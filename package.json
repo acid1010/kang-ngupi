@@ -1,0 +1,20 @@
+{
+  "name": "ngupi-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "queue:run": "node src/queue/run-once.js",
+    "queue:retry-failed": "node src/queue/retry-failed.js",
+    "queue:sample": "node src/queue/sample-payloads.js",
+    "outbox:run": "node src/outbox/run-once.js",
+    "outbox:watch": "node src/outbox/watch.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.56.0",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0"
+  }
+}
