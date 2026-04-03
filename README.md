@@ -43,6 +43,7 @@ Memindahkan ulang semua file dari bucket `failed/` ke bucket yang sesuai (`draft
 ### POST /bridge/order-context
 Menerima update state order aktif per customer. Endpoint ini akan:
 - merge update ke active state JSON store
+- jika state lama sudah final enough dan update baru membawa item order yang valid, backend akan memulai state order baru untuk customer yang sama
 - mengevaluasi apakah `draft_order` / `final_order` sudah layak dikirim
 - enqueue event ke queue lokal jika readiness terpenuhi
 

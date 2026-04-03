@@ -173,6 +173,18 @@ function hasValidItems(items) {
   return Array.isArray(items) && items.some((item) => item && item.menuName && Number(item.qty) > 0);
 }
 
+function buildStableRawMessage(items = [], fallback = null) {
+  if (!Array.isArray(items) || items.length === 0) {
+    return fallback ?? null;
+  }
+
+  const parts = items
+    .filter((item) => item && item.menuName && Number(item.qty) > 0)
+    .map((item) => `${String(item.menuName).trim().toLowerCase()} ${Number(item.qty)}`);
+
+  return parts.length > 0 ? parts.join(', ') : (fallback ?? null);
+}
+
 function hasShareloc(context) {
   return Boolean(
     context.locationStatus === 'shareloc_received' &&
@@ -254,6 +266,10 @@ export function mergeOrderContext(existing = {}, updates = {}) {
 
   if (!next.locationStatus && next.shareloc) {
     next.locationStatus = 'shareloc_received';
+  }
+
+  if (hasValidItems(next.items)) {
+    next.rawMessage = buildStableRawMessage(next.items, next.rawMessage);
   }
 
   return next;
