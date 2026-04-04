@@ -142,6 +142,50 @@ app.post('/payments/pakasir/qris', async (req, res) => {
   }
 });
 
+app.post('/payments/qris/direct', async (req, res) => {
+  try {
+    const { customer_phone, customer_name, items, fulfillment_method, shareloc, delivery_provider } = req.body;
+
+    if (!customer_phone || !items || !fulfillment_method) {
+      return res.status(400).json({ ok: false, error: 'customer_phone, items, and fulfillment_method are required' });
+    }
+
+    // Create or update order via bridge
+    const stateResult = await upsertOrderContext(customer_phone, {
+      customerName: customer_name,
+      items,
+      fulfillmentMethod: fulfillment_method,
+      shareloc,
+      deliveryProvider: delivery_provider,
+      paymentMethod: 'qris',
+      paymentStatus: 'pending'
+    });
+
+    const clientOrderId = stateResult.state.orderContext?.clientOrderId;
+
+    if (!clientOrderId) {
+      return res.status(500).json({ ok: false, error: 'Failed to create order - clientOrderId not generated' });
+    }
+
+    // Create QRIS payment
+    const baseUrl = buildPaymentBaseUrl(req);
+    const paymentResult = await createPakasirQrisPayment({
+      clientOrderId,
+      baseUrl
+    });
+
+    res.json({
+      ok: true,
+      data: {
+        client_order_id: clientOrderId,
+        ...paymentResult
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
 app.get('/payments/:id', async (req, res) => {
   try {
     const baseUrl = buildPaymentBaseUrl(req);
