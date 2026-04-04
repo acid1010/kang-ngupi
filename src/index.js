@@ -1,6 +1,13 @@
 import 'dotenv/config';
 import express from 'express';
+import QRCode from 'qrcode';
 import { upsertOrderContext, getOrderContextState } from './bridge/stateService.js';
+import {
+  buildPaymentBaseUrl,
+  createPakasirQrisPayment,
+  getPaymentSessionById,
+  verifyPakasirPaymentWebhook
+} from './payments/service.js';
 import { createOrUpdateOrder, getOrderById, listOrders } from './repositories/orders.js';
 import { buildQueueFileName, ensureQueueDirs, writeQueueFile } from './queue/fs.js';
 import { processAllQueues, retryFailedQueues } from './queue/processor.js';
@@ -112,6 +119,72 @@ app.get('/bridge/order-context/:phone', async (req, res) => {
   try {
     const state = await getOrderContextState(req.params.phone);
     res.json({ ok: true, data: state });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.post('/payments/pakasir/qris', async (req, res) => {
+  try {
+    const baseUrl = buildPaymentBaseUrl(req);
+    const result = await createPakasirQrisPayment({
+      clientOrderId: req.body?.client_order_id,
+      amountOverride: req.body?.amount,
+      baseUrl
+    });
+
+    res.json({
+      ok: true,
+      data: result
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: error.message });
+  }
+});
+
+app.get('/payments/:id', async (req, res) => {
+  try {
+    const baseUrl = buildPaymentBaseUrl(req);
+    const payment = await getPaymentSessionById(req.params.id, { baseUrl });
+    res.json({ ok: true, data: payment });
+  } catch (error) {
+    res.status(404).json({ ok: false, error: error.message });
+  }
+});
+
+app.get('/payments/:id/qr.png', async (req, res) => {
+  try {
+    const payment = await getPaymentSessionById(req.params.id);
+
+    if (!payment.qr_string) {
+      return res.status(404).json({ ok: false, error: 'QR string not found for this payment' });
+    }
+
+    const png = await QRCode.toBuffer(payment.qr_string, {
+      errorCorrectionLevel: 'M',
+      margin: 1,
+      width: 512,
+      type: 'png'
+    });
+
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Cache-Control', 'no-store');
+    res.send(png);
+  } catch (error) {
+    res.status(404).json({ ok: false, error: error.message });
+  }
+});
+
+app.post('/webhooks/pakasir', async (req, res) => {
+  try {
+    const result = await verifyPakasirPaymentWebhook(req.body ?? {});
+    const responseBody = { ok: true, data: result };
+
+    if (autoProcessQueue && result.events.length > 0) {
+      responseBody.processed = await processAllQueues();
+    }
+
+    res.json(responseBody);
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }

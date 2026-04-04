@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { createPakasirQrisPayment } from '../payments/service.js';
 import { inferQueueKindFromFileName, listQueueFiles, moveToBucket, readJson } from './fs.js';
 import { webhookUrl } from './config.js';
 
@@ -17,6 +18,41 @@ async function postPayload(payload) {
   return response.json();
 }
 
+function shouldAutoCreateQris(payload = {}) {
+  if (payload?.event_type !== 'draft_order') return false;
+
+  const clientOrderId = payload?.order?.client_order_id ?? null;
+  const paymentMethod = String(payload?.order?.payment?.method ?? '').trim().toLowerCase();
+  const paymentStatus = String(payload?.order?.payment?.status ?? '').trim().toLowerCase();
+
+  return Boolean(clientOrderId) && paymentMethod === 'qris' && ['pending', 'awaiting_payment', 'waiting'].includes(paymentStatus);
+}
+
+async function maybeCreateQrisPayment(payload) {
+  if (!shouldAutoCreateQris(payload)) {
+    return { ok: false, skipped: true, reason: 'not-applicable' };
+  }
+
+  try {
+    const result = await createPakasirQrisPayment({
+      clientOrderId: payload.order.client_order_id,
+      baseUrl: process.env.PUBLIC_BASE_URL || null
+    });
+
+    return {
+      ok: true,
+      skipped: false,
+      data: result
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      skipped: false,
+      error: error.message
+    };
+  }
+}
+
 export async function processQueueKind(kind) {
   const files = await listQueueFiles(kind);
   const results = [];
@@ -25,8 +61,9 @@ export async function processQueueKind(kind) {
     try {
       const payload = await readJson(file);
       const response = await postPayload(payload);
+      const qrisPayment = await maybeCreateQrisPayment(payload);
       const movedTo = await moveToBucket(file, 'processed');
-      results.push({ file, status: 'processed', movedTo, response });
+      results.push({ file, status: 'processed', movedTo, response, qrisPayment });
     } catch (error) {
       const movedTo = await moveToBucket(file, 'failed').catch(() => null);
       results.push({ file, status: 'failed', movedTo, error: error.message });

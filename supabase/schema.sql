@@ -44,8 +44,34 @@ create table if not exists order_items (
   created_at timestamptz not null default now()
 );
 
+create table if not exists order_payments (
+  id uuid primary key default gen_random_uuid(),
+  order_id uuid not null references orders(id) on delete cascade,
+  client_order_id text not null unique,
+  provider text not null default 'pakasir',
+  provider_project text not null,
+  provider_order_id text not null unique,
+  amount integer not null check (amount > 0),
+  fee integer,
+  total_payment integer not null check (total_payment > 0),
+  currency text not null default 'IDR',
+  payment_method text not null default 'qris' check (payment_method in ('qris')),
+  provider_status text not null default 'pending',
+  payment_status text not null default 'pending' check (payment_status in ('pending', 'confirmed', 'failed')),
+  qr_string text,
+  expired_at timestamptz,
+  paid_at timestamptz,
+  customer_phone_snapshot text,
+  customer_name_snapshot text,
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create index if not exists idx_customers_phone on customers(phone);
 create index if not exists idx_orders_customer_id on orders(customer_id);
 create index if not exists idx_orders_order_status on orders(order_status);
 create index if not exists idx_orders_created_at on orders(created_at desc);
 create index if not exists idx_order_items_order_id on order_items(order_id);
+create index if not exists idx_order_payments_order_id on order_payments(order_id);
+create index if not exists idx_order_payments_provider_status on order_payments(provider_status);

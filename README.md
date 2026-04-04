@@ -11,6 +11,10 @@ Backend awal untuk Kedai Ngupi Ngupi Purwakarta.
 - `GET /bridge/order-context/:phone`
 - `GET /orders`
 - `GET /orders/:id`
+- `POST /payments/pakasir/qris`
+- `GET /payments/:id`
+- `GET /payments/:id/qr.png`
+- `POST /webhooks/pakasir`
 - target database: Supabase
 
 ## Setup
@@ -33,6 +37,7 @@ Menerima payload order yang sama seperti webhook, tetapi menyimpannya dulu ke fo
 Catatan proses queue:
 - draft diproses lebih dulu, lalu final
 - ini sengaja agar order dengan `client_order_id` yang sama tidak balapan saat masuk ke webhook
+- jika draft order membawa `payment.method = qris` dan status pending, queue processor akan mencoba membuat payment session Pakasir otomatis setelah draft berhasil masuk ke webhook
 
 ### POST /queue/process
 Memproses queue draft/final secara manual via HTTP.
@@ -55,6 +60,36 @@ List order terbaru beserta item order.
 
 ### GET /orders/:id
 Ambil detail satu order.
+
+### POST /payments/pakasir/qris
+Membuat payment session QRIS Pakasir untuk order yang sudah ada (berdasarkan `client_order_id`). Endpoint ini akan:
+- menghitung nominal order dari item order (atau pakai `amount` override jika dikirim)
+- membuat transaksi QRIS via API Pakasir
+- menyimpan payment session di database
+- menyediakan URL gambar QR yang bisa dikirim ke customer
+- mencoba mengirim gambar QR langsung ke WhatsApp customer via `wacli` sebagai best-effort jika nomor customer tersedia
+- jika payment session pending yang sama diminta lagi, endpoint akan me-return payment lama dan mencoba resend QR ke WhatsApp
+
+Contoh body:
+```json
+{
+  "client_order_id": "draft_2026-04-03T22-21-13"
+}
+```
+
+### GET /payments/:id
+Ambil detail satu payment session termasuk `qr_image_url`.
+
+### GET /payments/:id/qr.png
+Menghasilkan gambar PNG QRIS langsung dari QR string yang diberikan Pakasir.
+
+### POST /webhooks/pakasir
+Menerima webhook dari Pakasir, lalu:
+- verifikasi ulang status transaksi via `transactiondetail`
+- update payment session menjadi `confirmed` jika valid
+- update ringkasan payment di order
+- update active state customer agar `final_order` bisa otomatis lanjut saat payment QRIS sudah terverifikasi
+- kirim notifikasi WhatsApp langsung ke customer via `wacli` saat status pertama kali benar-benar berubah menjadi `confirmed`
 
 ## Example payload
 ```json
@@ -148,8 +183,19 @@ Script yang tersedia:
 Env tambahan:
 - `ORDER_WEBHOOK_URL` (default: `http://localhost:3001/webhooks/orders`)
 - `AUTO_PROCESS_QUEUE` (`true` / `false`)
+- `PAKASIR_BASE_URL` (default: `https://app.pakasir.com`)
+- `PAKASIR_PROJECT_SLUG`
+- `PAKASIR_API_KEY`
+- `PUBLIC_BASE_URL` (untuk membentuk URL QR image, mis. `http://localhost:3001`)
+- `WHATSAPP_SEND_QRIS_ON_CREATE` (`true` / `false`, default `true`) → coba kirim QR image ke customer saat payment QRIS dibuat
+- `WHATSAPP_NOTIFY_QRIS_SUCCESS` (`true` / `false`, default `true`) → kirim notifikasi teks saat pembayaran QRIS terverifikasi
+- `WACLI_BIN` (default `wacli`)
 
 ## Notes
 - Kode sudah siap dihubungkan ke Supabase.
 - Jika env Supabase belum diisi, endpoint tulis akan gagal dengan pesan yang jelas.
 - Schema SQL ada di `supabase/schema.sql`.
+- Perhitungan nominal QRIS saat ini memakai mapping harga menu inti di backend (`Es Kopi Susu Original`, `Americano`, `Caffe Latte`, `Cappuccino`). Jika ada biaya tambahan seperti ongkir, bisa sementara dikirim sebagai `amount` override saat membuat payment session.
+- Saat payment QRIS dibuat, backend sekarang mencoba mengirim gambar QR langsung ke customer via `wacli send file`.
+- Setelah QRIS terverifikasi, backend juga mencoba mengirim notifikasi WhatsApp langsung ke customer via `wacli`.
+- Kedua pengiriman WhatsApp tersebut bersifat best-effort: create/verify payment tetap sukses walau pengiriman WA gagal, dan hasil kirim akan muncul di response sebagai `whatsapp_qris_delivery` atau `whatsapp_notification`.

@@ -138,12 +138,12 @@ export async function listOrders() {
   return data.map((row) => mapOrderRow(row, itemsByOrderId.get(row.id) ?? []));
 }
 
-export async function getOrderById(id) {
+async function getOrderByFilter(column, value) {
   const supabase = getSupabase();
   const { data: row, error } = await supabase
     .from('orders')
     .select('*')
-    .eq('id', id)
+    .eq(column, value)
     .single();
 
   if (error) throw error;
@@ -151,9 +151,40 @@ export async function getOrderById(id) {
   const { data: items, error: itemsError } = await supabase
     .from('order_items')
     .select('*')
-    .eq('order_id', id)
+    .eq('order_id', row.id)
     .order('created_at', { ascending: true });
 
   if (itemsError) throw itemsError;
   return mapOrderRow(row, items);
+}
+
+export async function getOrderById(id) {
+  return getOrderByFilter('id', id);
+}
+
+export async function getOrderByClientOrderId(clientOrderId) {
+  return getOrderByFilter('client_order_id', clientOrderId);
+}
+
+export async function updateOrderPaymentSummary(clientOrderId, updates = {}) {
+  const supabase = getSupabase();
+  const payload = {
+    payment_method: updates.payment_method ?? updates.paymentMethod,
+    payment_status: updates.payment_status
+      ? normalizePaymentStatusForDb(updates.payment_status)
+      : updates.paymentStatus
+        ? normalizePaymentStatusForDb(updates.paymentStatus)
+        : undefined,
+    order_status: updates.order_status ?? updates.orderStatus ?? undefined
+  };
+
+  Object.keys(payload).forEach((key) => payload[key] === undefined && delete payload[key]);
+
+  const { error } = await supabase
+    .from('orders')
+    .update(payload)
+    .eq('client_order_id', clientOrderId);
+
+  if (error) throw error;
+  return getOrderByClientOrderId(clientOrderId);
 }
