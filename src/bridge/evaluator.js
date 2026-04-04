@@ -1,5 +1,6 @@
 import { buildDraftOrderPayload, buildFinalOrderPayload, normalizeNotes, normalizePhone } from '../builders/orderPayload.js';
 import { buildQueueFileName, writeQueueFile } from '../queue/fs.js';
+import { getPaymentByClientOrderId } from '../repositories/payments.js';
 
 function toFiniteNumber(value) {
   const number = Number(value);
@@ -282,6 +283,43 @@ async function enqueuePayload(payload) {
   return { queueKind, filePath, clientOrderId: payload.order.client_order_id };
 }
 
+function shouldAutoCreateQris(state) {
+  const context = state.orderContext ?? {};
+  if (!state.draftSentAt) return false;
+  if (!context.clientOrderId) return false;
+  if (context.paymentMethod !== 'qris') return false;
+  if (!['pending', 'waiting', 'awaiting_payment'].includes(context.paymentStatus)) return false;
+  return true;
+}
+
+async function maybeAutoCreateQris(state, events) {
+  if (!shouldAutoCreateQris(state)) {
+    return null;
+  }
+
+  const clientOrderId = state.orderContext.clientOrderId;
+
+  try {
+    const existingPayment = await getPaymentByClientOrderId(clientOrderId);
+    if (existingPayment && ['pending', 'confirmed'].includes(existingPayment.payment_status)) {
+      console.log('[evaluator] QRIS payment already exists for', clientOrderId);
+      return { skipped: true, reason: 'already-exists', paymentId: existingPayment.id };
+    }
+
+    // Lazy import to avoid circular dependency
+    const { createPakasirQrisPayment } = await import('../payments/service.js');
+    const result = await createPakasirQrisPayment({ clientOrderId });
+
+    console.log('[evaluator] Auto-created QRIS payment for', clientOrderId);
+    events.push({ type: 'qris_payment_created', clientOrderId, paymentId: result.payment?.id });
+
+    return result;
+  } catch (error) {
+    console.error('[evaluator] Failed to auto-create QRIS payment:', error.message);
+    return { error: error.message };
+  }
+}
+
 export async function evaluateAndEnqueue(state) {
   const events = [];
   state.orderContext = mergeOrderContext({}, state.orderContext ?? {});
@@ -306,6 +344,12 @@ export async function evaluateAndEnqueue(state) {
     state.finalSentAt = new Date().toISOString();
     state.orderContext.status = payload.order.status;
     events.push({ type: 'final_order', ...queued });
+  }
+
+  // Auto-create QRIS payment if conditions met
+  const qrisResult = await maybeAutoCreateQris(state, events);
+  if (qrisResult) {
+    state.qrisAutoCreateResult = qrisResult;
   }
 
   return { state, events };
