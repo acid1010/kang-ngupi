@@ -167,6 +167,19 @@ app.post('/payments/qris/direct', async (req, res) => {
       return res.status(500).json({ ok: false, error: 'Failed to create order - clientOrderId not generated' });
     }
 
+    // Wait a moment for draft to be queued, then process
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Process queue to persist draft to DB
+    try {
+      await Promise.race([
+        processAllQueues(),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Queue timeout')), 10000))
+      ]);
+    } catch (e) {
+      console.warn('[qris/direct] Queue processing warning:', e.message);
+    }
+
     // Create QRIS payment
     const baseUrl = buildPaymentBaseUrl(req);
     const paymentResult = await createPakasirQrisPayment({

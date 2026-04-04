@@ -1,6 +1,5 @@
 import { calculateOrderAmount } from '../catalog/menuPricing.js';
 import { normalizePhone } from '../builders/orderPayload.js';
-import { upsertOrderContext } from '../bridge/stateService.js';
 import { getOrderByClientOrderId, updateOrderPaymentSummary } from '../repositories/orders.js';
 import {
   getPaymentByClientOrderId,
@@ -146,13 +145,8 @@ export async function createPakasirQrisPayment({ clientOrderId, amountOverride =
     orderStatus: 'awaiting_payment'
   });
 
-  if (order.customer_phone_snapshot) {
-    await upsertOrderContext(order.customer_phone_snapshot, {
-      clientOrderId,
-      paymentMethod: 'qris',
-      paymentStatus: 'pending'
-    });
-  }
+  // Note: Payment status update to bridge state is handled by caller (endpoint or evaluator)
+  // to avoid circular dependency issues
 
   const whatsappQrisDelivery = await sendQrisImageBestEffort(updatedOrder, saved);
 
@@ -227,6 +221,7 @@ export async function verifyPakasirPaymentWebhook(payload = {}) {
 
   let events = [];
   if (payment.customer_phone_snapshot) {
+    const { upsertOrderContext } = await import('../bridge/stateService.js');
     const stateResult = await upsertOrderContext(payment.customer_phone_snapshot, {
       clientOrderId: payment.client_order_id,
       customerPhone: normalizePhone(payment.customer_phone_snapshot),
