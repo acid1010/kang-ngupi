@@ -148,7 +148,9 @@ export async function createPakasirQrisPayment({ clientOrderId, amountOverride =
   // Note: Payment status update to bridge state is handled by caller (endpoint or evaluator)
   // to avoid circular dependency issues
 
-  const whatsappQrisDelivery = await sendQrisImageBestEffort(updatedOrder, saved);
+  // Skip auto-send via wacli - let SobatNgupi agent handle delivery
+  // This avoids wacli lock conflicts when wacli sync is running
+  const whatsappQrisDelivery = { ok: false, skipped: true, reason: 'agent-handled' };
 
   return {
     order: updatedOrder,
