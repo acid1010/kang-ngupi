@@ -27,20 +27,20 @@ curl -s -X POST http://localhost:3001/payments/qris/direct \
 
 ## Penting
 
-**MANDATORY:** Saat customer memilih QRIS, kamu **WAJIB** execute curl ke backend endpoint `/payments/qris/direct`.
+**QRIS AUTO-TRIGGER:** Backend sekarang auto-generate QRIS saat kamu sync order dengan `paymentMethod: qris`.
 
-**Flow:**
-1. Customer pilih QRIS
-2. Acknowledge: "Siap kak, QRIS-nya sedang kami generate..."
-3. **IMMEDIATE exec curl** (jangan delay atau skip!)
-4. Parse response, inform customer
+**Kamu TIDAK perlu call `/payments/qris/direct` manual!**
 
-**Jangan:**
-- Bilang "sedang digenerate" lalu diam
-- Assume backend auto-trigger
-- Skip exec step
+Cukup sync order state via `/bridge/order-context`:
+```bash
+curl -s -X POST http://localhost:3001/bridge/order-context \
+  -H "Content-Type: application/json" \
+  -d '{"customer_phone":"+628xxx","updates":{"paymentMethod":"qris","paymentStatus":"pending"}}'
+```
 
-**Backend akan:**
-- Generate QRIS via Pakasir
-- Auto-send QR image via WhatsApp
-- Return status `whatsapp_sent: true/false`
+Backend akan:
+1. Detect `paymentMethod: qris`
+2. Auto-generate QRIS via Pakasir
+3. Auto-send QR image ke WhatsApp customer
+
+Agent tinggal konfirmasi ke customer bahwa QR sudah dikirim.
