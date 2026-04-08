@@ -1,0 +1,22 @@
+{
+  "customer_phone": "+6285157634464",
+  "updates": {
+    "customerName": "M Rizky",
+    "rawMessage": "kopsu 1",
+    "items": [
+      {
+        "name": "Es Kopi Susu Original",
+        "quantity": 1,
+        "price": 17000
+      }
+    ],
+    "fulfillmentMethod": "delivery",
+    "locationStatus": "received",
+    "shareloc": "-6.571727, 107.463333",
+    "address": null,
+    "paymentMethod": "qris",
+    "paymentStatus": "pending",
+    "deliveryProvider": null,
+    "notes": ""
+  }
+}

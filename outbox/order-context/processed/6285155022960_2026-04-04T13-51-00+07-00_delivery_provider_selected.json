@@ -1,0 +1,25 @@
+{
+  "customer_phone": "+6285155022960",
+  "updates": {
+    "customerName": "Rasyid",
+    "rawMessage": "kopsu 1",
+    "items": [
+      {
+        "name": "Es Kopi Susu Original",
+        "quantity": 1,
+        "unitPrice": 17000
+      }
+    ],
+    "fulfillmentMethod": "delivery",
+    "locationStatus": "shareloc_received",
+    "shareloc": "-6.575756, 107.464066",
+    "address": null,
+    "paymentMethod": "COD",
+    "paymentStatus": "pending_on_delivery",
+    "deliveryProvider": "Ngupi Express",
+    "notes": [
+      "Nama penerima: Rasyid",
+      "Ongkir akan diinformasikan lanjut"
+    ]
+  }
+}

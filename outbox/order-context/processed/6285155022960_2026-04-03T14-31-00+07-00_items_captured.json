@@ -1,0 +1,22 @@
+{
+  "customer_phone": "+6285155022960",
+  "updates": {
+    "customerName": "Acid Baru",
+    "rawMessage": "americano 1",
+    "items": [
+      {
+        "name": "Americano",
+        "quantity": 1,
+        "unitPrice": 15000
+      }
+    ],
+    "fulfillmentMethod": null,
+    "locationStatus": null,
+    "shareloc": null,
+    "address": null,
+    "paymentMethod": null,
+    "paymentStatus": null,
+    "deliveryProvider": null,
+    "notes": []
+  }
+}

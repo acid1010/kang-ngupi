@@ -1,0 +1,26 @@
+{
+  "customer_phone": "+6281573400730",
+  "updates": {
+    "customerName": "Dika",
+    "rawMessage": "kopi susu 1",
+    "items": [
+      {
+        "name": "Es Kopi Susu Original",
+        "quantity": 1,
+        "unitPrice": 17000,
+        "lineTotal": 17000,
+        "raw": "kopi susu 1"
+      }
+    ],
+    "fulfillmentMethod": null,
+    "locationStatus": null,
+    "shareloc": null,
+    "address": null,
+    "paymentMethod": null,
+    "paymentStatus": null,
+    "deliveryProvider": null,
+    "notes": [
+      "Customer order baru via WhatsApp"
+    ]
+  }
+}

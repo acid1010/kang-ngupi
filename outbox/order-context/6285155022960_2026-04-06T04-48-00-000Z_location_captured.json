@@ -1,0 +1,22 @@
+{
+  "customer_phone": "+6285155022960",
+  "updates": {
+    "customerName": "acidjp",
+    "rawMessage": "pesan kopsu 1",
+    "items": [
+      {
+        "name": "Es Kopi Susu Original",
+        "quantity": 1,
+        "price": 17000
+      }
+    ],
+    "fulfillmentMethod": "delivery",
+    "locationStatus": "received",
+    "shareloc": "-6.575756, 107.464066",
+    "address": null,
+    "paymentMethod": null,
+    "paymentStatus": null,
+    "deliveryProvider": null,
+    "notes": null
+  }
+}
