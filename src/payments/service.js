@@ -98,9 +98,8 @@ export async function createPakasirQrisPayment({ clientOrderId, amountOverride =
   const existingPayment = await getPaymentByClientOrderId(clientOrderId);
   if (existingPayment && ['pending', 'confirmed'].includes(existingPayment.payment_status)) {
     const currentOrder = await getOrderByClientOrderId(clientOrderId);
-    const whatsappQrisDelivery = existingPayment.payment_status === 'pending'
-      ? await sendQrisImageBestEffort(currentOrder, existingPayment)
-      : { ok: false, skipped: true, reason: 'already-confirmed' };
+    // Resend QRIS image for pending reused payment
+    const whatsappQrisDelivery = await sendQrisImageBestEffort(currentOrder, existingPayment);
 
     return {
       order: currentOrder,
@@ -148,9 +147,8 @@ export async function createPakasirQrisPayment({ clientOrderId, amountOverride =
   // Note: Payment status update to bridge state is handled by caller (endpoint or evaluator)
   // to avoid circular dependency issues
 
-  // Skip auto-send via wacli - let SobatNgupi agent handle delivery
-  // This avoids wacli lock conflicts when wacli sync is running
-  const whatsappQrisDelivery = { ok: false, skipped: true, reason: 'agent-handled' };
+  // Send QRIS image via wacli
+  const whatsappQrisDelivery = await sendQrisImageBestEffort(updatedOrder, saved);
 
   return {
     order: updatedOrder,

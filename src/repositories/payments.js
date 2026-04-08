@@ -46,14 +46,16 @@ export async function getPaymentByClientOrderId(clientOrderId) {
     .from('order_payments')
     .select('*')
     .eq('client_order_id', clientOrderId)
-    .single();
+    .order('updated_at', { ascending: false })
+    .limit(1);
 
   if (error) {
     if (error.code === 'PGRST116') return null;
     throw error;
   }
 
-  return mapPaymentRow(data);
+  const row = Array.isArray(data) ? data[0] : data;
+  return mapPaymentRow(row ?? null);
 }
 
 export async function getPaymentByProviderOrderId(providerOrderId) {
@@ -98,11 +100,11 @@ export async function upsertPaymentSession(payment = {}) {
   const { data, error } = await supabase
     .from('order_payments')
     .upsert(payload, { onConflict: 'client_order_id' })
-    .select('*')
-    .single();
+    .select('*');
 
   if (error) throw error;
-  return mapPaymentRow(data);
+  const row = Array.isArray(data) ? data[0] : data;
+  return mapPaymentRow(row ?? null);
 }
 
 export async function updatePaymentStatusByProviderOrderId(providerOrderId, updates = {}) {

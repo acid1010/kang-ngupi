@@ -7,6 +7,13 @@ import { promisify } from 'node:util';
 import QRCode from 'qrcode';
 import { normalizePhone } from '../builders/orderPayload.js';
 
+// wacli expects phone without '+' prefix
+function toWacliPhone(phone) {
+  const normalized = normalizePhone(phone);
+  if (!normalized) return null;
+  return normalized.startsWith('+') ? normalized.slice(1) : normalized;
+}
+
 const execFileAsync = promisify(execFile);
 
 function isSuccessEnabled() {
@@ -51,7 +58,7 @@ export async function sendQrisImageWhatsApp({ to, customerName = null, amount = 
     return { ok: false, skipped: true, reason: 'disabled' };
   }
 
-  const recipient = normalizePhone(to);
+  const recipient = toWacliPhone(to);
   if (!recipient) {
     return { ok: false, skipped: true, reason: 'missing-recipient' };
   }
@@ -98,14 +105,13 @@ export async function sendQrisSuccessWhatsApp({ to, customerName = null, order =
     return { ok: false, skipped: true, reason: 'disabled' };
   }
 
-  const recipient = normalizePhone(to);
+  const recipient = toWacliPhone(to);
   if (!recipient) {
     return { ok: false, skipped: true, reason: 'missing-recipient' };
   }
 
   const salutation = customerName ? `Siap kak ${customerName},` : 'Siap kak,';
-  const orderSuffix = order?.client_order_id ? ` Ref: ${order.client_order_id}.` : '';
-  const message = `${salutation} pembayaran QRIS-nya sudah terverifikasi ya. Pesanan kakak segera kami proses.${orderSuffix}`;
+  const message = `${salutation} pembayaran QRIS-nya sudah terverifikasi ya ✅\n\nPesanan kakak segera kami proses. Ditunggu ya! ☕`;
 
   try {
     const result = await runWacli(['send', 'text', '--to', recipient, '--message', message]);

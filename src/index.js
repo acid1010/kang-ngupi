@@ -143,11 +143,16 @@ app.post('/payments/pakasir/qris', async (req, res) => {
 });
 
 app.post('/payments/qris/direct', async (req, res) => {
+  console.log('[qris/direct] incoming request', { customer_phone: req.body?.customer_phone });
   try {
-    const { customer_phone, customer_name, items, fulfillment_method, shareloc, delivery_provider } = req.body;
+    const { customer_phone, customer_name, items, fulfillment_method, shareloc, delivery_provider, amount } = req.body;
 
-    if (!customer_phone || !items || !fulfillment_method) {
-      return res.status(400).json({ ok: false, error: 'customer_phone, items, and fulfillment_method are required' });
+    if (!customer_phone || !fulfillment_method) {
+      return res.status(400).json({ ok: false, error: 'customer_phone and fulfillment_method are required' });
+    }
+
+    if (!items && !amount) {
+      return res.status(400).json({ ok: false, error: 'either items or amount is required' });
     }
 
     // Create or update order via bridge
@@ -167,6 +172,8 @@ app.post('/payments/qris/direct', async (req, res) => {
       return res.status(500).json({ ok: false, error: 'Failed to create order - clientOrderId not generated' });
     }
 
+    console.log('[qris/direct] order context updated, clientOrderId:', clientOrderId);
+
     // Wait a moment for draft to be queued, then process
     await new Promise(resolve => setTimeout(resolve, 500));
     
@@ -180,18 +187,35 @@ app.post('/payments/qris/direct', async (req, res) => {
       console.warn('[qris/direct] Queue processing warning:', e.message);
     }
 
+    console.log('[qris/direct] queue processing completed');
+
     // Create QRIS payment
+    console.log('[qris/direct] creating QRIS payment for', clientOrderId);
     const baseUrl = buildPaymentBaseUrl(req);
     const paymentResult = await createPakasirQrisPayment({
       clientOrderId,
+      amountOverride: amount,
       baseUrl
     });
 
+    console.log('[qris/direct] QRIS payment created', {
+      qr_image_url: paymentResult?.payment?.qr_image_url,
+      whatsapp_sent: paymentResult?.whatsapp_qris_delivery?.ok
+    });
+
+    // Return clean response with WhatsApp delivery status
+    const waDelivery = paymentResult?.whatsapp_qris_delivery;
     res.json({
       ok: true,
       data: {
         client_order_id: clientOrderId,
-        ...paymentResult
+        qr_image_url: paymentResult?.payment?.qr_image_url ?? null,
+        total_payment: paymentResult?.payment?.total_payment ?? null,
+        amount: paymentResult?.payment?.amount ?? null,
+        expired_at: paymentResult?.payment?.expired_at ?? null,
+        whatsapp_sent: waDelivery?.ok === true,
+        whatsapp_skipped: waDelivery?.skipped === true,
+        whatsapp_error: waDelivery?.error ?? null
       }
     });
   } catch (error) {

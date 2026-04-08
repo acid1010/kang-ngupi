@@ -308,7 +308,20 @@ async function maybeAutoCreateQris(state, events) {
 
     // Lazy import to avoid circular dependency
     const { createPakasirQrisPayment } = await import('../payments/service.js');
-    const result = await createPakasirQrisPayment({ clientOrderId });
+
+    let result;
+    try {
+      result = await createPakasirQrisPayment({ clientOrderId });
+    } catch (firstError) {
+      // Order may not be persisted yet when called from bridge evaluator.
+      if (String(firstError?.message || '').includes('Order not found for client_order_id=')) {
+        const { processAllQueues } = await import('../queue/processor.js');
+        await processAllQueues();
+        result = await createPakasirQrisPayment({ clientOrderId });
+      } else {
+        throw firstError;
+      }
+    }
 
     console.log('[evaluator] Auto-created QRIS payment for', clientOrderId);
     events.push({ type: 'qris_payment_created', clientOrderId, paymentId: result.payment?.id });

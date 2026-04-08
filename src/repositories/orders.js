@@ -75,13 +75,15 @@ export async function createOrUpdateOrder(eventType, order) {
     notes: order.notes ?? []
   };
 
-  const { data: savedOrder, error: orderError } = await supabase
+  const { data: savedOrderRows, error: orderError } = await supabase
     .from('orders')
     .upsert(orderRow, { onConflict: 'client_order_id' })
-    .select('*')
-    .single();
+    .select('*');
 
   if (orderError) throw orderError;
+
+  const savedOrder = Array.isArray(savedOrderRows) ? savedOrderRows[0] : savedOrderRows;
+  if (!savedOrder?.id) throw new Error('Failed to persist order');
 
   await supabase.from('order_items').delete().eq('order_id', savedOrder.id);
 
@@ -140,13 +142,19 @@ export async function listOrders() {
 
 async function getOrderByFilter(column, value) {
   const supabase = getSupabase();
-  const { data: row, error } = await supabase
+  const { data, error } = await supabase
     .from('orders')
     .select('*')
     .eq(column, value)
-    .single();
+    .order('updated_at', { ascending: false })
+    .limit(1);
 
   if (error) throw error;
+
+  const row = Array.isArray(data) ? data[0] : data;
+  if (!row) {
+    throw new Error(`Order not found for ${column}=${value}`);
+  }
 
   const { data: items, error: itemsError } = await supabase
     .from('order_items')
