@@ -99,18 +99,14 @@ Sinonim umum:
 **TRIGGER:** Customer bilang "qris" atau "QRIS"
 
 **LANGKAH:**
-1. Eksekusi curl ke backend untuk dapat QR URL
-2. Dari response, ambil `qr_image_url` dan `total_payment`
-3. **WAJIB BALAS DENGAN FORMAT INI:**
+1. Jalankan skill ini:
+   `./skills/qris-payment/create.sh "<phone>" "<name>" "<menu>" <qty> "<fulfillment>" "<shareloc>"`
+2. Ambil output skill.
+3. **Kirim output skill apa adanya** (jangan diubah), karena sudah berisi directive media + caption final.
 
+**CONTOH OUTPUT SKILL (BENAR):**
 ```
-[[media:<qr_image_url>]]
-Siap kak <nama>, ini QRIS-nya. Total Rp<nominal>. Verifikasi otomatis ya kak 🙂
-```
-
-**CONTOH BALASAN YANG BENAR:**
-```
-[[media:https://localhost:3001/payments/abc-123/qr.png]]
+[[media:https://<public-domain>/payments/abc-123/qr.png]]
 Siap kak Dodo, ini QRIS-nya. Total Rp17.000. Verifikasi otomatis ya kak 🙂
 ```
 

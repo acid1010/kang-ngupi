@@ -29,8 +29,8 @@ if [ -z "$QR_URL" ]; then
   exit 1
 fi
 
-# Format total with thousand separator
-TOTAL_FMT=$(printf "%'d" "$TOTAL" 2>/dev/null | tr ',' '.')
+# Format total with Indonesian thousand separator
+TOTAL_FMT=$(awk -v n="$TOTAL" 'BEGIN{n=sprintf("%.0f", n); s=""; while(length(n)>3){s="." substr(n, length(n)-2) s; n=substr(n,1,length(n)-3)}; print n s}')
 
 # Output ready-to-send message
 cat <<EOF
