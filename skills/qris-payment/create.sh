@@ -34,6 +34,6 @@ TOTAL_FMT=$(awk -v n="$TOTAL" 'BEGIN{n=sprintf("%.0f", n); s=""; while(length(n)
 
 # Output ready-to-send message
 cat <<EOF
-[[media:$QR_URL]]
+MEDIA: $QR_URL
 Siap kak $NAME, ini QRIS-nya. Total Rp$TOTAL_FMT. Verifikasi otomatis ya kak 🙂
 EOF

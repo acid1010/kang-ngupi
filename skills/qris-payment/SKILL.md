@@ -21,11 +21,11 @@ Jalankan script dengan parameter order:
 
 ## Output
 
-Script akan output response yang LANGSUNG kamu kirim ke customer (sudah include `[[media:url]]`).
+Script akan output response yang LANGSUNG kamu kirim ke customer (sudah include directive `MEDIA: <url>`).
 
 **Contoh output:**
 ```
-[[media:http://localhost:3001/payments/abc-123/qr.png]]
+MEDIA: http://localhost:3001/payments/abc-123/qr.png
 Siap kak Dodo, ini QRIS-nya. Total Rp17.000. Verifikasi otomatis ya kak 🙂
 ```
 
