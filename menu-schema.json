@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "brand": "Kedai Ngupi Ngupi Purwakarta",
+  "channel": "whatsapp",
+  "defaultLanguage": "id",
+  "businessProfile": {
+    "city": "Purwakarta",
+    "hours": "09:00-17:00",
+    "instagram": "@kedaingupingupi"
+  },
+  "parsing": {
+    "interpretHotIceAdaptively": true,
+    "requireHotIce": false,
+    "mapCommonAliasesDirectly": true,
+    "readQuantityAdaptively": true,
+    "quantityTokens": {
+      "satu": 1,
+      "dua": 2,
+      "tiga": 3,
+      "empat": 4,
+      "lima": 5,
+      "segelas": 1,
+      "secup": 1
+    },
+    "quantityUnits": ["gelas", "cup", "pcs"],
+    "hotIceTokens": {
+      "hot": "hot",
+      "panas": "hot",
+      "ice": "iced",
+      "es": "iced",
+      "dingin": "iced"
+    }
+  },
+  "menus": [
+    {"id":"kopi-susu-original","name":"Es Kopi Susu Original","aliases":["kopi susu","kopsu","kopi susu biasa","es kopi susu","es kopi susu original"],"price":17000},
+    {"id":"americano","name":"Americano","aliases":["americano","amer","kopi amer"],"price":15000},
+    {"id":"caffe-latte","name":"Caffe Latte","aliases":["latte","cafe latte","caffe latte","kopi latte"],"price":21000},
+    {"id":"cappuccino","name":"Cappuccino","aliases":["cappuccino","capuccino","cappucino","capucino"],"ambiguousAliases":["cap"],"price":21000}
+  ]
+}

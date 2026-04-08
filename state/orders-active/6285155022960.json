@@ -1,0 +1,27 @@
+{
+  "customerId": "6285155022960",
+  "customerPhone": "+6285155022960",
+  "customerName": "acidjp",
+  "channel": "whatsapp",
+  "rawMessageLatest": "kopsu 3",
+  "items": [
+    {
+      "name": "Es Kopi Susu Original",
+      "quantity": 3,
+      "price": 17000
+    }
+  ],
+  "fulfillmentMethod": "delivery",
+  "locationStatus": "received",
+  "shareloc": "-6.575756, 107.464066",
+  "address": null,
+  "confirmationStatus": "confirmed",
+  "paymentMethod": "qris",
+  "paymentStatus": "pending",
+  "deliveryProvider": null,
+  "notes": null,
+  "lastMilestone": "payment_selected",
+  "createdAt": "2026-04-06T08:14:00.000Z",
+  "updatedAt": "2026-04-06T08:16:00.000Z",
+  "expiresAt": "2026-04-07T08:16:00.000Z"
+}
