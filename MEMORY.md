@@ -12,16 +12,6 @@ Jangan duplikasi aturan yang sudah ada di SOBATNGUPI_PROMPT.md atau AGENTS.md �
 - Channel: WhatsApp
 - Owner/Admin: Acid (+6283872201310)
 
-## Menu (sumber kebenaran: menu-schema.json)
-- Kopi: Es Kopi Susu Original (Rp17k), Americano (Rp15k), Caffe Latte (Rp21k), Cappuccino (Rp21k)
-- Non-Kopi: Matcha Latte (Rp22k), Chocolate (Rp18k), Teh (Rp10k)
-
-## Pembayaran
-- Tersedia: QRIS (via Pakasir) dan COD
-- Transfer: belum tersedia
-- Pickup: wajib QRIS, COD tidak boleh
-- Delivery: QRIS atau COD
-
 ## Keputusan desain
 - `notes` = catatan sistem internal; `customerNotes` = request customer (less ice, dll)
 - Shareloc disimpan sebagai objek `{lat, lng, label?, source?}`, bukan string
@@ -29,23 +19,78 @@ Jangan duplikasi aturan yang sudah ada di SOBATNGUPI_PROMPT.md atau AGENTS.md �
 - Order ID format: `ORD-YYYYMMDD-XXXX` (hex), dibuat saat items_captured
 - Reservation ID format: `RSV-YYYYMMDD-XXXX` (hex)
 
-## Pembelajaran dari sesi sebelumnya
-- Customer sering pakai alias pendek: kopsu, amer, latte, coklat
-- "cap" ambigu — perlu klarifikasi (Cappuccino?)
-- Customer kadang kirim sapaan sangat pendek (p, min, halo) — tetap pakai opening penuh
-- Jangan otomatis pakai nama lama tanpa soft reconfirm di order baru
-- QRIS flow: jangan bilang "QRIS sudah terkirim" kalau QR belum benar-benar muncul di chat
-- Bukti bayar manual tidak diminta untuk QRIS kecuali verifikasi otomatis gagal
-- WhatsApp list formatting: selalu pakai `- ` (tanda minus), bukan bullet atau numbering
+---
 
-## Contoh flow singkat (referensi cepat)
-```
-Customer: kopsu 1
--> Siap kak, es kopi susu original 1 yaa. Mau pickup atau delivery nih?
--> (delivery) Boleh kirim shareloc-nya ya?
--> (shareloc diterima) Boleh info nama penerima?
--> (konfirmasi) Es Kopi Susu Original x1 — Rp17.000 / Total: Rp17.000 / Sudah sesuai?
--> (setuju) Mau bayar via QRIS atau COD kak?
--> (QRIS) [jalankan skill, kirim QR]
--> (verified) Pesanan segera diproses!
-```
+## Operational Learnings
+
+### QRIS Payment Gotchas
+
+**QR tidak terkirim / customer bilang "mana qris nya":**
+- Artinya backend belum push QR image ke WhatsApp — customer tidak melihat apa-apa
+- agent Harus langsung eksekusi exec tool untuk generate QRIS, bukan cuma bilang "sedang disiapkan"
+- Jika exec gagal → jangan bilang "kendala teknis" ke customer, cukup bilang "Coba lagi sebentar ya kak"
+- Follow up hanya 1x jika QR belum muncul setelah >15 menit
+
+**Expired QR reuse (backend bug):**
+- Backend reusing expired QR from previous order when fresh QR not generated
+- Workaround: call `/bridge/order-context` with fresh items to regenerate QR
+- QRIS timeout → tawarkan generate ulang (delivery only) atau switch ke COD
+
+**Pickup wajib QRIS — tidak boleh COD:**
+- Jika customer minta COD untuk pickup → tolak sopan, arahkan ke QRIS
+- Delivery → QRIS atau COD
+
+### Order Flow Insights
+
+**Soft reconfirm untuk nama lama:**
+- Jika customer sudah punya nama di state, gunakan soft reconfirm: "Masih atas nama [Nama] ya kak?"
+- Jangan otomatis pakai nama lama tanpa konfirmasi di order baru
+
+**Mid-flow modifikasi:**
+- Customer ubah qty / hapus / tambah item → update + konfirmasi ulang
+- Setelah konfirmasi order → harus konfirmasi ulang dulu sebelum tanya pembayaran
+
+**"cap" ambigu:**
+- "cap" bisa berarti Cappuccino atau Capture (screenshot bukti bayar)
+- Selalu klarifikasi: "Yang dimaksud cappuccino ya kak?"
+
+### Alias Handling Insights
+
+- `kopsu` → Es Kopi Susu Original
+- `amer` / `ameri` → Americano
+- `coklat` / `cokelat` → Chocolate
+- `latte` → Caffe Latte
+- `matcha` → Matcha Latte
+- `teh` → Teh
+- Jika alias ambigu → langsung klarifikasi
+
+### Formatting Preferences
+
+- WhatsApp list: selalu pakai `- ` (minus + spasi), bukan `•` atau numbering
+- Emoji hemat: 0-1 per pesan pendek; variatif: 🙂 😊 ✨ 🙏 👍 📍 🛵 🧾
+- Jangan spam ☕ dalam pesan
+
+### Edge Cases
+
+**Queued messages saat agent sibuk:**
+- Customer kirim beberapa pesan sekaligus saat agent busy → semua masuk sebagai queued
+- agent tidak boleh kirim duplicate confirmation untuk tiap queued message
+- Cukup proses yang terakhir, atau respond ke yang paling relevan
+
+**Sapaan sangat pendek ("p", "min", "halo"):**
+- Tetap pakai opening penuh, janganZGV巴掌 response
+
+**No active credentials for session:**
+- Indikasi backend Pakasir down atau session tidak aktif
+- Jangan try-exec berkali-kali — cukup informasikan ke customer dan coba lagi manual
+
+**Repeat order "sama kayak kemarin":**
+- Cek state lama → tampilkan ringkasan → minta konfirmasi
+- Jika tidak ada state → minta order ulang
+
+### Critical Rules (dari pembelajaran operasional)
+
+1. **Exec tool WAJIB langsung** saat customer pilih QRIS — jangan bilang "sebentar" tanpa exec
+2. **Jangan kirim localhost URL** ke customer — termasuk di text message
+3. **TUNGGU konfirmasi customer** sebelum tanya pembayaran (pisahkan konfirmasi dan tanya payment method)
+4. **Hanya exec SEKALI** per request QRIS — jangan panggil dua kali
