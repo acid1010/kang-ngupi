@@ -43,4 +43,6 @@ Backend akan:
 2. Auto-generate QRIS via Pakasir
 3. Auto-send QR image ke WhatsApp customer
 
-Agent tinggal konfirmasi ke customer bahwa QR sudah dikirim.
+Setelah exec berhasil, agent tinggal konfirmasi ke customer bahwa QR sudah dikirim.
+
+**PENTING:** Kamu HARUS benar-benar memanggil `exec` tool untuk menjalankan curl di atas. Jangan hanya menulis teks balasan tanpa exec.
