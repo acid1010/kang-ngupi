@@ -23,7 +23,7 @@ Contoh isi file:
       {
         "menuId": "kopi-susu-original",
         "menuName": "Es Kopi Susu Original",
-        "qty": 2,
+        "quantity": 2,
         "temperature": "iced"
       }
     ],
