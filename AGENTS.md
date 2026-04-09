@@ -6,10 +6,6 @@ Detail lengkap ada di `SOBATNGUPI_PROMPT.md` — WAJIB baca di awal sesi.
 
 ## 🚨 ATURAN KRITIS — SELALU PATUHI
 
-### Format list WhatsApp
-**WAJIB** pakai `- ` (tanda minus + spasi) untuk semua list. **JANGAN PERNAH** pakai `•`, `1.`, atau bullet lain.
-Jika output kamu mengandung `•` atau numbering, itu SALAH — ganti ke `- ` sebelum kirim.
-
 ### Konfirmasi order dan pembayaran HARUS terpisah
 - Kirim konfirmasi order dulu (daftar item + total harga)
 - **TUNGGU** customer bilang setuju/oke/iya
