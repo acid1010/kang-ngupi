@@ -1,39 +1,67 @@
 #!/bin/bash
 # QRIS Payment Creator
-# Usage: ./create.sh "<phone>" "<name>" "<menu>" <qty> "<fulfillment>" "<shareloc>"
+# Usage:
+#   Single item:  ./create.sh "<phone>" "<name>" "<items_json>" "<fulfillment>" "<shareloc>"
+#   items_json:   JSON array, e.g. '[{"name":"Es Kopi Susu Original","quantity":2},{"name":"Americano","quantity":1}]'
+#
+# Example:
+#   ./create.sh "+6285155022960" "Dodo" '[{"name":"Es Kopi Susu Original","quantity":1}]' "delivery" "-6.575756, 107.464066"
 
-PHONE="$1"
-NAME="$2"
-MENU="$3"
-QTY="${4:-1}"
-FULFILLMENT="${5:-delivery}"
-SHARELOC="${6:-}"
+set -euo pipefail
 
-# Build JSON payload
-JSON=$(cat <<EOF
-{"customer_phone":"$PHONE","customer_name":"$NAME","items":[{"name":"$MENU","quantity":$QTY}],"fulfillment_method":"$FULFILLMENT","shareloc":"$SHARELOC"}
-EOF
-)
+PHONE="${1:?phone required}"
+NAME="${2:?name required}"
+ITEMS_JSON="${3:?items_json required}"
+FULFILLMENT="${4:-delivery}"
+SHARELOC="${5:-}"
+
+# Build JSON payload safely with jq
+JSON=$(jq -n \
+  --arg phone "$PHONE" \
+  --arg name "$NAME" \
+  --argjson items "$ITEMS_JSON" \
+  --arg fulfillment "$FULFILLMENT" \
+  --arg shareloc "$SHARELOC" \
+  '{
+    customer_phone: $phone,
+    customer_name: $name,
+    items: $items,
+    fulfillment_method: $fulfillment,
+    shareloc: $shareloc
+  }')
 
 # Call backend
-RESPONSE=$(curl -s -X POST http://localhost:3001/payments/qris/direct \
+RESPONSE=$(curl -s -w "\n%{http_code}" -X POST http://localhost:3001/payments/qris/direct \
   -H "Content-Type: application/json" \
-  -d "$JSON" 2>/dev/null)
+  -d "$JSON" 2>/dev/null) || true
 
-# Parse response
-QR_URL=$(echo "$RESPONSE" | grep -o '"qr_image_url":"[^"]*"' | cut -d'"' -f4)
-TOTAL=$(echo "$RESPONSE" | grep -o '"total_payment":[0-9]*' | cut -d':' -f2)
+HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+BODY=$(echo "$RESPONSE" | sed '$d')
+
+if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "201" ]; then
+  ERROR=$(echo "$BODY" | jq -r '.message // .error // "unknown"' 2>/dev/null || echo "unknown")
+  echo "Maaf kak, ada kendala sebentar. Aku coba lagi ya."
+  echo "DEBUG_ERROR: HTTP $HTTP_CODE - $ERROR" >&2
+  exit 1
+fi
+
+# Parse response with jq
+QR_URL=$(echo "$BODY" | jq -r '.qr_image_url // empty')
+TOTAL=$(echo "$BODY" | jq -r '.total_payment // empty')
 
 if [ -z "$QR_URL" ]; then
   echo "Maaf kak, ada kendala sebentar. Aku coba lagi ya."
+  echo "DEBUG_ERROR: missing qr_image_url in response" >&2
   exit 1
 fi
 
 # Format total with Indonesian thousand separator
-TOTAL_FMT=$(awk -v n="$TOTAL" 'BEGIN{n=sprintf("%.0f", n); s=""; while(length(n)>3){s="." substr(n, length(n)-2) s; n=substr(n,1,length(n)-3)}; print n s}')
+if [ -n "$TOTAL" ]; then
+  TOTAL_FMT=$(printf "%.0f" "$TOTAL" | sed ':a;s/\B[0-9]\{3\}\>/.&/;ta')
+else
+  TOTAL_FMT="—"
+fi
 
 # Output ready-to-send message
-cat <<EOF
-MEDIA: $QR_URL
-Siap kak $NAME, ini QRIS-nya. Total Rp$TOTAL_FMT. Verifikasi otomatis ya kak 🙂
-EOF
+echo "MEDIA: $QR_URL"
+echo "Siap kak $NAME, ini QRIS-nya. Total Rp$TOTAL_FMT. Verifikasi otomatis ya kak 🙂"
