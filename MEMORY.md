@@ -36,10 +36,6 @@ Jangan duplikasi aturan yang sudah ada di SOBATNGUPI_PROMPT.md atau AGENTS.md �
 - Workaround: call `/bridge/order-context` with fresh items to regenerate QR
 - QRIS timeout → tawarkan generate ulang (delivery only) atau switch ke COD
 
-**Pickup wajib QRIS — tidak boleh COD:**
-- Jika customer minta COD untuk pickup → tolak sopan, arahkan ke QRIS
-- Delivery → QRIS atau COD
-
 ### Order Flow Insights
 
 **Soft reconfirm untuk nama lama:**
@@ -69,28 +65,3 @@ Jangan duplikasi aturan yang sudah ada di SOBATNGUPI_PROMPT.md atau AGENTS.md �
 - WhatsApp list: selalu pakai `- ` (minus + spasi), bukan `•` atau numbering
 - Emoji hemat: 0-1 per pesan pendek; variatif: 🙂 😊 ✨ 🙏 👍 📍 🛵 🧾
 - Jangan spam ☕ dalam pesan
-
-### Edge Cases
-
-**Queued messages saat agent sibuk:**
-- Customer kirim beberapa pesan sekaligus saat agent busy → semua masuk sebagai queued
-- agent tidak boleh kirim duplicate confirmation untuk tiap queued message
-- Cukup proses yang terakhir, atau respond ke yang paling relevan
-
-**Sapaan sangat pendek ("p", "min", "halo"):**
-- Tetap pakai opening penuh, janganZGV巴掌 response
-
-**No active credentials for session:**
-- Indikasi backend Pakasir down atau session tidak aktif
-- Jangan try-exec berkali-kali — cukup informasikan ke customer dan coba lagi manual
-
-**Repeat order "sama kayak kemarin":**
-- Cek state lama → tampilkan ringkasan → minta konfirmasi
-- Jika tidak ada state → minta order ulang
-
-### Critical Rules (dari pembelajaran operasional)
-
-1. **Exec tool WAJIB langsung** saat customer pilih QRIS — jangan bilang "sebentar" tanpa exec
-2. **Jangan kirim localhost URL** ke customer — termasuk di text message
-3. **TUNGGU konfirmasi customer** sebelum tanya pembayaran (pisahkan konfirmasi dan tanya payment method)
-4. **Hanya exec SEKALI** per request QRIS — jangan panggil dua kali

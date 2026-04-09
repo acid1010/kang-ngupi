@@ -6,27 +6,26 @@ Kamu **BOLEH dan HARUS** menggunakan `exec` tool untuk menjalankan perintah shel
 - `curl` untuk request ke backend API
 - `cat` untuk membaca file state
 
-## Contoh penggunaan exec
+## Backend Endpoints
 
-### Baca state order
+### Primary QRIS Method — `/bridge/order-context`
 ```bash
-cat state/orders-active/6285155022960.json
+curl -s -X POST http://localhost:3001/bridge/order-context \
+  -H "Content-Type: application/json" \
+  -d '{"customer_phone":"+628xxx","updates":{"paymentMethod":"qris","paymentStatus":"pending"}}'
 ```
+Backend auto-detects `paymentMethod: qris`, generates QRIS via Pakasir, and sends QR image + caption to WhatsApp customer.
 
-### Request QRIS payment
+### DEPRECATED — `/payments/qris/direct`
+**Catatan:** Endpoint ini tidak lagi direkomendasikan. Gunakan `/bridge/order-context` di atas sebagai gantinya.
 ```bash
 curl -s -X POST http://localhost:3001/payments/qris/direct \
   -H "Content-Type: application/json" \
   -d '{"customer_phone":"+6285155022960","customer_name":"Acid","items":[{"name":"Es Kopi Susu Original","quantity":1}],"fulfillment_method":"delivery","shareloc":"-6.575756, 107.464066"}'
 ```
 
-## Backend Endpoints
-
-- **QRIS Payment:** `POST http://localhost:3001/payments/qris/direct`
-- **Health check:** `GET http://localhost:3001/`
-
-## Known issue: QRIS expired reuse
-Backend akan skip QRIS generation jika sudah ada payment untuk order yang sama (`"skipped": true, "reason": "already-exists"`), bahkan jika QRIS sudah expired. Workaround sementara: hapus state lama di backend (`/state/orders-active/<phone>.json`) agar order baru bisa dibuat fresh. Fix permanen yang dibutuhkan di backend: auto-detect expired QRIS dan regenerate otomatis.
+### Health check
+- `GET http://localhost:3001/`
 
 ## Penting
 
@@ -49,3 +48,22 @@ Backend akan:
 Setelah exec berhasil, agent tinggal konfirmasi ke customer bahwa QR sudah dikirim.
 
 **PENTING:** Kamu HARUS benar-benar memanggil `exec` tool untuk menjalankan curl di atas. Jangan hanya menulis teks balasan tanpa exec.
+
+## Known Issues
+
+### QRIS Expired-Reuse Bug
+
+**Gejala:**
+- Backend mengembalikan `{"skipped": true, "reason": "already-exists"}` meskipun QRIS sudah expired
+- Customer tidak menerima QR image baru di WhatsApp
+- Customer bilang "mana QR-nya" atau QR tidak muncul
+
+**Penyebab:**
+Backend Pakasir melakukan skip jika sudah ada payment record untuk order/customer yang sama, tanpa memeriksa apakah QRIS sudah expired atau belum.
+
+**Workaround sementara:**
+Hapus state lama di backend (`/state/orders-active/<phone>.json`) agar order baru bisa dibuat fresh — ini memaksa backend generate QRIS baru.
+
+**Fix yang dibutuhkan di backend:**
+- Auto-detect expired QRIS (berdasarkan timestamp atau status)
+- Regenerate QRIS otomatis tanpa perlu hapus state manual
