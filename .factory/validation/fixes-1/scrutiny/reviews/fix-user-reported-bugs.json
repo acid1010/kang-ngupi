@@ -1,0 +1,29 @@
+{
+  "featureId": "fix-user-reported-bugs",
+  "reviewedAt": "2026-04-10T05:17:00+07:00",
+  "commitId": "c33c042169ce7a7f368534fb3459ed4336ab280d",
+  "transcriptSkeletonReviewed": false,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "All 3 bug fixes were implemented correctly in both SOBATNGUPI_PROMPT.md and AGENTS.md. Changes are minimal, targeted, and address each reported bug with clear instructions.",
+    "issues": []
+  },
+  "assertions": {
+    "VAL-FIX-001": {
+      "satisfied": true,
+      "evidence": "SOBATNGUPI_PROMPT.md now contains: '**Delivery recap:** Saat konfirmasi pesanan delivery, format shareloc sebagai Google Maps link: `https://maps.google.com/?q={lat},{lng}`. Contoh: `Delivery ke: https://maps.google.com/?q=-6.575756,107.464066`. JANGAN tampilkan koordinat mentah seperti `-6.575756, 107.464066`.' (line ~101)"
+    },
+    "VAL-FIX-002": {
+      "satisfied": true,
+      "evidence": "SOBATNGUPI_PROMPT.md now contains: '**WAJIB cek harga dari `menu-schema.json` — JANGAN hitung/tebak dari memory.** `menu-schema.json` adalah satu-satunya sumber kebenaran untuk harga.' (line ~20)"
+    },
+    "VAL-FIX-003": {
+      "satisfied": true,
+      "evidence": "SOBATNGUPI_PROMPT.md contains full QRIS non-delivery procedure under '⚠️ QRIS Tidak Sampai:' section with apologize → retry → fallback to COD flow. AGENTS.md line 27 also documents: 'QR tidak sampai (\"mana QR-nya?\", \"belum terkirim\") → minta maaf, coba kirim ulang; gagal lagi → tawarkan COD (delivery only)'"
+    }
+  },
+  "sharedStateObservations": [],
+  "addressesFailureFrom": null,
+  "summary": "All 3 bug fixes correctly implemented. VAL-FIX-001 (maps link format), VAL-FIX-002 (pricing from schema), and VAL-FIX-003 (QRIS non-delivery handling) are all satisfied with clear, actionable instructions in both SOBATNGUPI_PROMPT.md and AGENTS.md."
+}
