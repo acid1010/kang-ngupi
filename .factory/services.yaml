@@ -1,0 +1,5 @@
+commands:
+  validate-json: jq . menu-schema.json
+  word-count: wc -w SOBATNGUPI_PROMPT.md AGENTS.md MEMORY.md
+  check-field-naming: grep -rn '"qty"' . --include="*.md" --include="*.json" || echo "No old-style fields found"
+  check-forbidden-words: grep -n 'backend\|localhost\|endpoint\|exec\|curl' SOBATNGUPI_PROMPT.md | grep -v '##\|###\|JANGAN\|terlarang\|```' || echo "No forbidden words in user-facing content"
