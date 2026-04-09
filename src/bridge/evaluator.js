@@ -1,6 +1,5 @@
 import { buildDraftOrderPayload, buildFinalOrderPayload, normalizeNotes, normalizePhone } from '../builders/orderPayload.js';
 import { buildQueueFileName, writeQueueFile } from '../queue/fs.js';
-import { getPaymentByClientOrderId } from '../repositories/payments.js';
 
 function toFiniteNumber(value) {
   const number = Number(value);
@@ -300,12 +299,6 @@ async function maybeAutoCreateQris(state, events) {
   const clientOrderId = state.orderContext.clientOrderId;
 
   try {
-    const existingPayment = await getPaymentByClientOrderId(clientOrderId);
-    if (existingPayment && ['pending', 'confirmed'].includes(existingPayment.payment_status)) {
-      console.log('[evaluator] QRIS payment already exists for', clientOrderId);
-      return { skipped: true, reason: 'already-exists', paymentId: existingPayment.id };
-    }
-
     // Lazy import to avoid circular dependency
     const { createPakasirQrisPayment } = await import('../payments/service.js');
 

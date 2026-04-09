@@ -96,7 +96,11 @@ export async function createPakasirQrisPayment({ clientOrderId, amountOverride =
   }
 
   const existingPayment = await getPaymentByClientOrderId(clientOrderId);
-  if (existingPayment && ['pending', 'confirmed'].includes(existingPayment.payment_status)) {
+  const isExpired = existingPayment?.expired_at && new Date(existingPayment.expired_at) < new Date();
+  if (isExpired) {
+    console.log('[payments] Existing QRIS expired, creating new one for', clientOrderId);
+  }
+  if (existingPayment && ['pending', 'confirmed'].includes(existingPayment.payment_status) && !isExpired) {
     const currentOrder = await getOrderByClientOrderId(clientOrderId);
     // Resend QRIS image for pending reused payment
     const whatsappQrisDelivery = await sendQrisImageBestEffort(currentOrder, existingPayment);
