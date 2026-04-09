@@ -25,6 +25,9 @@ curl -s -X POST http://localhost:3001/payments/qris/direct \
 - **QRIS Payment:** `POST http://localhost:3001/payments/qris/direct`
 - **Health check:** `GET http://localhost:3001/`
 
+## Known issue: QRIS expired reuse
+Backend akan skip QRIS generation jika sudah ada payment untuk order yang sama (`"skipped": true, "reason": "already-exists"`), bahkan jika QRIS sudah expired. Workaround sementara: hapus state lama di backend (`/state/orders-active/<phone>.json`) agar order baru bisa dibuat fresh. Fix permanen yang dibutuhkan di backend: auto-detect expired QRIS dan regenerate otomatis.
+
 ## Penting
 
 **QRIS AUTO-TRIGGER:** Backend sekarang auto-generate QRIS saat kamu sync order dengan `paymentMethod: qris`.
