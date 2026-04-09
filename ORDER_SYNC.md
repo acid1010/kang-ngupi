@@ -12,6 +12,7 @@ Lokasi:
 - `state/orders-active/<normalized-customer-id>.json`
 
 State aktif minimal menyimpan:
+- `orderId` — ID unik order, format: `ORD-<YYYYMMDD>-<4 digit random>` (e.g. `ORD-20260409-7A3F`)
 - `customerId`
 - `customerPhone` bila tersedia
 - `customerName`
@@ -21,13 +22,14 @@ State aktif minimal menyimpan:
 - `items[]`
 - `fulfillmentMethod`
 - `locationStatus`
-- `shareloc`
+- `shareloc` (objek: `{lat, lng, label?, source?}` — lihat catatan format di bawah)
 - `address`
 - `confirmationStatus`
 - `paymentMethod`
 - `paymentStatus`
 - `deliveryProvider`
-- `notes[]`
+- `notes[]` — catatan sistem/internal (e.g. `shareloc_received`, `qris_pending`)
+- `customerNotes[]` — catatan/request dari customer (e.g. `less ice`, `gula dikit`)
 - `lastMilestone`
 - `createdAt`
 - `updatedAt`
@@ -53,6 +55,8 @@ Milestone utama:
 - `payment_selected`
 - `payment_confirmed`
 - `delivery_provider_selected`
+- `order_cancelled`
+- `order_completed`
 
 Catatan khusus QRIS Pakasir:
 - saat customer memilih QRIS, tulis `payment_selected` dengan `paymentMethod: "qris"` dan `paymentStatus: "pending"`
@@ -60,10 +64,21 @@ Catatan khusus QRIS Pakasir:
 - `payment_confirmed` untuk QRIS hanya boleh ditulis setelah backend memverifikasi transaksi secara otomatis
 - untuk flow QRIS otomatis, default-nya tidak perlu minta bukti bayar manual ke customer
 
+## Format item order (berlaku untuk state DAN outbox)
+Gunakan field yang sama di state aktif maupun snapshot outbox agar konsisten:
+- `menuId` — ID menu dari menu-schema.json (e.g. `kopi-susu-original`)
+- `menuName` — nama lengkap menu (e.g. `Es Kopi Susu Original`)
+- `quantity` — jumlah item (angka, bukan string)
+- `price` — harga satuan dari menu-schema.json
+- `temperature` — `iced` / `hot` jika disebutkan customer (opsional)
+
+**Jangan** gunakan `name` sebagai pengganti `menuName`, atau `qty` sebagai pengganti `quantity`. Selalu pakai field di atas.
+
 ## Format snapshot
 ```json
 {
   "customer_phone": "081234567890",
+  "order_id": "ORD-20260403-A1B2",
   "updates": {
     "customerName": "Acid",
     "rawMessage": "kopsu 2",
@@ -71,7 +86,8 @@ Catatan khusus QRIS Pakasir:
       {
         "menuId": "kopi-susu-original",
         "menuName": "Es Kopi Susu Original",
-        "qty": 2,
+        "quantity": 2,
+        "price": 17000,
         "temperature": "iced"
       }
     ],
@@ -83,7 +99,8 @@ Catatan khusus QRIS Pakasir:
       "label": "Purwakarta",
       "source": "whatsapp"
     },
-    "notes": ["shareloc_received"]
+    "notes": ["shareloc_received"],
+    "customerNotes": []
   }
 }
 ```
@@ -99,3 +116,65 @@ Catatan khusus QRIS Pakasir:
 - jika payment method adalah QRIS, sinkronisasi awal tetap `pending` sampai backend mengirim/verifikasi status pembayaran
 - saat backend sudah menyatakan QRIS terverifikasi, sinkronisasi `payment_confirmed` harus membawa `paymentMethod: "qris"` dan `paymentStatus: "confirmed"`
 - jangan anggap chat customer seperti `sudah bayar` sebagai sumber kebenaran untuk QRIS otomatis
+
+## Format shareloc
+- Di state aktif dan outbox, `shareloc` harus disimpan sebagai objek:
+  ```json
+  {
+    "lat": -6.5397,
+    "lng": 107.446,
+    "label": "Purwakarta",
+    "source": "whatsapp"
+  }
+  ```
+- Jika shareloc masuk sebagai string koordinat (e.g. `"-6.5397, 107.446"`), parse menjadi objek dengan `lat`/`lng` dan set `source: "whatsapp"`
+- `label` boleh kosong jika tidak tersedia
+- Jangan simpan shareloc sebagai string mentah di state maupun outbox
+
+## Reservasi
+
+### State reservasi
+Lokasi: `state/reservations-active/<normalized-customer-id>.json`
+
+State minimal:
+- `reservationId` — format: `RSV-<YYYYMMDD>-<4 digit hex>` (e.g. `RSV-20260412-3D8A`)
+- `customerId`
+- `customerPhone`
+- `customerName`
+- `channel`
+- `date` — tanggal reservasi (ISO date, e.g. `2026-04-12`)
+- `time` — jam reservasi (e.g. `14:00`)
+- `partySize` — jumlah orang
+- `status` — `pending` / `confirmed` / `cancelled`
+- `lastMilestone`
+- `createdAt`
+- `updatedAt`
+
+### Outbox reservasi
+Lokasi: `outbox/reservation-context/`
+
+Nama file: `<normalized-customer-id>_<timestamp>_<milestone>.json`
+
+Milestone reservasi:
+- `reservation_confirmed`
+- `reservation_cancelled`
+
+Format snapshot:
+```json
+{
+  "customer_phone": "+6281234567890",
+  "reservation_id": "RSV-20260412-3D8A",
+  "updates": {
+    "customerName": "Acid",
+    "date": "2026-04-12",
+    "time": "14:00",
+    "partySize": 4,
+    "status": "confirmed"
+  }
+}
+```
+
+## Pembatalan order
+- Jika customer membatalkan order, tulis milestone `order_cancelled` dengan `confirmationStatus: "cancelled"`
+- Setelah snapshot ditulis, pindahkan state aktif ke `state/orders-expired/`
+- Pembatalan hanya bisa diproses sebelum `payment_confirmed`; setelah itu perlu eskalasi refund

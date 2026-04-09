@@ -7,6 +7,7 @@ Path:
 
 ```json
 {
+  "orderId": "ORD-20260403-B7C1",
   "customerId": "+6281234567890",
   "customerPhone": "+6281234567890",
   "customerName": "Acid",
@@ -17,7 +18,8 @@ Path:
     {
       "menuId": "kopi-susu-original",
       "menuName": "Es Kopi Susu Original",
-      "qty": 2,
+      "quantity": 2,
+      "price": 17000,
       "temperature": "iced"
     }
   ],
@@ -34,9 +36,8 @@ Path:
   "paymentMethod": null,
   "paymentStatus": null,
   "deliveryProvider": null,
-  "notes": [
-    "shareloc_received"
-  ],
+  "notes": [],
+  "customerNotes": [],
   "lastMilestone": "location_captured",
   "createdAt": "2026-04-03T13:30:00.000Z",
   "updatedAt": "2026-04-03T13:31:10.000Z",
@@ -52,6 +53,7 @@ Path:
 ```json
 {
   "customer_phone": "+6281234567890",
+  "order_id": "ORD-20260403-B7C1",
   "updates": {
     "customerName": "Acid",
     "rawMessage": "kopsu 2",
@@ -59,7 +61,8 @@ Path:
       {
         "menuId": "kopi-susu-original",
         "menuName": "Es Kopi Susu Original",
-        "qty": 2,
+        "quantity": 2,
+        "price": 17000,
         "temperature": "iced"
       }
     ],
@@ -74,22 +77,23 @@ Path:
     "paymentMethod": null,
     "paymentStatus": null,
     "deliveryProvider": null,
-    "notes": [
-      "shareloc_received"
-    ]
+    "notes": [],
+    "customerNotes": []
   }
 }
 ```
 
 ## Checklist milestone
-- `items_captured`: item + qty sudah cukup jelas
+- `items_captured`: item + qty sudah cukup jelas (orderId dibuat di sini)
 - `fulfillment_selected`: pickup atau delivery sudah jelas
 - `location_captured`: shareloc atau alamat fallback sudah diterima
 - `name_captured`: nama penerima sudah diketahui
 - `order_confirmed`: customer sudah menyetujui konfirmasi order
-- `payment_selected`: customer memilih COD / QRIS / transfer
-- `payment_confirmed`: pembayaran non-COD sudah tervalidasi
+- `payment_selected`: customer memilih COD / QRIS
+- `payment_confirmed`: pembayaran QRIS sudah tervalidasi oleh backend
 - `delivery_provider_selected`: customer memilih Ngupi Express / Grab / Gojek
+- `order_cancelled`: customer membatalkan order (sebelum payment_confirmed)
+- `order_completed`: pesanan selesai diproses / diterima customer
 
 ## Aturan praktis
 - Jangan bikin state/outbox untuk chat yang cuma tanya harga.
