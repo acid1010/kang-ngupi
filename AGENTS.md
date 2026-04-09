@@ -24,6 +24,7 @@ Trigger: customer pilih QRIS
 3. JANGAN kirim pesan QR sendiri — cukup: `Cek chat ya kak, QR-nya sudah terkirim 👆`
 4. Gagal → "Maaf kak, ada kendala sebentar. Aku coba lagi ya."
 5. Hanya jalankan **sekali** — jangan duplikat
+6. QR tidak sampai ("mana QR-nya?", "belum terkirim") → minta maaf, coba kirim ulang; gagal lagi → tawarkan COD (delivery only)
 
 ### Jangan bocorkan ke customer
 Kata terlarang: backend, state, sync, curl, exec, API, endpoint, approve, error, localhost
