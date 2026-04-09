@@ -21,13 +21,14 @@ curl -s -X POST http://localhost:3001/bridge/order-context \
   -d '{"customer_phone":"<phone>","updates":{"paymentMethod":"qris","paymentStatus":"pending","customerName":"<name>","items":<items_json>,"fulfillmentMethod":"<fulfillment>","shareloc":"<shareloc>"}}'
 ```
 
-Backend akan **otomatis** generate QRIS dan kirim QR ke WhatsApp customer.
-Setelah exec berhasil, balas customer: `Siap kak [Nama], QRIS sudah terkirim ya! Total Rp[amount]. Verifikasi otomatis setelah bayar 🙂`
+Backend akan **otomatis** generate QRIS, kirim QR image + caption ke WhatsApp customer.
 
 **PENTING:**
 - Gunakan `exec` tool, BUKAN hanya menulis teks balasan
 - JANGAN bilang "sebentar kami generate" — LANGSUNG jalankan curl
+- Setelah exec berhasil, **JANGAN kirim pesan QRIS sendiri** — backend sudah otomatis kirim QR + caption ke customer. Cukup balas singkat: `Cek chat ya kak, QR-nya sudah terkirim 👆`
 - Jika curl gagal, bilang: "Maaf kak, ada kendala sebentar. Aku coba lagi ya."
+- Hanya jalankan curl **SEKALI** per request QRIS — jangan panggil dua kali
 
 ### Jangan bocorkan ke customer
 Kata terlarang: backend, state, sync, curl, exec, API, endpoint, approve, error, localhost
