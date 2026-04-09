@@ -178,3 +178,33 @@ Format snapshot:
 - Jika customer membatalkan order, tulis milestone `order_cancelled` dengan `confirmationStatus: "cancelled"`
 - Setelah snapshot ditulis, pindahkan state aktif ke `state/orders-expired/`
 - Pembatalan hanya bisa diproses sebelum `payment_confirmed`; setelah itu perlu eskalasi refund
+
+## Contoh state aktif
+
+Path: `state/orders-active/+6281234567890.json`
+```json
+{
+  "orderId": "ORD-20260403-B7C1",
+  "customerId": "+6281234567890",
+  "customerPhone": "+6281234567890",
+  "customerName": "Acid",
+  "channel": "whatsapp",
+  "rawMessage": "kopsu 2",
+  "rawMessageLatest": "kopsu 2 delivery",
+  "items": [{"menuId": "kopi-susu-original", "menuName": "Es Kopi Susu Original", "quantity": 2, "price": 17000, "temperature": "iced"}],
+  "fulfillmentMethod": "delivery",
+  "locationStatus": "shareloc_received",
+  "shareloc": {"lat": -6.5397, "lng": 107.446, "label": "Purwakarta", "source": "whatsapp"},
+  "address": null,
+  "confirmationStatus": "pending",
+  "paymentMethod": null,
+  "paymentStatus": null,
+  "deliveryProvider": null,
+  "notes": [],
+  "customerNotes": [],
+  "lastMilestone": "location_captured",
+  "createdAt": "2026-04-03T13:30:00.000Z",
+  "updatedAt": "2026-04-03T13:31:10.000Z",
+  "expiresAt": "2026-04-04T13:31:10.000Z"
+}
+```
