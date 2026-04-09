@@ -1,0 +1,64 @@
+{
+  "featureId": "restructure-main-prompt",
+  "reviewedAt": "2026-04-10T04:52:00Z",
+  "commitId": "ad5c269",
+  "transcriptSkeletonReviewed": true,
+  "diffReviewed": true,
+  "status": "pass",
+  "codeReview": {
+    "summary": "Feature successfully restructured SOBATNGUPI_PROMPT.md: word count reduced from 966 to 820 (15.1% reduction, exactly meeting ≤820 target), explicit 5-step order flow state machine with prominent TUNGGU step, QRIS expired-reuse bug workaround documented, duplicated menu table removed (replaced with menu-schema.json reference), all personality/warmth sections preserved, QRIS procedure complete with curl command and error handling.",
+    "issues": []
+  },
+  "assertionResults": [
+    {
+      "id": "VAL-PROMPT-001",
+      "status": "passed",
+      "evidence": "wc -w returns exactly 820 words — meets ≤820 target"
+    },
+    {
+      "id": "VAL-PROMPT-002",
+      "status": "passed",
+      "evidence": "grep -c 'TUNGGU' returns 1 match. Explicit 5-step state machine present: Step 1 (tangkap item), Step 2 (konfirmasi + total), Step 3 (TUNGGU with prominent bold+emoji marking), Step 4 (metode pembayaran di pesan TERPISAH), Step 5 (proses pembayaran)"
+    },
+    {
+      "id": "VAL-PROMPT-003",
+      "status": "passed",
+      "evidence": "grep -c 'expired\\|kedaluwarsa' returns 1 match. Section '⚠️ Expired / Payment Exists Bug:' present with 3-step handling: (1) minta maaf, (2) bilang ada kendala teknis + minta tunggu, (3) catat known bug"
+    },
+    {
+      "id": "VAL-PROMPT-004",
+      "status": "passed",
+      "evidence": "Menu table (~90 words) removed, replaced with 2-line reference to menu-schema.json. AGENTS.md reduced from ~370 to 237 words. Critical rules (order separation, QRIS exec, forbidden words) present in both files per design intent (SOBATNGUPI_PROMPT.md as source of truth, AGENTS.md as reinforcement)"
+    },
+    {
+      "id": "VAL-PROMPT-005",
+      "status": "passed",
+      "evidence": "Persona section intact: 'Fun, hangat, santai asik, sopan, tidak defensif, tidak kaku'. Emoji guidance intact. WhatsApp formatting rules (dash lists) intact. Sapaan/opening section intact with name variants"
+    },
+    {
+      "id": "VAL-PROMPT-006",
+      "status": "passed",
+      "evidence": "QRIS procedure complete: curl command with correct JSON schema (menuId, menuName, quantity, price, shareloc), 'exec tool' instruction, post-exec behavior 'Cek chat ya kak, QR-nya sudah terkirim 👆', JANGAN rules (no duplicate, no 'sebentar' without exec, no >1x curl), error handling 'Exec gagal → Maaf kak...', timeout handling present"
+    },
+    {
+      "id": "VAL-CROSS-004",
+      "status": "passed",
+      "evidence": "Forbidden words (backend, state, sync, curl, exec, API, endpoint, approve, error, localhost) appear only in: (1) the forbidden words list section itself, (2) internal instruction sections (QRIS procedure with curl command), (3) system references (state, sync). No forbidden words appear in customer-facing example responses (greeting, order confirmation, order completion messages)"
+    },
+    {
+      "id": "VAL-CROSS-005",
+      "status": "passed",
+      "evidence": "Cross-references in SOBATNGUPI_PROMPT.md: 'menu-schema.json' (referenced in Menu section), 'ORDER_SYNC.md' (referenced in Sinkronisasi section). All referenced files exist in workspace"
+    }
+  ],
+  "blockingIssues": [],
+  "sharedStateObservations": [
+    {
+      "area": "skills",
+      "observation": "The config-worker skill procedure mentions JSON validation with `jq . <file>` as a verification step, but this feature only edited markdown files. Worker correctly determined JSON validation was not applicable. However, the skill procedure could clarify that JSON validation is only needed when JSON files are modified.",
+      "evidence": "Transcript shows worker did not run jq validation (correctly, since only SOBATNGUPI_PROMPT.md was edited). Skill procedure lists 'jq . <file>' under Verification without conditional context."
+    }
+  ],
+  "addressesFailureFrom": null,
+  "summary": "Feature pass. All 8 validation assertions passed. SOBATNGUPI_PROMPT.md reduced from 966 to 820 words (15.1% reduction, meets ≤820 target). Explicit 5-step order flow state machine with prominent TUNGGU step implemented. QRIS expired-reuse bug workaround documented with 3-step handling. Duplicated menu table removed. All personality/warmth sections preserved. QRIS procedure complete with correct curl JSON schema (menuId, menuName, quantity, price). No forbidden words in customer-facing content. All cross-references valid. One non-blocking skill documentation observation noted."
+}
