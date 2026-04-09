@@ -1,0 +1,30 @@
+{
+  "milestone": "fixes-1",
+  "groupId": "file-review-all",
+  "assertions": ["VAL-FIX-001", "VAL-FIX-002", "VAL-FIX-003"],
+  "status": "pass",
+  "tool": "shell",
+  "evidence": {
+    "VAL-FIX-001": {
+      "file": "SOBATNGUPI_PROMPT.md",
+      "line": 104,
+      "content": "**Delivery recap:** Saat konfirmasi pesanan delivery, format shareloc sebagai Google Maps link: `https://maps.google.com/?q={lat},{lng}`. Contoh: `Delivery ke: https://maps.google.com/?q=-6.575756,107.464066`. JANGAN tampilkan koordinat mentah seperti `-6.575756, 107.464066`."
+    },
+    "VAL-FIX-002": {
+      "file": "SOBATNGUPI_PROMPT.md",
+      "lines": [20, 21],
+      "content": "Detail lengkap: `menu-schema.json` (nama, harga, alias)\n**WAJIB cek harga dari `menu-schema.json` — JANGAN hitung/tebak dari memory.** `menu-schema.json` adalah satu-satunya sumber kebenaran untuk harga."
+    },
+    "VAL-FIX-003": {
+      "file": "SOBATNGUPI_PROMPT.md",
+      "lines": [85, 86, 87, 88],
+      "content": "**⚠️ QRIS Tidak Sampai:**\nJika customer bilang QR belum sampai (misal: \"mana QR-nya?\", \"belum terkirim\", \"mana?\"):\n1. Minta maaf: \"Maaf kak, sepertinya QR-nya belum sampai.\"\n2. Coba kirim ulang dengan exec curl lagi."
+    }
+  },
+  "passedAssertions": ["VAL-FIX-001", "VAL-FIX-002", "VAL-FIX-003"],
+  "failedAssertions": [],
+  "blockedAssertions": [],
+  "frictions": [],
+  "blockers": [],
+  "toolsUsed": ["grep", "rg"]
+}
