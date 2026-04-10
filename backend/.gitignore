@@ -1,0 +1,13 @@
+node_modules/
+.env
+.DS_Store
+*.log
+state/orders-active/*.json
+state/orders-expired/*.json
+state/reservations-active/*.json
+outbox/order-context/*.json
+!outbox/order-context/README.md
+outbox/reservation-context/*.json
+queue/
+logs/
+!logs/.gitkeep
