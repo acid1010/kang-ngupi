@@ -20,12 +20,14 @@ module.exports = {
       autorestart: true
     },
     {
-      name: 'ngupi-ngrok',
-      script: '/opt/homebrew/bin/ngrok',
-      args: 'http --url=ngupingupi.me 3001',
+      name: 'ngupi-tunnel',
+      script: '/opt/homebrew/bin/cloudflared',
+      args: 'tunnel --url http://localhost:3001',
       autorestart: true,
       max_restarts: 10,
-      restart_delay: 5000
+      restart_delay: 5000,
+      out_file: '/Users/acidjp/.openclaw/workspace-sobatngupi/backend/logs/cloudflared.log',
+      error_file: '/Users/acidjp/.openclaw/workspace-sobatngupi/backend/logs/cloudflared-error.log'
     }
   ]
 };
