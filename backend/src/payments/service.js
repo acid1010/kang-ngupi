@@ -1,5 +1,6 @@
 import { calculateOrderAmount } from '../catalog/menuPricing.js';
 import { normalizePhone } from '../builders/orderPayload.js';
+import logger from '../lib/logger.js';
 import { getOrderByClientOrderId, updateOrderPaymentSummary } from '../repositories/orders.js';
 import {
   getPaymentByClientOrderId,
@@ -35,10 +36,10 @@ async function sendQrisImageBestEffort(order, payment) {
   });
 
   if (!result.ok && !result.skipped) {
-    console.warn('[payments] failed to send QRIS image WhatsApp notification', {
+    logger.warn({
       to: order.customer_phone_snapshot,
       error: result.error
-    });
+    }, '[payments] failed to send QRIS image WhatsApp notification');
   }
 
   return result;
@@ -56,10 +57,10 @@ async function sendSuccessNotificationBestEffort(order) {
   });
 
   if (!result.ok && !result.skipped) {
-    console.warn('[payments] failed to send QRIS success WhatsApp notification', {
+    logger.warn({
       to: order.customer_phone_snapshot,
       error: result.error
-    });
+    }, '[payments] failed to send QRIS success WhatsApp notification');
   }
 
   return result;
@@ -98,7 +99,7 @@ export async function createPakasirQrisPayment({ clientOrderId, amountOverride =
   const existingPayment = await getPaymentByClientOrderId(clientOrderId);
   const isExpired = existingPayment?.expired_at && new Date(existingPayment.expired_at) < new Date();
   if (isExpired) {
-    console.log('[payments] Existing QRIS expired, creating new one for', clientOrderId);
+    logger.info('[payments] Existing QRIS expired, creating new one for %s', clientOrderId);
   }
   if (existingPayment && ['pending', 'confirmed'].includes(existingPayment.payment_status) && !isExpired) {
     const currentOrder = await getOrderByClientOrderId(clientOrderId);

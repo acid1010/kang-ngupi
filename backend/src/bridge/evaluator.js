@@ -1,5 +1,6 @@
 import { buildDraftOrderPayload, buildFinalOrderPayload, normalizeNotes, normalizePhone } from '../builders/orderPayload.js';
 import { buildQueueFileName, writeQueueFile } from '../queue/fs.js';
+import logger from '../lib/logger.js';
 
 function toFiniteNumber(value) {
   const number = Number(value);
@@ -316,12 +317,12 @@ async function maybeAutoCreateQris(state, events) {
       }
     }
 
-    console.log('[evaluator] Auto-created QRIS payment for', clientOrderId);
+    logger.info('[evaluator] Auto-created QRIS payment for %s', clientOrderId);
     events.push({ type: 'qris_payment_created', clientOrderId, paymentId: result.payment?.id });
 
     return result;
   } catch (error) {
-    console.error('[evaluator] Failed to auto-create QRIS payment:', error.message);
+    logger.error('[evaluator] Failed to auto-create QRIS payment: %s', error.message);
     return { error: error.message };
   }
 }
