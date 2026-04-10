@@ -1,7 +1,8 @@
 import 'dotenv/config';
+import logger from '../lib/logger.js';
 import { ensureOutboxDirs } from './fs.js';
 import { processSobatNgupiOutboxOnce } from './processor.js';
 
 await ensureOutboxDirs();
 const result = await processSobatNgupiOutboxOnce();
-console.log(JSON.stringify(result, null, 2));
+logger.info({ result }, 'Outbox run-once completed');

@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import logger from '../lib/logger.js';
 import { buildDraftOrderPayload } from '../builders/orderPayload.js';
 import { buildQueueFileName, ensureQueueDirs, writeQueueFile } from './fs.js';
 
@@ -34,4 +35,4 @@ const filePath = await writeQueueFile(
   buildQueueFileName('draft', draftPayload.order.client_order_id),
   draftPayload
 );
-console.log(`Sample draft payload written to ${filePath}`);
+logger.info(`Sample draft payload written to ${filePath}`);

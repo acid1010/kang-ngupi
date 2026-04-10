@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import QRCode from 'qrcode';
+import logger from './lib/logger.js';
 import { upsertOrderContext, getOrderContextState } from './bridge/stateService.js';
 import {
   buildPaymentBaseUrl,
@@ -12,6 +13,17 @@ import { createOrUpdateOrder, getOrderById, listOrders } from './repositories/or
 import { buildQueueFileName, ensureQueueDirs, writeQueueFile } from './queue/fs.js';
 import { processAllQueues, retryFailedQueues } from './queue/processor.js';
 import { ensureStateDirs } from './state/store.js';
+
+// Uncaught exception handlers
+process.on('uncaughtException', (err) => {
+  logger.fatal({ err }, 'Uncaught exception — shutting down');
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason) => {
+  logger.fatal({ reason }, 'Unhandled rejection — shutting down');
+  process.exit(1);
+});
 
 const app = express();
 app.use(express.json());
@@ -143,7 +155,7 @@ app.post('/payments/pakasir/qris', async (req, res) => {
 });
 
 app.post('/payments/qris/direct', async (req, res) => {
-  console.log('[qris/direct] incoming request', { customer_phone: req.body?.customer_phone });
+  logger.info({ customer_phone: req.body?.customer_phone }, '[qris/direct] incoming request');
   try {
     const { customer_phone, customer_name, items, fulfillment_method, shareloc, delivery_provider, amount } = req.body;
 
@@ -172,7 +184,7 @@ app.post('/payments/qris/direct', async (req, res) => {
       return res.status(500).json({ ok: false, error: 'Failed to create order - clientOrderId not generated' });
     }
 
-    console.log('[qris/direct] order context updated, clientOrderId:', clientOrderId);
+    logger.info('[qris/direct] order context updated, clientOrderId: %s', clientOrderId);
 
     // Wait a moment for draft to be queued, then process
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -184,13 +196,13 @@ app.post('/payments/qris/direct', async (req, res) => {
         new Promise((_, reject) => setTimeout(() => reject(new Error('Queue timeout')), 10000))
       ]);
     } catch (e) {
-      console.warn('[qris/direct] Queue processing warning:', e.message);
+      logger.warn('[qris/direct] Queue processing warning: %s', e.message);
     }
 
-    console.log('[qris/direct] queue processing completed');
+    logger.info('[qris/direct] queue processing completed');
 
     // Create QRIS payment
-    console.log('[qris/direct] creating QRIS payment for', clientOrderId);
+    logger.info('[qris/direct] creating QRIS payment for %s', clientOrderId);
     const baseUrl = buildPaymentBaseUrl(req);
     const paymentResult = await createPakasirQrisPayment({
       clientOrderId,
@@ -198,10 +210,10 @@ app.post('/payments/qris/direct', async (req, res) => {
       baseUrl
     });
 
-    console.log('[qris/direct] QRIS payment created', {
+    logger.info({
       qr_image_url: paymentResult?.payment?.qr_image_url,
       whatsapp_sent: paymentResult?.whatsapp_qris_delivery?.ok
-    });
+    }, '[qris/direct] QRIS payment created');
 
     // Return clean response with WhatsApp delivery status
     const waDelivery = paymentResult?.whatsapp_qris_delivery;
@@ -310,6 +322,22 @@ app.get('/orders/:id', async (req, res) => {
 const port = Number(process.env.PORT || 3001);
 await ensureQueueDirs();
 await ensureStateDirs();
-app.listen(port, () => {
-  console.log(`Ngupi backend listening on port ${port}`);
+const server = app.listen(port, () => {
+  logger.info(`Ngupi backend listening on port ${port}`);
 });
+
+// Graceful shutdown
+const shutdown = (signal) => {
+  logger.info(`${signal} received — shutting down gracefully`);
+  server.close(() => {
+    logger.info('Server closed');
+    process.exit(0);
+  });
+  setTimeout(() => {
+    logger.error('Forced shutdown after timeout');
+    process.exit(1);
+  }, 10000);
+};
+
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
