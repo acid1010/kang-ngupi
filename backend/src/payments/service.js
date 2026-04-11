@@ -86,7 +86,7 @@ export async function getPaymentSessionById(id, { baseUrl } = {}) {
   return withQrUrl(payment, baseUrl);
 }
 
-export async function createPakasirQrisPayment({ clientOrderId, amountOverride = null, baseUrl = null }) {
+export async function createPakasirQrisPayment({ clientOrderId, amountOverride = null, baseUrl = null, skipWhatsApp = false }) {
   if (!clientOrderId) {
     throw new Error('client_order_id is required');
   }
@@ -104,7 +104,9 @@ export async function createPakasirQrisPayment({ clientOrderId, amountOverride =
   if (existingPayment && ['pending', 'confirmed'].includes(existingPayment.payment_status) && !isExpired) {
     const currentOrder = await getOrderByClientOrderId(clientOrderId);
     // Resend QRIS image for pending reused payment
-    const whatsappQrisDelivery = await sendQrisImageBestEffort(currentOrder, existingPayment);
+    const whatsappQrisDelivery = skipWhatsApp
+      ? { ok: false, skipped: true, reason: 'deduplicated' }
+      : await sendQrisImageBestEffort(currentOrder, existingPayment);
 
     return {
       order: currentOrder,
@@ -153,7 +155,9 @@ export async function createPakasirQrisPayment({ clientOrderId, amountOverride =
   // to avoid circular dependency issues
 
   // Send QRIS image via wacli
-  const whatsappQrisDelivery = await sendQrisImageBestEffort(updatedOrder, saved);
+  const whatsappQrisDelivery = skipWhatsApp
+    ? { ok: false, skipped: true, reason: 'deduplicated' }
+    : await sendQrisImageBestEffort(updatedOrder, saved);
 
   return {
     order: updatedOrder,
