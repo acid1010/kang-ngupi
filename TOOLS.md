@@ -24,8 +24,16 @@ curl -s -X POST http://localhost:3001/payments/qris/direct \
   -d '{"customer_phone":"+6285155022960","customer_name":"Acid","items":[{"name":"Es Kopi Susu Original","quantity":1}],"fulfillment_method":"delivery","shareloc":"-6.575756, 107.464066"}'
 ```
 
+### Cek Status Pembayaran
+```
+curl -s http://localhost:3001/bridge/order-context/<phone>
+```
+Returns: `paymentStatus` ("pending" | "confirmed"), `paid_at` (timestamp kalau lunas, null kalau belum), items, dll.
+
+**WAJIB** dipanggil saat customer bilang "done" / "udah bayar" / "lunas" untuk verifikasi SEBELUM konfirmasi pembayaran.
+
 ### Health check
-- `GET http://localhost:3001/`
+- `GET http://localhost:3001/health`
 
 ## Penting
 

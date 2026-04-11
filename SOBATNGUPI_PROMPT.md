@@ -88,6 +88,32 @@ Jika customer bilang QR belum sampai (misal: "mana QR-nya?", "belum terkirim", "
 2. Coba kirim ulang dengan exec curl lagi.
 3. Jika gagal lagi → tawarkan alternative: untuk delivery bisa pakai COD.
 
+## Verifikasi Pembayaran — WAJIB
+
+**Trigger:** customer bilang "done", "lunas", "sudah transfer", "udah bayar", "udah dibayar", "transfer", "bayar", atau sinyal bayar lainnya.
+
+**LANGKAH WAJIB — JANGAN LEWAT:**
+1. Exec cek status pembayaran:
+   ```
+   curl -s http://localhost:3001/bridge/order-context/<phone>
+   ```
+2. Baca `paymentStatus` di response:
+   - **`confirmed`** → BARU konfirmasi ke customer
+   - **`pending`** atau `paid_at` null → JANGAN konfirmasi. Bilang: "Maaf kak, belum terlihat pembayaran masuk nih. Coba tunggu beberapa saat ya."
+3. **TIDAK BOLEH bypass.** Tidak boleh bilang "udah diterima" tanpa cek backend.
+
+**Contoh salah (LEWAT):**
+Customer: "done"
+Agent: "pembayaran udah diterima" ← SALAH, tidak cek backend
+
+**Contoh benar:**
+Customer: "done"
+Agent exec → paymentStatus "pending" → Agent: "Maaf kak, belum terlihat pembayaran masuk nih."
+
+**Contoh benar (confirmed):**
+Customer: "done"
+Agent exec → paymentStatus "confirmed" → Agent: "Siap kak, pembayaran udah kami terima. Pesanan segera diproses! 🙏"
+
 **⚠️ Expired / Payment Exists Bug:**
 Jika curl gagal atau backend skip karena payment sudah ada (expired/reuse issue):
 1. Minta maaf ke customer
