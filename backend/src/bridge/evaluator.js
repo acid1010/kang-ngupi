@@ -292,9 +292,21 @@ function shouldAutoCreateQris(state) {
   return true;
 }
 
+const QRIS_COOLDOWN_MS = 3 * 60 * 1000;
+
 async function maybeAutoCreateQris(state, events) {
   if (!shouldAutoCreateQris(state)) {
     return null;
+  }
+
+  // Deduplicate: skip WhatsApp send if QR was sent to this customer within 3 minutes
+  if (state.lastQrisSentAt) {
+    const elapsed = Date.now() - new Date(state.lastQrisSentAt).getTime();
+    if (elapsed < QRIS_COOLDOWN_MS) {
+      logger.info('[evaluator] Skipping QRIS WhatsApp send — dedup cooldown (%ds elapsed, %ds remaining)',
+        Math.floor(elapsed / 1000), Math.floor((QRIS_COOLDOWN_MS - elapsed) / 1000));
+      return { deduplicated: true, skipped: true };
+    }
   }
 
   const clientOrderId = state.orderContext.clientOrderId;
@@ -303,21 +315,24 @@ async function maybeAutoCreateQris(state, events) {
     // Lazy import to avoid circular dependency
     const { createPakasirQrisPayment } = await import('../payments/service.js');
 
+    let skipWhatsApp = false;
     let result;
     try {
-      result = await createPakasirQrisPayment({ clientOrderId });
+      result = await createPakasirQrisPayment({ clientOrderId, skipWhatsApp });
     } catch (firstError) {
       // Order may not be persisted yet when called from bridge evaluator.
       if (String(firstError?.message || '').includes('Order not found for client_order_id=')) {
         const { processAllQueues } = await import('../queue/processor.js');
         await processAllQueues();
-        result = await createPakasirQrisPayment({ clientOrderId });
+        result = await createPakasirQrisPayment({ clientOrderId, skipWhatsApp });
       } else {
         throw firstError;
       }
     }
 
-    logger.info('[evaluator] Auto-created QRIS payment for %s', clientOrderId);
+    // Mark lastQrisSentAt so we don't spam WhatsApp within the cooldown window
+    state.lastQrisSentAt = new Date().toISOString();
+    logger.info('[evaluator] Auto-created QRIS payment for %s (lastQrisSentAt=%s)', clientOrderId, state.lastQrisSentAt);
     events.push({ type: 'qris_payment_created', clientOrderId, paymentId: result.payment?.id });
 
     return result;
