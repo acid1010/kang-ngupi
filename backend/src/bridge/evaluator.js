@@ -295,18 +295,19 @@ function shouldAutoCreateQris(state) {
 const QRIS_COOLDOWN_MS = 3 * 60 * 1000;
 
 async function maybeAutoCreateQris(state, events) {
-  if (!shouldAutoCreateQris(state)) {
-    return null;
-  }
-
-  // Deduplicate: skip WhatsApp send if QR was sent to this customer within 3 minutes
+  // Deduplicate: skip QR creation if WhatsApp was already sent to this customer within 3 minutes
+  // Check this FIRST, before shouldAutoCreateQris (which requires draftSentAt)
   if (state.lastQrisSentAt) {
     const elapsed = Date.now() - new Date(state.lastQrisSentAt).getTime();
     if (elapsed < QRIS_COOLDOWN_MS) {
-      logger.info('[evaluator] Skipping QRIS WhatsApp send — dedup cooldown (%ds elapsed, %ds remaining)',
+      logger.info('[evaluator] Skipping QRIS — dedup cooldown (%ds elapsed, %ds remaining)',
         Math.floor(elapsed / 1000), Math.floor((QRIS_COOLDOWN_MS - elapsed) / 1000));
       return { deduplicated: true, skipped: true };
     }
+  }
+
+  if (!shouldAutoCreateQris(state)) {
+    return null;
   }
 
   const clientOrderId = state.orderContext.clientOrderId;
