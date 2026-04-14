@@ -3,12 +3,36 @@ import { createPakasirQrisPayment } from '../payments/service.js';
 import { inferQueueKindFromFileName, listQueueFiles, moveToBucket, readJson } from './fs.js';
 import { webhookUrl } from './config.js';
 
+const webhookTimeoutMs = Number(process.env.QUEUE_POST_TIMEOUT_MS || 15000);
+if (!Number.isFinite(webhookTimeoutMs) || webhookTimeoutMs < 1000) {
+  throw new Error('QUEUE_POST_TIMEOUT_MS must be a number >= 1000');
+}
+
 async function postPayload(payload) {
-  const response = await fetch(webhookUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
+  const headers = { 'Content-Type': 'application/json' };
+  if (process.env.BACKEND_API_KEY) {
+    headers['x-api-key'] = process.env.BACKEND_API_KEY;
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), webhookTimeoutMs);
+
+  let response;
+  try {
+    response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new Error(`Webhook POST timeout after ${webhookTimeoutMs}ms`);
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!response.ok) {
     const text = await response.text();

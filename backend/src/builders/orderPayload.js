@@ -17,17 +17,24 @@ export function generateClientOrderId(prefix = 'draft') {
 }
 
 export function normalizePhone(phone) {
-  if (!phone) return null;
+  if (phone === null || phone === undefined) return null;
 
-  const raw = String(phone).trim().replace(/[\s()-]/g, '');
+  const raw = String(phone).trim();
+  if (!raw) return null;
 
-  if (raw.startsWith('+')) {
-    return `+${raw.slice(1).replace(/\D/g, '')}`;
+  const compact = raw.replace(/[\s()-]/g, '');
+  const hasPlusPrefix = compact.startsWith('+');
+  const digits = compact.replace(/\D/g, '');
+
+  if (!digits) return null;
+  if (digits.length < 8 || digits.length > 16) return null;
+
+  if (hasPlusPrefix) {
+    return `+${digits}`;
   }
 
-  const digits = raw.replace(/\D/g, '');
-
   if (digits.startsWith('0')) {
+    if (digits.length <= 1) return null;
     return `+62${digits.slice(1)}`;
   }
 
@@ -47,14 +54,28 @@ export function mapItems(items = []) {
   if (!Array.isArray(items)) return [];
 
   return items
-    .filter((item) => item && item.menuName && item.qty)
-    .map((item) => ({
-      menu_id: item.menuId ?? item.menu_id ?? null,
-      menu_name: item.menuName ?? item.menu_name,
-      qty: Number(item.qty),
-      temperature: item.temperature ?? null,
-      notes: item.notes ?? null
-    }));
+    .map((item) => {
+      if (!item) return null;
+
+      const menuName = item.menuName ?? item.menu_name ?? item.name ?? null;
+      const qtyRaw = Number(item.qty ?? item.quantity ?? item.count ?? 0);
+      const qty = Math.trunc(qtyRaw);
+      const menuId = item.menuId ?? item.menu_id ?? null;
+      const normalizedMenuName = menuName ?? (menuId ? String(menuId) : null);
+
+      if (!normalizedMenuName || !Number.isFinite(qtyRaw) || qty <= 0) {
+        return null;
+      }
+
+      return {
+        menu_id: menuId,
+        menu_name: normalizedMenuName,
+        qty,
+        temperature: item.temperature ?? null,
+        notes: item.notes ?? null
+      };
+    })
+    .filter(Boolean);
 }
 
 function mapFulfillment(context = {}) {
@@ -136,4 +157,8 @@ export function buildFinalOrderPayload(context = {}) {
   payload.order.payment = mapPayment(context, 'confirmed');
   payload.order.status = context.status ?? 'ready_to_submit';
   return payload;
+}
+
+export function generateUniqueClientOrderId(prefix = 'draft') {
+  return generateClientOrderId(prefix);
 }
