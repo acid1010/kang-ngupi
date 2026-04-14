@@ -181,9 +181,15 @@ export async function createPakasirQrisPayment({ clientOrderId, amountOverride =
   }
   if (existingPayment && existingPayment.payment_status === 'pending' && !isExpired) {
     const currentOrder = await getOrderByClientOrderId(clientOrderId);
+    // Clear stale whatsapp_sent_at so reused payment can re-send QR
+    const cleanedPayment = { ...existingPayment };
+    if (cleanedPayment.metadata?.whatsapp_sent_at) {
+      cleanedPayment.metadata = { ...cleanedPayment.metadata };
+      delete cleanedPayment.metadata.whatsapp_sent_at;
+    }
     const whatsappQrisDelivery = skipWhatsApp
       ? { ok: false, skipped: true, reason: 'deduplicated' }
-      : await sendQrisImageBestEffort(currentOrder, existingPayment);
+      : await sendQrisImageBestEffort(currentOrder, cleanedPayment);
 
     return {
       order: currentOrder,
@@ -227,7 +233,7 @@ export async function createPakasirQrisPayment({ clientOrderId, amountOverride =
     expired_at: payment.expired_at ?? null,
     customer_phone_snapshot: order.customer_phone_snapshot ?? null,
     customer_name_snapshot: order.customer_name_snapshot ?? null,
-    metadata: transaction
+    metadata: { ...transaction } // fresh metadata, no stale whatsapp_sent_at
   });
 
   const updatedOrder = await updateOrderPaymentSummary(clientOrderId, {

@@ -51,10 +51,24 @@ function findCatalogEntry(item = {}) {
     .filter(Boolean)
     .map(normalizeKey);
 
+  // Exact match first
   for (const [menuId, entry] of Object.entries(MENU_PRICING)) {
     const keys = [menuId, entry.name, ...(entry.aliases ?? [])].map(normalizeKey);
     if (candidates.some((candidate) => keys.includes(candidate))) {
       return { menuId, ...entry };
+    }
+  }
+
+  // Fuzzy match: check if any candidate is a substring of (or contains) a known alias
+  for (const [menuId, entry] of Object.entries(MENU_PRICING)) {
+    const keys = [menuId, entry.name, ...(entry.aliases ?? [])].map(normalizeKey);
+    for (const candidate of candidates) {
+      if (!candidate || candidate.length < 3) continue;
+      for (const key of keys) {
+        if (key.includes(candidate) || candidate.includes(key)) {
+          return { menuId, ...entry };
+        }
+      }
     }
   }
 
