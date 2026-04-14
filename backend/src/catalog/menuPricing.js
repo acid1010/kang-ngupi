@@ -1,25 +1,42 @@
-const MENU_PRICING = {
-  'kopi-susu-original': {
-    name: 'Es Kopi Susu Original',
-    price: 17000,
-    aliases: ['kopi-susu-original', 'kopi susu', 'es kopi susu original', 'es kopi susu']
-  },
-  americano: {
-    name: 'Americano',
-    price: 15000,
-    aliases: ['americano', 'amer']
-  },
-  'caffe-latte': {
-    name: 'Caffe Latte',
-    price: 21000,
-    aliases: ['caffe-latte', 'caffe latte', 'latte', 'cafe latte']
-  },
-  cappuccino: {
-    name: 'Cappuccino',
-    price: 21000,
-    aliases: ['cappuccino', 'capuccino', 'cappucino', 'capucino']
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT_DIR = path.resolve(__dirname, '../../..');
+
+let _cache = null;
+
+function loadMenuSchema() {
+  if (_cache) return _cache;
+  const raw = readFileSync(path.join(ROOT_DIR, 'menu-schema.json'), 'utf8');
+  _cache = JSON.parse(raw);
+  return _cache;
+}
+
+function buildPricingFromSchema() {
+  const schema = loadMenuSchema();
+  const map = {};
+
+  for (const menu of schema.menus ?? []) {
+    const aliases = [
+      menu.id,
+      String(menu.name).toLowerCase(),
+      ...(menu.aliases ?? []),
+      ...(menu.ambiguousAliases ?? [])
+    ];
+
+    map[menu.id] = {
+      name: menu.name,
+      price: menu.price,
+      aliases
+    };
   }
-};
+
+  return map;
+}
+
+const MENU_PRICING = buildPricingFromSchema();
 
 function normalizeKey(value) {
   return String(value ?? '')
@@ -42,6 +59,10 @@ function findCatalogEntry(item = {}) {
   }
 
   return null;
+}
+
+export function resolveCatalogEntryForItem(item = {}) {
+  return findCatalogEntry(item);
 }
 
 export function getUnitPriceForItem(item = {}) {

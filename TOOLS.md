@@ -2,68 +2,55 @@
 
 ## Exec / Shell Commands
 
-Kamu **BOLEH dan HARUS** menggunakan `exec` tool untuk menjalankan perintah shell seperti:
-- `curl` untuk request ke backend API
-- `cat` untuk membaca file state
+Kamu **BOLEH dan HARUS** menggunakan `exec` tool untuk menjalankan perintah shell.
 
-## Backend Endpoints
+**PERINGATAN KEAMANAN:** DILARANG KERAS menggunakan perintah `curl` secara langsung yang merangkai data/JSON dari input pengguna. Ini menyebabkan resiko *Command Injection*. Gunakan script `node backend/sync-state.js` yang telah disediakan, karena script tersebut membaca data secara aman dari file `state`.
 
-### Primary QRIS Method — `/bridge/order-context`
+## Backend Scripts
+
+### Primary QRIS Method & Sync — `node backend/sync-state.js sync`
+Jalankan perintah ini setelah kamu mengupdate dan mensimpan file `state/orders-active/<phone>.json`:
 ```bash
-curl -s -X POST http://localhost:3001/bridge/order-context \
-  -H "Content-Type: application/json" \
-  -d '{"customer_phone":"+628xxx","updates":{"paymentMethod":"qris","paymentStatus":"pending"}}'
+node backend/sync-state.js sync <customer_phone>
 ```
-Backend auto-detects `paymentMethod: qris`, generates QRIS via Pakasir, and sends QR image + caption to WhatsApp customer.
-
-### DEPRECATED — `/payments/qris/direct`
-**Catatan:** Endpoint ini tidak lagi direkomendasikan. Gunakan `/bridge/order-context` di atas sebagai gantinya.
+Contoh:
 ```bash
-curl -s -X POST http://localhost:3001/payments/qris/direct \
-  -H "Content-Type: application/json" \
-  -d '{"customer_phone":"+6285155022960","customer_name":"Acid","items":[{"name":"Es Kopi Susu Original","quantity":1}],"fulfillment_method":"delivery","shareloc":"-6.575756, 107.464066"}'
+node backend/sync-state.js sync +628123456789
 ```
+Backend akan otomatis:
+1. Membaca data state (nama, pesanan, shareloc) secara aman tanpa merangkai JSON mentah.
+2. Jika `paymentMethod` = `qris` dan `paymentStatus` = `pending`, backend akan auto-generate QRIS via Pakasir.
+3. Mengirim QR image + caption ke WhatsApp customer.
 
-### Health check
-- `GET http://localhost:3001/`
+Setelah exec berhasil, konfirmasi ke customer bahwa QR sudah dikirim.
+
+### Cek Status Pembayaran — `node backend/sync-state.js status`
+Untuk mengecek apakah customer sudah bayar QRIS atau belum:
+```bash
+node backend/sync-state.js status <customer_phone>
+```
+Returns: `{"ok":true,"paymentStatus":"pending","paymentMethod":"qris",...}`
+
+**WAJIB** dipanggil saat customer bilang "done" / "udah bayar" / "lunas" untuk verifikasi SEBELUM konfirmasi pembayaran.
 
 ## Penting
 
-**QRIS AUTO-TRIGGER:** Backend sekarang auto-generate QRIS saat kamu sync order dengan `paymentMethod: qris`.
+**QRIS AUTO-TRIGGER:** Backend otomatis melakukan trigger QRIS ketika state memuat `paymentMethod: qris`.
 
-**Kamu TIDAK perlu call `/payments/qris/direct` manual!**
+**Kamu TIDAK BOLEH menggunakan `/payments/qris/direct` dan `curl` secara manual!**
 
-Cukup sync order state via `/bridge/order-context`:
+Cukup pastikan state file terbaru sudah tertulis, lalu jalankan sinkronisasi dengan aman:
 ```bash
-curl -s -X POST http://localhost:3001/bridge/order-context \
-  -H "Content-Type: application/json" \
-  -d '{"customer_phone":"+628xxx","updates":{"paymentMethod":"qris","paymentStatus":"pending"}}'
+node backend/sync-state.js sync <customer_phone>
 ```
 
-Backend akan:
-1. Detect `paymentMethod: qris`
-2. Auto-generate QRIS via Pakasir
-3. Auto-send QR image ke WhatsApp customer
-
-Setelah exec berhasil, agent tinggal konfirmasi ke customer bahwa QR sudah dikirim.
-
-**PENTING:** Kamu HARUS benar-benar memanggil `exec` tool untuk menjalankan curl di atas. Jangan hanya menulis teks balasan tanpa exec.
+**PENTING:** Kamu HARUS benar-benar memanggil `exec` tool untuk menjalankan perintah di atas. Jangan hanya menulis teks balasan tanpa exec.
 
 ## Known Issues
 
-### QRIS Expired-Reuse Bug
-
-**Gejala:**
-- Backend mengembalikan `{"skipped": true, "reason": "already-exists"}` meskipun QRIS sudah expired
-- Customer tidak menerima QR image baru di WhatsApp
-- Customer bilang "mana QR-nya" atau QR tidak muncul
-
-**Penyebab:**
-Backend Pakasir melakukan skip jika sudah ada payment record untuk order/customer yang sama, tanpa memeriksa apakah QRIS sudah expired atau belum.
-
-**Workaround sementara:**
-Hapus state lama di backend (`/state/orders-active/<phone>.json`) agar order baru bisa dibuat fresh — ini memaksa backend generate QRIS baru.
-
-**Fix yang dibutuhkan di backend:**
-- Auto-detect expired QRIS (berdasarkan timestamp atau status)
-- Regenerate QRIS otomatis tanpa perlu hapus state manual
+### (FIXED) QRIS Expired-Reuse Bug
+Bug ini sudah diperbaiki. Jika QRIS lama sudah kedaluwarsa (expired) dan customer meminta QRIS baru, cukup jalankan perintah sync kembali:
+```bash
+node backend/sync-state.js sync <customer_phone>
+```
+Backend secara otomatis akan mengevaluasi QRIS yang expired dan men-generate ulang QRIS baru tanpa perlu kamu menghapus file state lama secara manual.
