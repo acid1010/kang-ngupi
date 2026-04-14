@@ -12,18 +12,37 @@ Backend awal untuk Kedai Ngupi Ngupi Purwakarta.
 - `GET /orders`
 - `GET /orders/:id`
 - `POST /payments/pakasir/qris`
+- `POST /payments/resend`
+- `POST /payments/poll-pending`
+- `POST /payments/replay-success-notification`
 - `GET /payments/:id`
 - `GET /payments/:id/qr.png`
+- `GET /payments/:id/qr.json`
 - `POST /webhooks/pakasir`
 - target database: Supabase
 
 ## Setup
 1. Copy `.env.example` ke `.env`
 2. Isi `SUPABASE_URL` dan `SUPABASE_SERVICE_ROLE_KEY`
-3. Install dependency:
+3. Wajib set `BACKEND_API_KEY` untuk melindungi endpoint selain health
+4. (Opsional tapi direkomendasikan) set timeout env sesuai infrastruktur:
+   - `PAKASIR_REQUEST_TIMEOUT_MS`
+   - `QUEUE_POST_TIMEOUT_MS`
+   - `OUTBOX_POST_TIMEOUT_MS`
+5. Install dependency:
    - `npm install`
-4. Jalankan dev server:
+6. Jalankan dev server:
    - `npm run dev`
+
+## Security minimum untuk production
+- Set `BACKEND_API_KEY` yang kuat (acak panjang), lalu kirim via header `x-api-key` saat call endpoint backend.
+- Set `PAKASIR_WEBHOOK_SECRET` agar endpoint `/webhooks/pakasir` hanya menerima request webhook yang sah (header `x-pakasir-secret`).
+- Saat `NODE_ENV=production`, server akan gagal start jika `BACKEND_API_KEY` atau `PAKASIR_WEBHOOK_SECRET` belum diisi.
+- Default saat ini, request dari loopback (`127.0.0.1` / `::1`) boleh tanpa API key (`ALLOW_LOOPBACK_WITHOUT_API_KEY=true`) supaya gateway lokal tetap jalan.
+- Jika mau strict semua jalur wajib header key, set `ALLOW_LOOPBACK_WITHOUT_API_KEY=false`.
+- Jangan commit `.env` (sudah di-ignore).
+- Gunakan reverse proxy/TLS (mis. Nginx/Cloudflare) dan batasi akses origin bila memungkinkan.
+- Rotasi `PAKASIR_API_KEY` dan kredensial Supabase secara berkala.
 
 ## Endpoint
 ### POST /webhooks/orders
@@ -82,6 +101,18 @@ Ambil detail satu payment session termasuk `qr_image_url`.
 
 ### GET /payments/:id/qr.png
 Menghasilkan gambar PNG QRIS langsung dari QR string yang diberikan Pakasir.
+
+### GET /payments/:id/qr.json
+Menghasilkan QR dalam format data URL base64 (`qr_data_url`) untuk fallback kirim ulang.
+
+### POST /payments/resend
+Kirim ulang QR image ke WhatsApp customer berdasarkan `payment_id`.
+
+### POST /payments/poll-pending
+Memicu verifikasi manual untuk semua payment QRIS yang masih `pending` dan belum expired.
+
+### POST /payments/replay-success-notification
+Kirim ulang notifikasi WhatsApp "pembayaran terverifikasi" berdasarkan `client_order_id` (hanya untuk order yang sudah `payment_status=confirmed`).
 
 ### POST /webhooks/pakasir
 Menerima webhook dari Pakasir, lalu:
@@ -150,7 +181,7 @@ Builder akan:
 Backend ini juga bisa memproses outbox lokal dari workspace SobatNgupi.
 
 Struktur outbox default:
-- `/Users/acidjp/.openclaw/workspace-sobatngupi/outbox/order-context/`
+- `<workspace>/outbox/order-context/`
 - `processed/`
 - `failed/`
 
@@ -162,6 +193,7 @@ Env tambahan:
 - `BRIDGE_ORDER_CONTEXT_URL` (default: `http://localhost:3001/bridge/order-context`)
 - `SOBATNGUPI_OUTBOX_DIR`
 - `OUTBOX_SCAN_INTERVAL_MS`
+- `OUTBOX_POST_TIMEOUT_MS`
 
 ## Queue lokal untuk semi-otomatis
 Backend ini juga punya mode queue lokal untuk fase semi-otomatis.
@@ -183,13 +215,18 @@ Script yang tersedia:
 Env tambahan:
 - `ORDER_WEBHOOK_URL` (default: `http://localhost:3001/webhooks/orders`)
 - `AUTO_PROCESS_QUEUE` (`true` / `false`)
+- `QUEUE_POST_TIMEOUT_MS`
 - `PAKASIR_BASE_URL` (default: `https://app.pakasir.com`)
 - `PAKASIR_PROJECT_SLUG`
 - `PAKASIR_API_KEY`
+- `PAKASIR_WEBHOOK_SECRET`
+- `PAKASIR_REQUEST_TIMEOUT_MS`
 - `PUBLIC_BASE_URL` (untuk membentuk URL QR image, mis. `http://localhost:3001`)
 - `WHATSAPP_SEND_QRIS_ON_CREATE` (`true` / `false`, default `true`) → coba kirim QR image ke customer saat payment QRIS dibuat
 - `WHATSAPP_NOTIFY_QRIS_SUCCESS` (`true` / `false`, default `true`) → kirim notifikasi teks saat pembayaran QRIS terverifikasi
 - `WACLI_BIN` (default `wacli`)
+- `PAYMENT_POLL_INTERVAL_MS`
+- `JSON_BODY_LIMIT`
 
 ## Notes
 - Kode sudah siap dihubungkan ke Supabase.

@@ -1,12 +1,36 @@
 import { bridgeUrl } from './config.js';
 import { listInboxFiles, moveOutboxFile, readOutboxJson } from './fs.js';
 
+const bridgeTimeoutMs = Number(process.env.OUTBOX_POST_TIMEOUT_MS || 15000);
+if (!Number.isFinite(bridgeTimeoutMs) || bridgeTimeoutMs < 1000) {
+  throw new Error('OUTBOX_POST_TIMEOUT_MS must be a number >= 1000');
+}
+
 async function postToBridge(payload) {
-  const response = await fetch(bridgeUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
+  const headers = { 'Content-Type': 'application/json' };
+  if (process.env.BACKEND_API_KEY) {
+    headers['x-api-key'] = process.env.BACKEND_API_KEY;
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), bridgeTimeoutMs);
+
+  let response;
+  try {
+    response = await fetch(bridgeUrl, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new Error(`Bridge POST timeout after ${bridgeTimeoutMs}ms`);
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!response.ok) {
     const text = await response.text();

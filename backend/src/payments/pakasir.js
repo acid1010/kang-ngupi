@@ -1,4 +1,13 @@
 const pakasirBaseUrl = process.env.PAKASIR_BASE_URL || 'https://app.pakasir.com';
+const pakasirRequestTimeoutMs = Number(process.env.PAKASIR_REQUEST_TIMEOUT_MS || 15000);
+
+if (!Number.isFinite(pakasirRequestTimeoutMs) || pakasirRequestTimeoutMs < 1000) {
+  throw new Error('PAKASIR_REQUEST_TIMEOUT_MS must be a number >= 1000');
+}
+
+if (!['http:', 'https:'].includes(new URL(pakasirBaseUrl).protocol)) {
+  throw new Error('PAKASIR_BASE_URL must use http or https protocol');
+}
 
 function getRequiredEnv(name) {
   const value = process.env[name];
@@ -15,7 +24,24 @@ function getJsonHeaders() {
 }
 
 async function fetchJson(url, options = {}) {
-  const response = await fetch(url, options);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), pakasirRequestTimeoutMs);
+
+  let response;
+  try {
+    response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new Error(`Pakasir request timeout after ${pakasirRequestTimeoutMs}ms`);
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
+
   const text = await response.text();
   let parsed = null;
 

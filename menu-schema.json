@@ -32,12 +32,13 @@
     }
   },
   "menus": [
-    {"id":"kopi-susu-original","name":"Es Kopi Susu Original","aliases":["kopi susu","kopsu","kopi susu biasa","es kopi susu","es kopi susu original"],"price":17000},
+    {"id":"kopi-susu-original","name":"Es Kopi Susu Original","aliases":["kopi susu","kopsu","kopi susu biasa","es kopi susu","es kopi susu original","es kopi"],"price":17000},
     {"id":"americano","name":"Americano","aliases":["americano","amer","kopi amer"],"price":15000},
     {"id":"caffe-latte","name":"Caffe Latte","aliases":["latte","cafe latte","caffe latte","kopi latte"],"price":21000},
     {"id":"cappuccino","name":"Cappuccino","aliases":["cappuccino","capuccino","cappucino","capucino"],"ambiguousAliases":["cap"],"price":21000},
     {"id":"matcha-latte","name":"Matcha Latte","aliases":["matcha latte","matcha","green tea latte"],"price":22000},
     {"id":"chocolate","name":"Chocolate","aliases":["chocolate","coklat","cokelat","hot chocolate","es coklat","es cokelat"],"price":18000},
-    {"id":"teh","name":"Teh","aliases":["teh","tea","teh manis","es teh","teh panas","es teh manis"],"price":10000}
+    {"id":"teh","name":"Teh","aliases":["teh","tea","teh manis","es teh","teh panas","es teh manis"],"price":10000},
+    {"id":"test-menu","name":"Test Menu","aliases":["test","test menu","test item"],"price":1000}
   ]
 }
