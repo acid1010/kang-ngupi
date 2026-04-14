@@ -2,3 +2,9 @@ node_modules/
 .env
 .DS_Store
 *.log
+memory/archive/
+state/orders-active/*.json
+state/orders-expired/
+outbox/order-context/*.json
+outbox/order-context/processed/
+outbox/order-context/failed/
