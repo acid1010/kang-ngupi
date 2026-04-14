@@ -1,32 +1,28 @@
 #!/bin/bash
-# SobatNgupi — Start all services via PM2
-set -e
+# SobatNgupi — Start backend services via PM2
+set -euo pipefail
 
-BACKEND_DIR="$(cd "$(dirname "$0")/backend" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+BACKEND_DIR="${SCRIPT_DIR}/backend"
 
-echo "Installing backend dependencies..."
-cd "$BACKEND_DIR"
-npm install
+for cmd in node npm pm2; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "Required command not found: $cmd"
+    exit 1
+  fi
+done
 
-# Install cloudflared if not present
-if ! command -v cloudflared &> /dev/null; then
-  echo "Installing cloudflared..."
-  brew install cloudflared
+mkdir -p "${BACKEND_DIR}/logs"
+
+echo "Installing backend dependencies (production)..."
+if [ -f "${BACKEND_DIR}/package-lock.json" ]; then
+  npm ci --omit=dev --prefix "${BACKEND_DIR}"
+else
+  npm install --omit=dev --prefix "${BACKEND_DIR}"
 fi
 
-echo "Starting backend + Cloudflare Tunnel via PM2..."
-pm2 start ecosystem.config.cjs
-
-sleep 3
-TUNNEL_URL=$(pm2 logs ngupi-tunnel --nostream --lines 0 2>/dev/null | grep -o 'https://[^ ]*trycloudflare.com' | head -1)
-if [ -n "$TUNNEL_URL" ]; then
-  echo ""
-  echo "=== TUNNEL URL ==="
-  echo "$TUNNEL_URL"
-  echo "=================="
-  echo ""
-  echo "Update your WhatsApp webhook to: $TUNNEL_URL/webhooks/whatsapp"
-fi
+echo "Starting backend services via PM2..."
+pm2 startOrReload "${BACKEND_DIR}/ecosystem.config.cjs" --update-env
 
 echo "Saving PM2 state for auto-start on boot..."
 pm2 save
@@ -36,4 +32,4 @@ echo "Done. Services running:"
 pm2 list
 echo ""
 echo "Logs: npm run logs --prefix backend"
-echo "Stop:  npm run stop:pm2 --prefix backend"
+echo "Stop:  ./stop.sh"

@@ -1,6 +1,7 @@
 import { buildDraftOrderPayload, buildFinalOrderPayload, normalizeNotes, normalizePhone } from '../builders/orderPayload.js';
 import { buildQueueFileName, writeQueueFile } from '../queue/fs.js';
 import logger from '../lib/logger.js';
+import { resolveCatalogEntryForItem } from '../catalog/menuPricing.js';
 
 function toFiniteNumber(value) {
   const number = Number(value);
@@ -77,8 +78,15 @@ function inferMenuId(menuName, fallback = null) {
 
   if (normalized.includes('kopi susu')) return 'kopi-susu-original';
   if (normalized.includes('americano')) return 'americano';
-  if (normalized.includes('latte')) return 'caffe-latte';
+  if (normalized.includes('caffe latte') || normalized.includes('cafe latte') || normalized.includes('kopi latte')) {
+    return 'caffe-latte';
+  }
   if (normalized.includes('cappuccino')) return 'cappuccino';
+  if (normalized.includes('matcha')) return 'matcha-latte';
+  if (normalized.includes('chocolate') || normalized.includes('coklat') || normalized.includes('cokelat')) {
+    return 'chocolate';
+  }
+  if (normalized === 'teh' || normalized.includes('tea')) return 'teh';
 
   return fallback;
 }
@@ -90,15 +98,25 @@ function normalizeItems(items = []) {
     .map((item) => {
       if (!item) return null;
 
-      const menuName = item.menuName ?? item.menu_name ?? item.name ?? null;
-      const qty = Number(item.qty ?? item.quantity ?? item.count ?? 0);
+      const catalogEntry = resolveCatalogEntryForItem(item);
+      const menuName = item.menuName ?? item.menu_name ?? item.name ?? catalogEntry?.name ?? null;
+      const qtyRaw = Number(item.qty ?? item.quantity ?? item.count ?? 0);
+      const qty = Math.trunc(qtyRaw);
+      const incomingPrice = Number(item.price ?? item.unitPrice ?? item.unit_price);
+      const price = Number.isFinite(incomingPrice) && incomingPrice > 0
+        ? Math.round(incomingPrice)
+        : (catalogEntry?.price ?? null);
 
-      if (!menuName || !Number.isFinite(qty) || qty <= 0) return null;
+      const explicitMenuId = item.menuId ?? item.menu_id ?? null;
+      const menuId = explicitMenuId ?? catalogEntry?.menuId ?? inferMenuId(menuName, null);
+
+      if ((!menuName && !menuId) || !Number.isFinite(qtyRaw) || qty <= 0) return null;
 
       return {
-        menuId: item.menuId ?? item.menu_id ?? inferMenuId(menuName, null),
-        menuName,
+        menuId,
+        menuName: menuName ?? catalogEntry?.name ?? menuId,
         qty,
+        price,
         temperature: normalizeTemperature(item.temperature ?? item.temp ?? null),
         notes: item.notes ?? null
       };
@@ -283,6 +301,8 @@ async function enqueuePayload(payload) {
   return { queueKind, filePath, clientOrderId: payload.order.client_order_id };
 }
 
+const QRIS_COOLDOWN_MS = 3 * 60 * 1000;
+
 function shouldAutoCreateQris(state) {
   const context = state.orderContext ?? {};
   if (!state.draftSentAt) return false;
@@ -293,36 +313,78 @@ function shouldAutoCreateQris(state) {
 }
 
 async function maybeAutoCreateQris(state, events) {
+  const context = state.orderContext ?? {};
+  const clientOrderId = context.clientOrderId;
+
+  if (!clientOrderId) return null;
+
+  // Check cooldown first to avoid unnecessary DB lookups
+  if (state.lastQrisSentAt) {
+    const elapsed = Date.now() - new Date(state.lastQrisSentAt).getTime();
+    if (elapsed < QRIS_COOLDOWN_MS) {
+      logger.info('[evaluator] Skipping QRIS — dedup cooldown (%ds elapsed, %ds remaining)',
+        Math.floor(elapsed / 1000), Math.floor((QRIS_COOLDOWN_MS - elapsed) / 1000));
+      return { deduplicated: true, skipped: true };
+    }
+  }
+
+  // Skip if evaluator is not needed — /qris/direct endpoint handles payment creation and WhatsApp
+  // Evaluator auto-create only needed when order comes from queue/draft (not from /qris/direct)
+  if (state.qrisAutoCreateResult) {
+    const expiredAt = state.qrisAutoCreateResult.payment?.expired_at;
+    if (expiredAt && new Date(expiredAt) < new Date()) {
+      logger.info('[evaluator] Previous QRIS auto-create result expired, allowing new generation');
+      delete state.qrisAutoCreateResult;
+    } else {
+      return { skipped: true, reason: 'already_handled_by_endpoint' };
+    }
+  }
+
   if (!shouldAutoCreateQris(state)) {
     return null;
   }
-
-  const clientOrderId = state.orderContext.clientOrderId;
 
   try {
     // Lazy import to avoid circular dependency
     const { createPakasirQrisPayment } = await import('../payments/service.js');
 
+    let skipWhatsApp = false;
     let result;
     try {
-      result = await createPakasirQrisPayment({ clientOrderId });
+      result = await createPakasirQrisPayment({ clientOrderId, skipWhatsApp });
     } catch (firstError) {
       // Order may not be persisted yet when called from bridge evaluator.
       if (String(firstError?.message || '').includes('Order not found for client_order_id=')) {
         const { processAllQueues } = await import('../queue/processor.js');
         await processAllQueues();
-        result = await createPakasirQrisPayment({ clientOrderId });
+        result = await createPakasirQrisPayment({ clientOrderId, skipWhatsApp });
       } else {
         throw firstError;
       }
     }
 
-    logger.info('[evaluator] Auto-created QRIS payment for %s', clientOrderId);
-    events.push({ type: 'qris_payment_created', clientOrderId, paymentId: result.payment?.id });
-
-    return result;
+    // Mark lastQrisSentAt so we don't spam WhatsApp within the cooldown window
+    state.lastQrisSentAt = new Date().toISOString();
+    
+    // Check WhatsApp delivery status and surface failures
+    const waDelivery = result?.whatsapp_qris_delivery;
+    if (waDelivery && !waDelivery.ok) {
+      logger.warn('[evaluator] QRIS created but WhatsApp delivery failed for %s: %s (reason: %s)',
+        clientOrderId, waDelivery.error, waDelivery.reason);
+      state.qrisDeliveryFailed = true;
+      state.qrisDeliveryError = waDelivery.error || waDelivery.reason || 'whatsapp_delivery_failed';
+    } else {
+      state.qrisDeliveryFailed = false;
+      state.qrisDeliveryError = null;
+    }
+    
+    logger.info('[evaluator] Auto-created QRIS payment for %s (lastQrisSentAt=%s, whatsappSent=%s)',
+      clientOrderId, state.lastQrisSentAt, waDelivery?.ok === true);
+    events.push({ type: 'qris_payment_created', clientOrderId, paymentId: result.payment?.id, whatsappSent: waDelivery?.ok === true });
   } catch (error) {
     logger.error('[evaluator] Failed to auto-create QRIS payment: %s', error.message);
+    state.qrisDeliveryFailed = true;
+    state.qrisDeliveryError = error.message;
     return { error: error.message };
   }
 }
@@ -331,11 +393,11 @@ export async function evaluateAndEnqueue(state) {
   const events = [];
   state.orderContext = mergeOrderContext({}, state.orderContext ?? {});
 
-  if (!state.draftSentAt && isDraftReady(state)) {
+  if (isDraftReady(state) && !state.finalSentAt) {
     const payload = buildDraftOrderPayload(state.orderContext);
     state.orderContext.clientOrderId = payload.order.client_order_id;
     const queued = await enqueuePayload(payload);
-    state.draftSentAt = new Date().toISOString();
+    state.draftSentAt = state.draftSentAt || new Date().toISOString();
     state.orderContext.status = payload.order.status;
     events.push({ type: 'draft_order', ...queued });
   }

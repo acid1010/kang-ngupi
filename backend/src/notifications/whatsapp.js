@@ -7,11 +7,43 @@ import { promisify } from 'node:util';
 import QRCode from 'qrcode';
 import { normalizePhone } from '../builders/orderPayload.js';
 
-// wacli expects phone without '+' prefix
+// In-memory dedup: prevent sending WhatsApp to same recipient within 30 seconds
+const recentSends = new Map();
+const inFlightSends = new Set();
+const SEND_DEDUP_TTL_MS = 30_000;
+
+function markRecentlySent(phone) {
+  recentSends.set(phone, Date.now());
+}
+
+function wasRecentlySent(phone) {
+  const sentAt = recentSends.get(phone);
+  if (!sentAt) return false;
+  if (Date.now() - sentAt > SEND_DEDUP_TTL_MS) {
+    recentSends.delete(phone);
+    return false;
+  }
+  return true;
+}
+
+function isSendInFlight(phone) {
+  return inFlightSends.has(phone);
+}
+
+function markSendInFlight(phone) {
+  inFlightSends.add(phone);
+}
+
+function clearSendInFlight(phone) {
+  inFlightSends.delete(phone);
+}
+
+// wacli expects phone as JID format
 function toWacliPhone(phone) {
   const normalized = normalizePhone(phone);
   if (!normalized) return null;
-  return normalized.startsWith('+') ? normalized.slice(1) : normalized;
+  const num = normalized.startsWith('+') ? normalized.slice(1) : normalized;
+  return `${num}@s.whatsapp.net`;
 }
 
 const execFileAsync = promisify(execFile);
@@ -53,7 +85,7 @@ async function runWacli(args) {
   };
 }
 
-export async function sendQrisImageWhatsApp({ to, customerName = null, amount = null, qrString = null } = {}) {
+export async function sendQrisImageWhatsApp({ to, customerName = null, amount = null, qrString = null, force = false } = {}) {
   if (!isQrisSendEnabled()) {
     return { ok: false, skipped: true, reason: 'disabled' };
   }
@@ -67,6 +99,15 @@ export async function sendQrisImageWhatsApp({ to, customerName = null, amount = 
     return { ok: false, skipped: true, reason: 'missing-qr-string' };
   }
 
+  // Dedup: skip if we already sent to this recipient recently
+  if (!force && wasRecentlySent(recipient)) {
+    return { ok: false, skipped: true, reason: 'recently_sent' };
+  }
+
+  if (isSendInFlight(recipient)) {
+    return { ok: false, skipped: true, reason: 'send_in_flight' };
+  }
+
   const caption = buildQrisCaption({ customerName, amount });
   const tempFile = join(tmpdir(), `ngupi-qris-${randomUUID()}.png`);
 
@@ -78,7 +119,10 @@ export async function sendQrisImageWhatsApp({ to, customerName = null, amount = 
       type: 'png'
     });
 
+    markSendInFlight(recipient);
+
     const result = await runWacli(['send', 'file', '--to', recipient, '--file', tempFile, '--caption', caption]);
+    markRecentlySent(recipient);
 
     return {
       ok: true,
@@ -96,6 +140,7 @@ export async function sendQrisImageWhatsApp({ to, customerName = null, amount = 
       error: error.message
     };
   } finally {
+    clearSendInFlight(recipient);
     await rm(tempFile, { force: true }).catch(() => null);
   }
 }

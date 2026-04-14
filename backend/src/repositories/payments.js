@@ -111,10 +111,17 @@ export async function updatePaymentStatusByProviderOrderId(providerOrderId, upda
   const supabase = getSupabase();
   const payload = {
     provider_status: updates.provider_status,
-    payment_status: updates.payment_status,
-    paid_at: updates.paid_at ?? null,
-    metadata: updates.metadata ?? undefined
+    payment_status: updates.payment_status
   };
+
+  if (Object.prototype.hasOwnProperty.call(updates, 'paid_at')) {
+    payload.paid_at = updates.paid_at ?? null;
+  }
+
+  // Merge metadata if provided, otherwise leave unchanged
+  if (updates.metadata !== undefined) {
+    payload.metadata = updates.metadata;
+  }
 
   Object.keys(payload).forEach((key) => payload[key] === undefined && delete payload[key]);
 
@@ -127,4 +134,20 @@ export async function updatePaymentStatusByProviderOrderId(providerOrderId, upda
 
   if (error) throw error;
   return mapPaymentRow(data);
+}
+
+export async function listPendingPayments({ limit = 50 } = {}) {
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from('order_payments')
+    .select('*')
+    .eq('payment_status', 'pending')
+    .eq('payment_method', 'qris')
+    .not('expired_at', 'is', null)
+    .gt('expired_at', new Date().toISOString())
+    .order('created_at', { ascending: true })
+    .limit(limit);
+
+  if (error) throw error;
+  return (data ?? []).map(mapPaymentRow);
 }
