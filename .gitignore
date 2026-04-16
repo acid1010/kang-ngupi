@@ -1,10 +1,37 @@
+# Dependencies
 node_modules/
-.env
-.DS_Store
-*.log
-memory/archive/
+backend/node_modules/
+dashboard/node_modules/
+
+# Build
+dashboard/.next/
+!dashboard/.next/standalone/
+
+# Environment
+backend/.env
+backend/data/dashboard-users.json
+
+# State (local runtime)
 state/orders-active/*.json
-state/orders-expired/
-outbox/order-context/*.json
-outbox/order-context/processed/
-outbox/order-context/failed/
+state/orders-expired/*.json
+!state/orders-active/README.md
+!state/orders-expired/README.md
+
+# Logs
+backend/logs/*.log
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+backend/tmp/
+/tmp/
+
+# OpenClaw
+.openclaw/
+
+# Memory archives (large session transcripts)
+memory/archive/
+memory/.dreams/

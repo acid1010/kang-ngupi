@@ -12,6 +12,7 @@ import {
   listPendingPayments
 } from '../repositories/payments.js';
 import { sendQrisImageWhatsApp, sendQrisSuccessWhatsApp } from '../notifications/whatsapp.js';
+import { getSupabase } from '../supabase.js';
 import { createQrisTransaction, getPakasirConfig, getTransactionDetail } from './pakasir.js';
 
 function buildProviderOrderId(clientOrderId) {
@@ -32,11 +33,13 @@ function buildPaymentNotification(order) {
 
 export async function sendQrisImageBestEffort(order, payment, { force = false } = {}) {
   if (!order?.customer_phone_snapshot) {
+    logger.info({ reason: 'missing-customer-phone' }, '[payments] sendQrisImageBestEffort skipped');
     return { ok: false, skipped: true, reason: 'missing-customer-phone' };
   }
 
   // Check if already sent (from prior concurrent call) — read from metadata
   if (!force && payment?.metadata?.whatsapp_sent_at) {
+    logger.info({ reason: 'already_sent_in_metadata', sentAt: payment.metadata.whatsapp_sent_at }, '[payments] sendQrisImageBestEffort skipped');
     return { ok: false, skipped: true, reason: 'already_sent_in_metadata' };
   }
 
@@ -314,10 +317,22 @@ export async function recreatePakasirQrisPaymentForOrder({ orderId, amountOverri
 }
 
 export async function verifyPakasirPaymentWebhook(payload = {}) {
-  const providerOrderId = payload.order_id ?? null;
+  // Log raw webhook payload for debugging
+  logger.info({ webhookPayload: payload }, '[webhook] Pakasir webhook received');
+
+  // Try multiple field names
+  const providerOrderId = payload.order_id ?? payload.orderId ?? payload.data?.order_id ?? payload.data?.orderId ?? null;
 
   if (!providerOrderId) {
+    logger.warn({ payload: JSON.stringify(payload).slice(0, 500) }, '[webhook] Missing order_id in payload');
     throw new Error('webhook order_id is required');
+  }
+
+  // Dedup: skip if payment already confirmed (prevents double processing from webhook retry + poller)
+  const existingCheck = await getPaymentByProviderOrderId(providerOrderId);
+  if (existingCheck?.payment_status === 'confirmed') {
+    logger.info('[webhook] Payment already confirmed, skipping: %s', providerOrderId);
+    return { payment: existingCheck, verified: false, events: [], customer_notification: null, whatsapp_notification: null, skipped: true, reason: 'already_confirmed' };
   }
 
   const payment = await getPaymentByProviderOrderId(providerOrderId);
@@ -388,6 +403,36 @@ export async function verifyPakasirPaymentWebhook(payload = {}) {
   const customerNotification = buildPaymentNotification(updatedOrder);
   const whatsappNotification = await sendSuccessNotificationBestEffort(updatedOrder);
 
+  // Courier notification + Pawoon push (same as poller flow)
+  try {
+    const { data: orderItems } = await getSupabase()
+      .from('order_items')
+      .select('menu_name, menu_id, qty, temperature, notes')
+      .eq('order_id', updatedOrder.id);
+
+    // Notify courier
+    const { notifyCouriers } = await import('../notifications/courier.js');
+    const courierResult = await notifyCouriers(updatedOrder, orderItems, updatedPayment);
+    if (courierResult.ok) {
+      logger.info('[webhook] Courier notified for %s', payment.client_order_id);
+    }
+
+    // Push to Pawoon POS
+    const { pushOrderToPawoon } = await import('../integrations/pawoon.js');
+    const pawoonResult = await pushOrderToPawoon(updatedOrder, orderItems, updatedPayment);
+    if (pawoonResult.ok) {
+      logger.info('[webhook] Order pushed to Pawoon: %s', pawoonResult.pawoonOrderId);
+    }
+  } catch (postConfirmErr) {
+    logger.warn('[webhook] Post-confirm actions error: %s', postConfirmErr.message);
+  }
+
+  // Broadcast to dashboard SSE
+  try {
+    const { broadcastOrderUpdate } = await import('../dashboard/orders.js');
+    broadcastOrderUpdate({ ...updatedOrder, payment_status: 'confirmed', order_status: 'ready_to_submit' });
+  } catch (_) {}
+
   return {
     payment: updatedPayment,
     order: updatedOrder,
@@ -457,12 +502,50 @@ export async function pollPendingPaymentsAndVerify() {
         if (!whatsappNotification.ok && !whatsappNotification.skipped) {
           logger.warn('[poll] Failed to send success WhatsApp for %s: %s', providerOrderId, whatsappNotification.error);
         }
+
+        // Notify courier for delivery orders
+        try {
+          const { notifyCouriers } = await import('../notifications/courier.js');
+          const { data: orderItems } = await getSupabase()
+            .from('order_items')
+            .select('menu_name, qty, temperature')
+            .eq('order_id', updatedOrder.id);
+          const courierResult = await notifyCouriers(updatedOrder, orderItems, payment);
+          if (courierResult.ok) {
+            logger.info('[poll] Courier notified for %s', providerOrderId);
+          } else if (!courierResult.skipped) {
+            logger.warn('[poll] Courier notification failed for %s', providerOrderId);
+          }
+        } catch (courierErr) {
+          logger.warn('[poll] Courier notification error: %s', courierErr.message);
+        }
+
+        // Push order to Pawoon POS
+        try {
+          const { pushOrderToPawoon } = await import('../integrations/pawoon.js');
+          const pawoonResult = await pushOrderToPawoon(updatedOrder, orderItems, payment);
+          if (pawoonResult.ok) {
+            logger.info('[poll] Order pushed to Pawoon: %s -> %s', providerOrderId, pawoonResult.pawoonOrderId);
+          } else if (!pawoonResult.skipped) {
+            logger.warn('[poll] Pawoon push failed for %s: %s', providerOrderId, pawoonResult.error);
+          }
+        } catch (pawoonErr) {
+          logger.warn('[poll] Pawoon push error: %s', pawoonErr.message);
+        }
+
+        // Broadcast to dashboard SSE
+        try {
+          const { broadcastOrderUpdate } = await import('../dashboard/orders.js');
+          broadcastOrderUpdate({ ...updatedOrder, payment_status: 'confirmed', order_status: 'ready_to_submit' });
+        } catch (_) {}
       }
 
       logger.info('[poll] Verified payment %s -> %s', providerOrderId, paymentStatus);
       results.push({ providerOrderId, status: 'verified', paymentStatus });
     } catch (error) {
       logger.warn('[poll] Failed to verify payment %s: %s', payment.provider_order_id, error.message);
+      // Alert admin on payment verification failure
+      try { const { alertPaymentFailed } = await import('../notifications/alerting.js'); await alertPaymentFailed(payment.provider_order_id, error.message); } catch (_) {}
       results.push({ providerOrderId: payment.provider_order_id, status: 'error', error: error.message });
     }
   }

@@ -46,6 +46,23 @@ node backend/sync-state.js sync <customer_phone>
 
 **PENTING:** Kamu HARUS benar-benar memanggil `exec` tool untuk menjalankan perintah di atas. Jangan hanya menulis teks balasan tanpa exec.
 
+### Riwayat Pesanan — `node backend/order-history.js`
+Untuk melihat riwayat pesanan customer (misal customer tanya "pesanan terakhir apa?"):
+```bash
+node backend/order-history.js <customer_phone> [limit]
+```
+Contoh:
+```bash
+node backend/order-history.js +6285155022960 3
+```
+Returns JSON dengan daftar order terbaru beserta items, status pembayaran, dan total.
+
+Gunakan data ini untuk menjawab pertanyaan customer tentang pesanan sebelumnya. **Jangan kirim raw JSON ke customer** — rangkum dalam bahasa natural.
+
+Contoh jawaban:
+- "Pesanan terakhir kak Acid: Es Kopi Susu Original x1 (Rp17.000), delivery, udah dibayar QRIS ✅"
+- "3 pesanan terakhir kak: 1) Americano x1, 2) Kopsu x2, 3) Matcha Latte x1"
+
 ## Known Issues
 
 ### (FIXED) QRIS Expired-Reuse Bug

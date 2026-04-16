@@ -101,7 +101,19 @@ export async function createOrUpdateOrder(eventType, order) {
     if (itemError) throw itemError;
   }
 
-  return getOrderById(savedOrder.id);
+  const fullOrder = await getOrderById(savedOrder.id);
+
+  // Broadcast to dashboard SSE
+  try {
+    const { broadcastNewOrder, broadcastOrderUpdate } = await import('../dashboard/orders.js');
+    if (eventType === 'draft_order' || eventType === 'final_order') {
+      broadcastNewOrder({ ...fullOrder, items: order.items || [] });
+    } else {
+      broadcastOrderUpdate({ ...fullOrder, items: order.items || [] });
+    }
+  } catch (_) {}
+
+  return fullOrder;
 }
 
 async function getItemsByOrderIds(orderIds) {

@@ -10,7 +10,7 @@ import { normalizePhone } from '../builders/orderPayload.js';
 // In-memory dedup: prevent sending WhatsApp to same recipient within 30 seconds
 const recentSends = new Map();
 const inFlightSends = new Set();
-const SEND_DEDUP_TTL_MS = 30_000;
+const SEND_DEDUP_TTL_MS = 60_000; // 60s dedup window — prevent double sends from evaluator + qris/direct race
 
 function markRecentlySent(phone) {
   recentSends.set(phone, Date.now());
@@ -132,13 +132,16 @@ export async function sendQrisImageWhatsApp({ to, customerName = null, amount = 
       ...result
     };
   } catch (error) {
-    return {
-      ok: false,
-      skipped: false,
-      to: recipient,
-      caption,
-      error: error.message
-    };
+    // Fallback: send text-only with QR string if image send fails
+    console.error('[whatsapp] Image send failed, trying text fallback:', error.message);
+    try {
+      const fallbackMsg = `${caption}\n\n⚠️ QR image gagal terkirim. Silakan scan QR di link berikut atau minta dikirim ulang.`;
+      await runWacli(['send', 'text', '--to', recipient, '--message', fallbackMsg]);
+      markRecentlySent(recipient);
+      return { ok: true, skipped: false, to: recipient, caption, fallback: true };
+    } catch (fallbackErr) {
+      return { ok: false, skipped: false, to: recipient, caption, error: error.message, fallbackError: fallbackErr.message };
+    }
   } finally {
     clearSendInFlight(recipient);
     await rm(tempFile, { force: true }).catch(() => null);

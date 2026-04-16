@@ -301,7 +301,7 @@ async function enqueuePayload(payload) {
   return { queueKind, filePath, clientOrderId: payload.order.client_order_id };
 }
 
-const QRIS_COOLDOWN_MS = 3 * 60 * 1000;
+const QRIS_COOLDOWN_MS = 60 * 1000; // 60s cooldown — enough to prevent spam, allows quick resend
 
 function shouldAutoCreateQris(state) {
   const context = state.orderContext ?? {};

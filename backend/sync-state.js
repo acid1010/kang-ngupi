@@ -152,7 +152,8 @@ async function cmdSync(phone) {
     die(`No active order state found for ${normalized}. File expected at: ${stateFilePath(normalized)}`);
   }
 
-  const ctx = state.orderContext || {};
+  // Support both nested (orderContext wrapper) and flat state formats
+  const ctx = state.orderContext || state;
 
   // Determine if this is a QRIS payment trigger
   const isQris = ctx.paymentMethod === 'qris' &&
@@ -162,25 +163,27 @@ async function cmdSync(phone) {
   const bridgePayload = {
     customer_phone: normalized,
     updates: {
-      customerName: ctx.customerName || null,
+      customerName: ctx.customerName || state.customerName || null,
       customerPhone: normalized,
-      rawMessage: ctx.rawMessage || null,
-      items: ctx.items || [],
-      fulfillmentMethod: ctx.fulfillmentMethod || null,
+      rawMessage: ctx.rawMessage || state.rawMessage || null,
+      items: ctx.items || state.items || [],
+      fulfillmentMethod: ctx.fulfillmentMethod || state.fulfillment || null,
       locationStatus: ctx.locationStatus || null,
-      shareloc: ctx.shareloc || null,
+      shareloc: ctx.shareloc || state.shareloc || null,
       address: ctx.address || null,
-      paymentMethod: ctx.paymentMethod || null,
-      paymentStatus: ctx.paymentStatus || null,
-      deliveryProvider: ctx.deliveryProvider || null,
+      paymentMethod: ctx.paymentMethod || state.paymentMethod || null,
+      paymentStatus: ctx.paymentStatus || state.paymentStatus || null,
+      deliveryProvider: ctx.deliveryProvider || state.deliveryProvider || null,
       notes: ctx.notes || [],
-      customerNotes: ctx.customerNotes || [],
+      customerNotes: ctx.customerNotes ? [ctx.customerNotes] : (state.customerNotes ? [state.customerNotes] : []),
       channel: ctx.channel || 'whatsapp'
     }
   };
 
-  if (ctx.clientOrderId) {
-    bridgePayload.updates.clientOrderId = ctx.clientOrderId;
+  // clientOrderId: use from ctx, or generate from orderId in flat format
+  const clientOrderId = ctx.clientOrderId || state.orderId || null;
+  if (clientOrderId) {
+    bridgePayload.updates.clientOrderId = clientOrderId;
   }
 
   const bridgeResult = await fetchJson(`${BACKEND_BASE_URL}/bridge/order-context`, {
@@ -206,13 +209,11 @@ async function cmdSync(phone) {
     const qrisEvent = events.find(e => e.type === 'qris_payment_created');
 
     if (qrisEvent) {
-      let whatsappSent = qrisEvent.whatsappSent || false;
+      // Evaluator already created QRIS and attempted WhatsApp send.
+      // Do NOT retry here — evaluator's send is the single source of truth.
+      // Retrying causes double QR sends to customer.
+      const whatsappSent = qrisEvent.whatsappSent || false;
       const paymentId = qrisEvent.paymentId || null;
-
-      // Auto-retry WhatsApp delivery if initial send failed
-      if (!whatsappSent && paymentId) {
-        whatsappSent = await retryWhatsAppIfNeeded(paymentId, whatsappSent);
-      }
 
       output({
         ok: true,
@@ -238,13 +239,9 @@ async function cmdSync(phone) {
 
       if (qrisResult.ok) {
         const waDelivery = qrisResult.data?.whatsapp_qris_delivery;
-        let whatsappSent = waDelivery?.ok === true;
+        // Trust the endpoint's delivery result — do NOT retry here to avoid double sends
+        const whatsappSent = waDelivery?.ok === true || (qrisResult.data?.payment?.metadata?.whatsapp_sent_at != null);
         const paymentId = qrisResult.data?.payment?.id || null;
-
-        // Auto-retry WhatsApp delivery if initial send failed
-        if (!whatsappSent && paymentId) {
-          whatsappSent = await retryWhatsAppIfNeeded(paymentId, whatsappSent);
-        }
 
         output({
           ok: true,
@@ -287,7 +284,7 @@ async function cmdSyncQrisDirect(phone, ctx) {
     customer_phone: phone,
     customer_name: ctx.customerName || null,
     items: ctx.items || [],
-    fulfillment_method: ctx.fulfillmentMethod || null,
+    fulfillment_method: ctx.fulfillmentMethod || ctx.fulfillment || null,
     shareloc: ctx.shareloc || null,
     delivery_provider: ctx.deliveryProvider || null,
     raw_message: ctx.rawMessage || null
@@ -326,7 +323,8 @@ async function cmdStatus(phone) {
     die(`No active order state found for ${normalized}`);
   }
 
-  const ctx = state.orderContext || {};
+  // Support both nested and flat state formats
+  const ctx = state.orderContext || state;
 
   // Query bridge for live state
   const bridgeResult = await fetchJson(
@@ -335,16 +333,16 @@ async function cmdStatus(phone) {
   );
 
   if (bridgeResult.ok && bridgeResult.data) {
-    const liveCtx = bridgeResult.data.orderContext || {};
+    const liveCtx = bridgeResult.data.orderContext || bridgeResult.data || {};
     output({
       ok: true,
       action: 'status',
       phone: normalized,
-      paymentMethod: liveCtx.paymentMethod || ctx.paymentMethod || null,
-      paymentStatus: liveCtx.paymentStatus || ctx.paymentStatus || null,
+      paymentMethod: liveCtx.paymentMethod || ctx.paymentMethod || state.paymentMethod || null,
+      paymentStatus: liveCtx.paymentStatus || ctx.paymentStatus || state.paymentStatus || null,
       orderStatus: liveCtx.status || ctx.status || null,
-      clientOrderId: liveCtx.clientOrderId || ctx.clientOrderId || null,
-      customerName: liveCtx.customerName || ctx.customerName || null,
+      clientOrderId: liveCtx.clientOrderId || ctx.clientOrderId || state.orderId || null,
+      customerName: liveCtx.customerName || ctx.customerName || state.customerName || null,
       source: 'bridge'
     });
     return;
@@ -355,10 +353,10 @@ async function cmdStatus(phone) {
     ok: true,
     action: 'status',
     phone: normalized,
-    paymentMethod: ctx.paymentMethod || null,
-    paymentStatus: ctx.paymentStatus || null,
+    paymentMethod: ctx.paymentMethod || state.paymentMethod || null,
+    paymentStatus: ctx.paymentStatus || state.paymentStatus || null,
     orderStatus: ctx.status || null,
-    clientOrderId: ctx.clientOrderId || null,
+    clientOrderId: ctx.clientOrderId || state.orderId || null,
     customerName: ctx.customerName || null,
     source: 'local_state'
   });
