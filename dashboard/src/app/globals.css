@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0d1b1b;
+  --foreground: #ffffff;
+  --ngupi: #3CC8C8;
+  --ngupi-light: #4DD9D9;
+  --ngupi-dark: #2BB5B5;
+  --ngupi-darker: #1F8A8A;
+  --ngupi-muted: #153030;
+  --ngupi-surface: #112626;
+  --ngupi-border: #1e4040;
+  --ngupi-border-light: #2a5555;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d1b1b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e4040;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3CC8C8;
+}
+
+/* Toast styles */
+[data-sonner-toaster] {
+  --normal-bg: #112626 !important;
+  --normal-border: #1e4040 !important;
+  --normal-text: #ffffff !important;
+}
+
+/* Mobile safe area */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Prevent text selection on interactive elements */
+button, a, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}

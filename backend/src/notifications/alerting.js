@@ -1,0 +1,64 @@
+/**
+ * Error Alerting — send WhatsApp notification to admin on critical errors
+ * Throttled: max 1 alert per error type per 10 minutes
+ */
+
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+import logger from '../lib/logger.js';
+
+const execFileAsync = promisify(execFile);
+const WACLI_BIN = process.env.WACLI_BIN || 'wacli';
+const ADMIN_PHONE = process.env.ADMIN_ALERT_PHONE || process.env.COURIER_PHONES?.split(',')[0] || '';
+const THROTTLE_MS = 10 * 60 * 1000; // 10 minutes
+
+const recentAlerts = new Map();
+
+function shouldAlert(errorType) {
+  const lastSent = recentAlerts.get(errorType);
+  if (lastSent && Date.now() - lastSent < THROTTLE_MS) return false;
+  recentAlerts.set(errorType, Date.now());
+  return true;
+}
+
+function toJid(phone) {
+  if (!phone) return null;
+  let p = String(phone).trim().replace(/[\s\-()]/g, '');
+  if (p.startsWith('+')) p = p.slice(1);
+  if (p.startsWith('08')) p = '62' + p.slice(1);
+  return `${p}@s.whatsapp.net`;
+}
+
+export async function alertAdmin(errorType, message, details = '') {
+  if (!ADMIN_PHONE) return;
+  if (!shouldAlert(errorType)) return;
+
+  const jid = toJid(ADMIN_PHONE);
+  if (!jid) return;
+
+  const text = `⚠️ *ALERT — SobatNgupi*\n\nType: ${errorType}\n${message}${details ? '\n\nDetail: ' + String(details).slice(0, 200) : ''}\n\nTime: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`;
+
+  try {
+    await execFileAsync(WACLI_BIN, ['send', 'text', '--to', jid, '--message', text], { timeout: 15_000 });
+    logger.info('[alert] Admin notified: %s', errorType);
+  } catch (err) {
+    logger.warn('[alert] Failed to notify admin: %s', err.message);
+  }
+}
+
+// Pre-defined alert types
+export async function alertPaymentFailed(orderId, error) {
+  await alertAdmin('PAYMENT_FAILED', `Payment verification gagal untuk order ${orderId}`, error);
+}
+
+export async function alertWebhookError(error) {
+  await alertAdmin('WEBHOOK_ERROR', 'Pakasir webhook error', error);
+}
+
+export async function alertWhatsAppDown(error) {
+  await alertAdmin('WHATSAPP_DOWN', 'WhatsApp send gagal berulang kali', error);
+}
+
+export async function alertPawoonError(orderId, error) {
+  await alertAdmin('PAWOON_ERROR', `Gagal push order ${orderId} ke Pawoon`, error);
+}

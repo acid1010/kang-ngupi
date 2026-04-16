@@ -1,205 +1,240 @@
-# ☕ SobatNgupi
+# SobatNgupi — Kedai Kopi Ngupi Ngupi
 
-AI-powered WhatsApp assistant for **Kedai Ngupi Ngupi Purwakarta** — handles orders, payments (QRIS/COD), delivery coordination, reservations, and complaints, all through natural conversation.
-
-> *"Kayak barista langganan yang udah hapal pesananmu, ramah tapi nggak lebay, dan selalu bikin suasana enak."*
+WhatsApp-based coffee shop ordering system with POS integration, QRIS payments, and delivery management.
 
 ## Architecture
 
 ```
-Customer (WhatsApp)
-     │
-     ▼
-┌─────────────────────────────────────────────┐
-│  OpenClaw Agent Platform                    │
-│  ┌───────────────────────────────────────┐  │
-│  │  SobatNgupi AI Agent                  │  │
-│  │  - SOBATNGUPI_PROMPT.md (behavior)    │  │
-│  │  - SOUL.md (voice & tone)             │  │
-│  │  - menu-schema.json (menu & prices)   │  │
-│  │  - MEMORY.md (learnings)              │  │
-│  └──────────────┬────────────────────────┘  │
-│                 │ exec tool                  │
-│                 ▼                            │
-│  ┌───────────────────────────────────────┐  │
-│  │  sync-state.js (CLI bridge)           │  │
-│  │  Reads local state → POSTs to backend │  │
-│  └──────────────┬────────────────────────┘  │
-└─────────────────┼───────────────────────────┘
-                  │ HTTPS
-                  ▼
-┌─────────────────────────────────────────────┐
-│  Backend (Express.js @ ngupingupi.me)       │
-│  - Bridge: order state machine              │
-│  - Payments: Pakasir QRIS gateway           │
-│  - Queue: local file-based order queue      │
-│  - Notifications: WhatsApp via wacli        │
-│  - Database: Supabase (PostgreSQL)          │
-└─────────────────────────────────────────────┘
+Customer (WhatsApp) → OpenClaw Gateway → SobatNgupi Agent
+                                              ↓
+                                    Backend API (Express)
+                                    ├── QRIS Payments (Pakasir)
+                                    ├── POS Integration (Pawoon)
+                                    ├── Courier Notifications (wacli)
+                                    ├── Dashboard API (JWT + SSE)
+                                    └── Supabase (PostgreSQL)
+                                              ↓
+                                    Dashboard (Next.js) → ngupingupi.me/app
 ```
 
-## Project Structure
+## Stack
+
+| Component | Tech |
+|-----------|------|
+| AI Agent | OpenClaw + Claude Opus 4.6 |
+| WhatsApp | OpenClaw WhatsApp plugin + wacli |
+| Backend | Node.js + Express |
+| Database | Supabase (PostgreSQL) |
+| Payments | Pakasir (QRIS) |
+| POS | Pawoon OpenAPI |
+| Dashboard | Next.js 15 (standalone) |
+| Process Manager | PM2 |
+| Reverse Proxy | Nginx + Let's Encrypt |
+
+## Directory Structure
 
 ```
 workspace-sobatngupi/
-├── SOBATNGUPI_PROMPT.md      # Main production prompt (order flow, rules)
-├── AGENTS.md                 # Critical rules (auto-loaded by OpenClaw)
-├── SOUL.md                   # Voice, tone & personality
-├── IDENTITY.md               # Agent identity card
-├── MEMORY.md                 # Long-term memory & learnings
-├── TOOLS.md                  # Backend tool documentation
-├── ORDER_SYNC.md             # State sync specification
-├── menu-schema.json          # Menu items, prices & aliases
-├── cleanup-memory.sh         # Session log archival script
+├── SOBATNGUPI_PROMPT.md    # Agent persona & order flow rules
+├── AGENTS.md               # Agent configuration
+├── SOUL.md                 # Persona voice & tone
+├── TOOLS.md                # Backend scripts documentation
+├── ORDER_SYNC.md           # State machine & sync protocol
+├── menu-schema.json        # Menu items (synced from Pawoon)
+├── AUDIT-2026-04-16.md     # Security & reliability audit
+│
+├── backend/
+│   ├── src/
+│   │   ├── index.js                 # Main Express server
+│   │   ├── supabase.js              # DB client (singleton)
+│   │   ├── bridge/
+│   │   │   ├── stateService.js      # Order state management
+│   │   │   └── evaluator.js         # Auto QRIS creation
+│   │   ├── payments/
+│   │   │   ├── service.js           # Payment verification + webhooks
+│   │   │   ├── pakasir.js           # Pakasir API client
+│   │   │   └── poll.js              # Payment poller (adaptive)
+│   │   ├── notifications/
+│   │   │   ├── whatsapp.js          # QR image + success notifications
+│   │   │   ├── courier.js           # Delivery courier alerts
+│   │   │   ├── feedback.js          # Post-delivery rating system
+│   │   │   └── alerting.js          # Admin error alerts
+│   │   ├── integrations/
+│   │   │   └── pawoon.js            # Pawoon POS order push
+│   │   ├── dashboard/
+│   │   │   ├── index.js             # Dashboard router
+│   │   │   ├── auth.js              # JWT auth (bcrypt)
+│   │   │   └── orders.js            # Orders API + SSE realtime
+│   │   ├── catalog/
+│   │   │   └── menuPricing.js       # Menu price resolution
+│   │   └── repositories/
+│   │       ├── orders.js            # Order CRUD
+│   │       └── payments.js          # Payment CRUD
+│   │
+│   ├── sync-state.js               # CLI: sync agent state → backend
+│   ├── order-history.js            # CLI: query order history
+│   ├── pawoon-sync-menu.js         # CLI: sync menu from Pawoon
+│   ├── expire-orders.js            # Cron: expire stale orders
+│   ├── cancel-unpaid.js            # Cron: cancel unpaid QRIS
+│   ├── update-wacli.sh             # Cron: auto-update wacli
+│   ├── seed-admin.js               # Setup: create dashboard admin
+│   ├── ecosystem.config.cjs        # PM2 configuration
+│   └── .env                        # Environment variables
+│
+├── dashboard/                      # Next.js 15 dashboard
+│   ├── src/app/
+│   │   ├── login/                  # Login page
+│   │   └── dashboard/              # Main dashboard
+│   │       ├── orders/             # Order management
+│   │       └── users/              # User management (admin)
+│   └── .next/standalone/           # Production build (54MB)
 │
 ├── state/
-│   ├── orders-active/        # Active order per customer (phone.json)
-│   ├── orders-expired/       # Stale orders (>24h)
-│   └── reservations-active/  # Active reservations
+│   ├── orders-active/              # Current order state files
+│   └── orders-expired/             # Archived orders
 │
-├── outbox/
-│   ├── order-context/        # Snapshots for backend processing
-│   └── reservation-context/  # Reservation snapshots
-│
-├── memory/                   # Session conversation logs
-│   └── archive/              # Archived old logs (by month)
-│
-└── backend/
-    ├── sync-state.js         # CLI bridge (agent exec → backend API)
-    ├── .env                  # Environment config (not committed)
-    ├── ecosystem.config.cjs  # PM2 process config
-    ├── package.json
-    └── src/
-        ├── index.js          # Express server (port 3001)
-        ├── bridge/           # Order state evaluator
-        ├── payments/         # QRIS payment service + poller
-        ├── queue/            # Local file-based order queue
-        ├── outbox/           # Outbox snapshot processor
-        ├── notifications/    # WhatsApp delivery (wacli)
-        ├── catalog/          # Menu pricing engine
-        ├── builders/         # Order payload builders
-        ├── repositories/     # Supabase DAL (orders, payments)
-        ├── state/            # Local state file management
-        └── lib/              # Logger, config
+└── memory/                         # Agent memory & learnings
 ```
 
-## Menu
+## Features
 
-| Item | Price | Popular aliases |
-|------|-------|-----------------|
-| Es Kopi Susu Original | Rp17.000 | kopsu, kopi susu |
-| Americano | Rp15.000 | amer |
-| Caffe Latte | Rp21.000 | latte |
-| Cappuccino | Rp21.000 | cap |
-| Matcha Latte | Rp22.000 | matcha |
-| Chocolate | Rp18.000 | coklat |
-| Teh | Rp10.000 | tea, teh manis |
+### Customer Flow (WhatsApp)
+- Natural language ordering in Bahasa Indonesia
+- Menu browsing by category (63 items from Pawoon)
+- Alias support (kopsu, amer, matcha, etc.)
+- QRIS payment with auto-generated QR code
+- COD payment for delivery
+- Delivery with shareloc + Google Maps link
+- Order history & repeat orders
+- Post-delivery feedback/rating (1-5 stars)
 
-## Order Flow
+### Payment (QRIS)
+- Auto-generate QR via Pakasir API
+- QR image sent to customer via WhatsApp (wacli)
+- Dual verification: webhook (instant) + poller (15s backup)
+- Dedup protection at every level
+- Auto-cancel unpaid orders after 1 hour
 
-```
-1. Capture items → 2. Confirm order → 3. WAIT for approval
-→ 4. Pickup/Delivery → 5. Location (if delivery)
-→ 6. Payment method (SEPARATE message!) → 7. Process payment
-```
+### POS Integration (Pawoon)
+- Daily menu sync (cron 06:00 WIB)
+- Auto-push confirmed orders to Pawoon POS
+- Sales type mapping (delivery/pickup)
 
-Key rules:
-- Payment question **must be in a separate message** from fulfillment/location
-- Pickup → QRIS only (no COD)
-- Delivery → QRIS or COD
-- Customer name must be collected before anything else
+### Dashboard (ngupingupi.me/app)
+- JWT authentication (admin/kurir roles)
+- Realtime order updates (SSE)
+- Order status management (8-step delivery flow)
+- Stats: total today, pending, on the way, completed
+- Mobile-optimized (PWA-ready)
 
-## QRIS Payment Flow
+### Notifications
+- Customer: QR code, payment confirmation
+- Courier: Order details + Google Maps link
+- Admin: Error alerts (throttled)
+- Feedback: Rating request after delivery
 
-```
-Customer says "QRIS"
-  → Agent writes state file (paymentMethod: qris)
-  → Agent exec: node backend/sync-state.js sync +62xxx
-  → Script POSTs to backend bridge
-  → Backend creates QRIS via Pakasir API
-  → Backend sends QR image to WhatsApp via wacli
-  → Customer scans & pays
-  → Pakasir webhook → backend verifies → success notification
-```
+### Automation (Cron Jobs)
+| Job | Schedule | Description |
+|-----|----------|-------------|
+| expire-stale-orders | Hourly | Move orders >24h to expired |
+| cancel-unpaid-orders | Every 30min | Cancel QRIS pending >1hr |
+| pawoon-menu-sync | Daily 06:00 | Sync menu from Pawoon POS |
+| wacli-auto-update | Weekly Mon 04:00 | Build wacli from source |
 
 ## Setup
 
 ### Prerequisites
-
 - Node.js 22+
-- PM2 (`npm i -g pm2`)
-- [wacli](https://github.com/nicejuerry/wacli) (WhatsApp CLI)
+- Go 1.22+ (for wacli build)
+- PM2
+- Nginx + SSL
 - Supabase project
-- Pakasir account (QRIS gateway)
+- Pakasir account
+- Pawoon POS account
+- OpenClaw gateway
 
-### Backend Setup
-
+### Environment Variables
 ```bash
-# 1. Install dependencies
+# Backend (.env)
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+PAKASIR_BASE_URL=https://app.pakasir.com
+PAKASIR_PROJECT_SLUG=
+PAKASIR_API_KEY=
+PAKASIR_WEBHOOK_SECRET=
+PAWOON_CLIENT_ID=
+PAWOON_CLIENT_SECRET=
+PAWOON_OUTLET_ID=
+PAWOON_BASE_URL=https://open-api.pawoon.com
+WHATSAPP_SEND_QRIS_ON_CREATE=true
+WHATSAPP_NOTIFY_QRIS_SUCCESS=true
+PAYMENT_POLL_INTERVAL_MS=15000
+COURIER_PHONES=+62xxx,+62yyy
+ADMIN_ALERT_PHONE=+62xxx
+DASHBOARD_JWT_SECRET=
+BACKEND_API_KEY=
+```
+
+### Quick Start
+```bash
+# Install dependencies
 cd backend && npm install
 
-# 2. Configure environment
-cp .env.example .env
-# Fill in: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY,
-#          PAKASIR_PROJECT_SLUG, PAKASIR_API_KEY,
-#          BACKEND_API_KEY, PAKASIR_WEBHOOK_SECRET
+# Create dashboard admin
+node seed-admin.js <username> <password> <name>
 
-# 3. Start with PM2
+# Start services
 pm2 start ecosystem.config.cjs
-pm2 save
 
-# 4. Verify
-curl http://localhost:3001/health
-# → {"ok":true,"service":"ngupi-backend"}
+# Build & start dashboard
+cd dashboard && npm run build
+pm2 start .next/standalone/server.js --name ngupi-dashboard
 ```
 
-### Agent Setup (OpenClaw)
+## API Endpoints
 
-The agent reads configuration from root-level markdown files. No additional setup needed — OpenClaw auto-loads `AGENTS.md` at session start, which references all other files.
+### Backend (port 3001)
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| GET | /health | ❌ | Health check + DB status |
+| POST | /bridge/order-context | API Key | Sync order state |
+| POST | /payments/qris/direct | API Key | Create QRIS payment |
+| POST | /webhooks/pakasir | Webhook Secret | Payment webhook |
+| POST | /payments/poll-pending | API Key | Manual poll trigger |
 
-## Maintenance
+### Dashboard API (port 3001, path /dashboard/api)
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| POST | /auth/login | ❌ | Login → JWT |
+| GET | /auth/me | JWT | Current user |
+| POST | /auth/users | JWT (admin) | Create user |
+| GET | /orders | JWT | List orders |
+| GET | /orders/:id | JWT | Order detail |
+| PATCH | /orders/:id/status | JWT | Update status |
+| GET | /orders/stats/summary | JWT | Dashboard stats |
+| GET | /orders/stream | JWT | SSE realtime |
+| GET | /feedback | JWT | Rating list |
 
-### Memory Cleanup
-
-Session logs in `memory/` grow over time. Use the cleanup script:
-
-```bash
-./cleanup-memory.sh              # Archive logs older than 7 days
-./cleanup-memory.sh 14           # Archive logs older than 14 days
-./cleanup-memory.sh --dry-run    # Preview only
-
-# Auto-cleanup via cron (daily at 3 AM):
-0 3 * * * cd ~/workspace-sobatngupi && ./cleanup-memory.sh
+## Order Status Flow
+```
+awaiting_payment → ready_to_submit → preparing → ready_for_pickup
+→ picked_up → on_the_way → delivered → completed
 ```
 
-### Useful Commands
+## Security
+- bcrypt password hashing (auto-migrated from SHA-256)
+- Rate limiting (login: 5/min, API: 100/min, webhooks: 30/min)
+- CORS restricted to ngupingupi.me
+- .env file permissions 600
+- JWT with 7-day expiry
+- API key authentication for backend endpoints
+- Pakasir webhook secret verification
 
-```bash
-# Check payment status
-node backend/sync-state.js status +62xxxxxxxxxx
-
-# Trigger QRIS sync manually
-node backend/sync-state.js sync +62xxxxxxxxxx
-
-# Process failed queue items
-npm run queue:retry-failed --prefix backend
-
-# View backend logs
-pm2 logs ngupi-backend
-```
-
-## Tech Stack
-
-| Component | Technology |
-|-----------|-----------|
-| Agent platform | [OpenClaw](https://openclaw.ai) |
-| Channel | WhatsApp (via wacli) |
-| Backend | Node.js, Express 5 |
-| Database | Supabase (PostgreSQL) |
-| Payments | [Pakasir](https://app.pakasir.com) (QRIS) |
-| Process manager | PM2 |
-| Hosting | Ubuntu VPS |
+## Monitoring
+- Health endpoint: `GET /health` (DB + uptime + memory)
+- PM2 log rotation (10MB max, 7 days retain)
+- Admin WA alerts on critical errors
+- Heartbeat checks via OpenClaw
 
 ## License
-
-Private — Kedai Ngupi Ngupi Purwakarta
+Private — Kedai Kopi Ngupi Ngupi © 2026

@@ -1,7 +1,11 @@
 import 'dotenv/config';
 import express from 'express';
+import cors from 'cors';
+import rateLimit from 'express-rate-limit';
 import QRCode from 'qrcode';
 import logger from './lib/logger.js';
+import dashboardRouter from './dashboard/index.js';
+import { getSupabase } from './supabase.js';
 import { upsertOrderContext, getOrderContextState } from './bridge/stateService.js';
 import {
   buildPaymentBaseUrl,
@@ -31,6 +35,14 @@ process.on('unhandledRejection', (reason) => {
 
 const app = express();
 app.disable('x-powered-by');
+
+// Rate limiting
+const apiLimiter = rateLimit({ windowMs: 60_000, max: 100, standardHeaders: true, legacyHeaders: false });
+const loginLimiter = rateLimit({ windowMs: 60_000, max: 5, message: { ok: false, error: 'Too many login attempts, try again in 1 minute' } });
+const webhookLimiter = rateLimit({ windowMs: 60_000, max: 30 });
+app.use('/dashboard/api', apiLimiter);
+app.use('/dashboard/api/auth/login', loginLimiter);
+app.use('/webhooks', webhookLimiter);
 const jsonBodyLimit = process.env.JSON_BODY_LIMIT || '256kb';
 app.use(express.json({ limit: jsonBodyLimit }));
 app.use((req, res, next) => {
@@ -136,8 +148,14 @@ function validateOrderPayload(eventType, order) {
   return null;
 }
 
-app.get('/health', (_req, res) => {
-  res.json({ ok: true, service: 'ngupi-backend' });
+app.get('/health', async (_req, res) => {
+  try {
+    const supabase = getSupabase();
+    const { error } = await supabase.from('orders').select('count').limit(1);
+    res.json({ ok: !error, service: 'ngupi-backend', uptime: Math.round(process.uptime()), memoryMB: Math.round(process.memoryUsage().rss / 1048576), db: error ? 'error' : 'ok' });
+  } catch (e) {
+    res.status(503).json({ ok: false, service: 'ngupi-backend', error: 'unhealthy' });
+  }
 });
 
 // SECURITY: Apply API key to all routes except /health
@@ -368,7 +386,7 @@ app.post('/payments/qris/direct', async (req, res) => {
     try {
       await Promise.race([
         processAllQueues(),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Queue timeout')), 10000))
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Queue timeout')), 30000))
       ]);
     } catch (e) {
       logger.warn('[qris/direct] Queue processing warning: %s', e.message);
@@ -398,13 +416,27 @@ app.post('/payments/qris/direct', async (req, res) => {
       }
     }
 
+    // Re-check payment metadata for evaluator race condition
+    // Evaluator may have sent WhatsApp between payment creation and this point
+    let freshPaymentMeta = paymentResult?.payment?.metadata;
+    if (paymentResult?.payment?.id && !paymentResult?.whatsapp_qris_delivery?.ok) {
+      try {
+        const freshPayment = await getPaymentSessionById(paymentResult.payment.id);
+        if (freshPayment?.metadata) freshPaymentMeta = freshPayment.metadata;
+      } catch (_) { /* ignore, use original */ }
+    }
+
+    const waDelivery = paymentResult?.whatsapp_qris_delivery;
+    const evaluatorAlreadySent = freshPaymentMeta?.whatsapp_sent_at != null;
+    const whatsappSent = waDelivery?.ok === true || evaluatorAlreadySent;
+    const whatsappSkipped = !whatsappSent && (waDelivery?.skipped === true);
+
     logger.info({
       qr_image_url: paymentResult?.payment?.qr_image_url,
-      whatsapp_sent: paymentResult?.whatsapp_qris_delivery?.ok
+      whatsapp_sent: whatsappSent,
+      sent_by: evaluatorAlreadySent ? 'evaluator' : (waDelivery?.ok ? 'qris_direct' : 'none')
     }, '[qris/direct] QRIS payment created');
 
-    // Return clean response with WhatsApp delivery status
-    const waDelivery = paymentResult?.whatsapp_qris_delivery;
     res.json({
       ok: true,
       data: {
@@ -414,8 +446,8 @@ app.post('/payments/qris/direct', async (req, res) => {
         total_payment: paymentResult?.payment?.total_payment ?? null,
         amount: paymentResult?.payment?.amount ?? null,
         expired_at: paymentResult?.payment?.expired_at ?? null,
-        whatsapp_sent: waDelivery?.ok === true,
-        whatsapp_skipped: waDelivery?.skipped === true,
+        whatsapp_sent: whatsappSent,
+        whatsapp_skipped: whatsappSkipped,
         whatsapp_error: waDelivery?.error ?? null
       }
     });
@@ -517,6 +549,7 @@ app.post('/webhooks/pakasir', requirePakasirWebhookSecret, async (req, res) => {
 
     res.json(responseBody);
   } catch (error) {
+    try { const { alertWebhookError } = await import('./notifications/alerting.js'); await alertWebhookError(error.message); } catch (_) {}
     res.status(500).json({ ok: false, error: sanitizeError(error) });
   }
 });
@@ -588,6 +621,13 @@ app.get('/orders/:id', async (req, res) => {
     res.status(500).json({ ok: false, error: sanitizeError(error) });
   }
 });
+
+// Dashboard API (CORS enabled for Next.js frontend)
+const dashboardCors = cors({
+  origin: ['https://ngupingupi.me', 'http://localhost:3000', 'http://localhost:3002'],
+  credentials: true
+});
+app.use('/dashboard', dashboardCors, dashboardRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ ok: false, error: 'Route not found' });

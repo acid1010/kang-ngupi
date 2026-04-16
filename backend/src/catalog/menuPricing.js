@@ -108,6 +108,12 @@ export function calculateOrderAmount(items = [], amountOverride = null) {
     }
 
     if (!unitPrice) {
+      // Fallback: use price from item itself (e.g. from DB or API payload)
+      const itemPrice = Number(item.price ?? item.unit_price ?? 0);
+      if (Number.isFinite(itemPrice) && itemPrice > 0) {
+        total += itemPrice * qty;
+        continue;
+      }
       const label = item.menu_name ?? item.menuName ?? item.name ?? item.menu_id ?? 'unknown-item';
       throw new Error(`missing price mapping for item: ${label}`);
     }

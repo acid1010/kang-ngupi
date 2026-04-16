@@ -1,0 +1,38 @@
+{
+  "event_type": "draft_order",
+  "order": {
+    "client_order_id": "draft_2026-04-13T21-09-22",
+    "channel": "whatsapp",
+    "customer": {
+      "name": "Acid",
+      "phone": "+6285155022960"
+    },
+    "items": [
+      {
+        "menu_id": "kopi-susu-original",
+        "menu_name": "Es Kopi Susu Original",
+        "qty": 1,
+        "temperature": "iced",
+        "notes": null
+      }
+    ],
+    "fulfillment": {
+      "method": "delivery",
+      "location_status": "shareloc_received",
+      "shareloc": {
+        "lat": -6.575756,
+        "lng": 107.464066,
+        "label": "Delivery location",
+        "source": "user"
+      },
+      "delivery_provider": "ngupi_express"
+    },
+    "payment": {
+      "method": "qris",
+      "status": "pending"
+    },
+    "status": "draft",
+    "raw_message": "es kopi susu original 1",
+    "notes": []
+  }
+}
