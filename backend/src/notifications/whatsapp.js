@@ -115,7 +115,7 @@ export async function sendQrisImageWhatsApp({ to, customerName = null, amount = 
     await QRCode.toFile(tempFile, qrString, {
       errorCorrectionLevel: 'M',
       margin: 1,
-      width: 720,
+      width: 400,
       type: 'png'
     });
 

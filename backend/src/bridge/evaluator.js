@@ -45,7 +45,7 @@ function normalizeDeliveryProvider(value) {
   if (!value) return null;
   const normalized = String(value).trim().toLowerCase().replace(/[\s-]+/g, '_');
 
-  if (normalized.includes('ngupi') && normalized.includes('express')) return 'ngupi_express';
+  if (normalized === 'go_ngupi' || (normalized.includes('ngupi') && normalized.includes('express'))) return 'ngupi_express';
   if (normalized.includes('grab')) return 'grab';
   if (normalized.includes('gojek') || normalized.includes('gocar') || normalized.includes('goride')) return 'gojek';
 

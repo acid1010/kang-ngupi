@@ -1,3 +1,8 @@
+function normalizeDeliveryProvider(val) {
+  if (!val) return null;
+  return val === 'go_ngupi' ? 'ngupi_express' : val;
+}
+
 function pad(value) {
   return String(value).padStart(2, '0');
 }
@@ -94,7 +99,7 @@ function mapFulfillment(context = {}) {
         }
       : null,
     delivery_provider:
-      fulfillment.deliveryProvider ?? fulfillment.delivery_provider ?? context.deliveryProvider ?? null
+      normalizeDeliveryProvider(fulfillment.deliveryProvider ?? fulfillment.delivery_provider ?? context.deliveryProvider ?? null)
   };
 }
 

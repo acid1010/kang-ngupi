@@ -1,0 +1,38 @@
+{
+  "customer_phone": "+6285797453403",
+  "order_id": "ORD-20260418-0D90",
+  "updates": {
+    "customerName": "Iqbal",
+    "rawMessage": "es kopi susu creamchesse 1, es batu di pisah",
+    "items": [
+      {
+        "menuId": "es-kopi-susu-cream-cheese",
+        "menuName": "Es Kopi Susu Cream Cheese",
+        "quantity": 1,
+        "price": 23000,
+        "temperature": "iced"
+      }
+    ],
+    "fulfillmentMethod": "delivery",
+    "locationStatus": "shareloc_received",
+    "shareloc": {
+      "lat": -6.549354,
+      "lng": 107.462175,
+      "source": "whatsapp"
+    },
+    "confirmationStatus": "confirmed",
+    "paymentMethod": "qris",
+    "paymentStatus": "pending",
+    "deliveryProvider": "go_ngupi",
+    "deliveryFee": 8000,
+    "totalAmount": 31000,
+    "notes": [
+      "shareloc_received",
+      "qris_pending",
+      "qris_regenerated_with_ongkir"
+    ],
+    "customerNotes": [
+      "es batu dipisah"
+    ]
+  }
+}

@@ -57,7 +57,7 @@ export default function DashboardLayout({
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1F8A8A] to-[#164a4a] flex items-center justify-center">
               <img src="/app/logo.jpg" alt="Ngupi" className="w-5 h-5 rounded object-cover" />
             </div>
-            <span className="font-bold text-[#3CC8C8]">Ngupi Express</span>
+            <span className="font-bold text-[#3CC8C8]">Go Ngupi</span>
           </div>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -117,7 +117,7 @@ export default function DashboardLayout({
               <img src="/app/logo.jpg" alt="Ngupi" className="w-7 h-7 rounded-lg object-cover" />
             </div>
             <div>
-              <h1 className="font-bold text-[#3CC8C8] text-lg leading-tight">Ngupi Express</h1>
+              <h1 className="font-bold text-[#3CC8C8] text-lg leading-tight">Go Ngupi</h1>
               <p className="text-[10px] text-white/50 uppercase tracking-wider">Dashboard</p>
             </div>
           </div>

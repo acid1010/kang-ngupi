@@ -212,6 +212,12 @@ router.get('/:id', async (req, res) => {
 // PATCH /orders/:id/status — update delivery status
 router.patch('/:id/status', async (req, res) => {
   try {
+    // Validate UUID format
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(req.params.id)) {
+      return res.status(400).json({ ok: false, error: 'Invalid order ID format' });
+    }
+
     const { status, notes } = req.body;
     const validStatuses = [
       'awaiting_payment', 'ready_to_submit', 'preparing',
@@ -258,8 +264,8 @@ router.patch('/:id/status', async (req, res) => {
       logger.warn('[dashboard] Customer notification error: %s', notifErr.message);
     }
 
-    // Send feedback request when order is delivered
-    if (status === 'delivered') {
+    // Send feedback request when order is completed
+    if (status === 'completed') {
       try {
         const { sendFeedbackRequest } = await import('../notifications/feedback.js');
         const fbResult = await sendFeedbackRequest(data);

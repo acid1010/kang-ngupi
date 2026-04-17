@@ -1,0 +1,29 @@
+{
+  "customer_phone": "+6285155022960",
+  "order_id": "ORD-20260417-5C34",
+  "updates": {
+    "customerName": "Acid",
+    "rawMessage": "kopsu 1",
+    "items": [
+      {
+        "menuId": "es-kopi-susu-original",
+        "menuName": "Es Kopi Susu Original",
+        "quantity": 1,
+        "price": 18000,
+        "temperature": "iced"
+      }
+    ],
+    "confirmationStatus": "confirmed",
+    "orderStatus": "pending",
+    "totalPrice": 18000,
+    "fulfillmentMethod": null,
+    "shareloc": null,
+    "paymentMethod": null,
+    "paymentStatus": null,
+    "notes": [
+      "Items captured",
+      "Order confirmed"
+    ],
+    "customerNotes": ""
+  }
+}
