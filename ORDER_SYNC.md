@@ -1,6 +1,6 @@
-# SobatNgupi Order Sync
+# Kang Ngupi Order Sync
 
-Dokumen ini menjelaskan cara SobatNgupi menyimpan state order lokal dan menulis snapshot outbox untuk integrasi backend.
+Dokumen ini menjelaskan cara Kang Ngupi menyimpan state order lokal dan menulis snapshot outbox untuk integrasi backend.
 
 ## Tujuan
 - menjaga konteks order aktif per customer

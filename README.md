@@ -1,11 +1,11 @@
-# SobatNgupi — Kedai Kopi Ngupi Ngupi
+# Kang Ngupi — Kedai Kopi Ngupi Ngupi
 
 WhatsApp-based coffee shop ordering system with POS integration, QRIS payments, and delivery management.
 
 ## Architecture
 
 ```
-Customer (WhatsApp) → OpenClaw Gateway → SobatNgupi Agent
+Customer (WhatsApp) → OpenClaw Gateway → Kang Ngupi Agent
                                               ↓
                                     Backend API (Express)
                                     ├── QRIS Payments (Pakasir)

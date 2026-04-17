@@ -177,8 +177,8 @@ Builder akan:
 - merapikan notes
 - memetakan items ke format payload final
 
-## Outbox SobatNgupi → bridge
-Backend ini juga bisa memproses outbox lokal dari workspace SobatNgupi.
+## Outbox Kang Ngupi → bridge
+Backend ini juga bisa memproses outbox lokal dari workspace Kang Ngupi.
 
 Struktur outbox default:
 - `<workspace>/outbox/order-context/`

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * sync-state.js — CLI bridge for SobatNgupi agent
+ * sync-state.js — CLI bridge for Kang Ngupi agent
  *
  * Usage:
  *   node backend/sync-state.js sync  <customer_phone>   — sync state + auto-trigger QRIS
