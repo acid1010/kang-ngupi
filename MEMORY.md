@@ -19,6 +19,58 @@ Jangan duplikasi aturan yang sudah ada di SOBATNGUPI_PROMPT.md atau AGENTS.md �
 - Order ID format: `ORD-YYYYMMDD-XXXX` (hex), dibuat saat items_captured
 - Reservation ID format: `RSV-YYYYMMDD-XXXX` (hex)
 
+## Cron Jobs
+- `cancel-unpaid-orders` — every :15 and :45, auto-cancel QRIS unpaid >1hr
+- `expire-stale-orders` — hourly, move stale orders >24h to expired
+- `pawoon-menu-sync` — daily 06:00 WIB, sync menu from Pawoon
+- `wacli-auto-update` — weekly Monday 04:00 WIB, rebuild wacli from source
+
+## Menu Images
+- 76 images downloaded from Pawoon → `backend/public/menu-images/`
+- Served via Express static at `/menu-images/`
+- Script: `backend/send-menu-image.js` — kirim foto menu ke customer via wacli
+- Script: `backend/pawoon-sync-images.js` — download images from Pawoon
+- Exclusive alias mapping: short aliases (kopsu, amer, latte) only map to 1 canonical item
+
+## Integration Test
+- Script: `backend/test-integration.js` — 17 tests covering full order flow
+- Tests: health, state, sync, DB, payment, dashboard API, history, menu, wacli, Pawoon
+
+---
+
+## Bug Fixes (2026-04-17)
+
+### Exec Preflight Block
+- Agent pakai `cd ... && node ...` yang di-block oleh exec preflight
+- Fix: semua script paths di prompt/TOOLS.md/AGENTS.md diganti ke absolute path
+
+### Payment Poller Scope Bug (CRITICAL)
+- `orderItems` di-declare dengan `const` di dalam courier `try` block
+- Pawoon push + courier notification di bawahnya nggak bisa akses → silently fail
+- Fix: `orderItems` di-fetch di scope lebih tinggi, shared antara courier + Pawoon
+- Impact: semua paid order sebelumnya TIDAK push ke Pawoon dan TIDAK notify courier
+
+### Pawoon Payment Method
+- Pawoon API nggak kenal `qris` sebagai payment method
+- Fix: semua payment method map ke `cash` untuk Pawoon
+- NaN price juga di-fix dengan `Number()` cast
+
+### Notes Field Corruption
+- Agent nulis `notes` sebagai string → di-spread jadi array of individual characters
+- Fix: sanitize di sync-state.js dan orders.js — string auto-wrap ke array, filter 1-char artifacts
+
+### QRIS Double Message
+- Agent kirim "Sebentar ya" + "Cek chat ya kak" padahal backend sudah kirim QR + caption
+- Fix: prompt updated — jika `whatsappSent: true`, agent DIAM (no reply)
+
+### Dashboard Unpaid Orders
+- Dashboard tampil semua order termasuk draft/pending
+- Fix: default filter hanya tampil order yang sudah bayar (confirmed/paid/settled)
+
+### Express Trust Proxy
+- Rate limiter error `ERR_ERL_UNEXPECTED_X_FORWARDED_FOR` karena nginx forwards header
+- Fix: `app.set('trust proxy', 1)`
+
 ---
 
 ## Operational Learnings

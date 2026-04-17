@@ -63,6 +63,11 @@ function slugify(name) {
     .trim();
 }
 
+// Items to exclude from sync (removed from menu by owner)
+const EXCLUDED_ITEMS = new Set([
+  'es-kopi-susu-flavour',
+]);
+
 // Short aliases that should only map to ONE canonical item
 // key = alias, value = canonical menu id that owns it
 const EXCLUSIVE_ALIASES = {
@@ -146,8 +151,11 @@ async function run() {
   const allProducts = await fetchProducts(token);
   console.log(`Fetched ${allProducts.length} total products`);
   
-  // Filter drinks
-  const drinks = allProducts.filter(p => DRINK_CATEGORIES.has(p.product_category_id) && p.sellable);
+  // Filter drinks (exclude removed items)
+  const drinks = allProducts.filter(p => {
+    const id = slugify(p.name);
+    return DRINK_CATEGORIES.has(p.product_category_id) && p.sellable && !EXCLUDED_ITEMS.has(id);
+  });
   console.log(`Found ${drinks.length} drink products`);
   
   // Load existing menu-schema

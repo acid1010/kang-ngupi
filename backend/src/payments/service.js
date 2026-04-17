@@ -503,13 +503,21 @@ export async function pollPendingPaymentsAndVerify() {
           logger.warn('[poll] Failed to send success WhatsApp for %s: %s', providerOrderId, whatsappNotification.error);
         }
 
-        // Notify courier for delivery orders
+        // Fetch order items for courier + Pawoon
+        let orderItems = [];
         try {
-          const { notifyCouriers } = await import('../notifications/courier.js');
-          const { data: orderItems } = await getSupabase()
+          const { data } = await getSupabase()
             .from('order_items')
             .select('menu_name, qty, temperature')
             .eq('order_id', updatedOrder.id);
+          orderItems = data || [];
+        } catch (itemsErr) {
+          logger.warn('[poll] Failed to fetch order items: %s', itemsErr.message);
+        }
+
+        // Notify courier for delivery orders
+        try {
+          const { notifyCouriers } = await import('../notifications/courier.js');
           const courierResult = await notifyCouriers(updatedOrder, orderItems, payment);
           if (courierResult.ok) {
             logger.info('[poll] Courier notified for %s', providerOrderId);

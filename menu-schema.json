@@ -408,18 +408,6 @@
       "image": "/menu-images/es-kopi-susu-dalgona.jpg"
     },
     {
-      "id": "es-kopi-susu-flavour",
-      "name": "Es Kopi Susu Flavour",
-      "aliases": [
-        "es kopi susu flavour",
-        "kopi susu flavour"
-      ],
-      "price": 18000,
-      "pawoonId": "b8f50be0-22b6-11f0-a05e-35c4c2b74db8",
-      "category": "kopi-susu",
-      "image": "/menu-images/es-kopi-susu-flavour.jpg"
-    },
-    {
       "id": "es-kopi-susu-float",
       "name": "Es Kopi Susu Float",
       "aliases": [

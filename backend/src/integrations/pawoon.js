@@ -119,9 +119,9 @@ export async function pushOrderToPawoon(order, items, payment) {
 
       pawoonItems.push({
         product_id: pawoonProduct.id,
-        qty: item.qty || 1,
+        qty: Number(item.qty) || 1,
         notes: item.temperature ? `${item.temperature}${item.notes ? ' - ' + item.notes : ''}` : (item.notes || ''),
-        price: pawoonProduct.price
+        price: Number(pawoonProduct.price) || 0
       });
     }
 
@@ -130,8 +130,8 @@ export async function pushOrderToPawoon(order, items, payment) {
     }
 
     // Build order payload
-    const totalAmount = payment?.total_payment || payment?.amount || 
-      pawoonItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    const totalAmount = Number(payment?.total_payment || payment?.amount || 
+      pawoonItems.reduce((sum, i) => sum + (i.price * i.qty), 0)) || 0;
 
     const orderPayload = {
       data: {
@@ -144,7 +144,7 @@ export async function pushOrderToPawoon(order, items, payment) {
         items: pawoonItems,
         payment: {
           amount: totalAmount,
-          method: order.payment_method === 'qris' ? 'qris' : 'cash'
+          method: 'cash'  // Pawoon only accepts 'cash' — QRIS/COD both map to cash
         },
         feature_flags: {
           order_accepted_type: 'auto'

@@ -6,6 +6,13 @@ import { Toaster } from "sonner";
 export const metadata: Metadata = {
   title: "Ngupi Express - Dashboard",
   description: "Coffee shop delivery management dashboard",
+  icons: {
+    icon: [
+      { url: "/app/favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/app/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: "/app/apple-touch-icon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
