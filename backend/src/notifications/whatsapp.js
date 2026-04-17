@@ -164,6 +164,15 @@ export async function sendQrisSuccessWhatsApp({ to, customerName = null, order =
   try {
     const result = await runWacli(['send', 'text', '--to', recipient, '--message', message]);
 
+    // Send digital receipt after success message
+    if (order) {
+      try {
+        await sendDigitalReceipt({ to, customerName, order });
+      } catch (receiptErr) {
+        logger.warn('[whatsapp] Failed to send receipt: %s', receiptErr.message);
+      }
+    }
+
     return {
       ok: true,
       skipped: false,
@@ -179,5 +188,72 @@ export async function sendQrisSuccessWhatsApp({ to, customerName = null, order =
       message,
       error: error.message
     };
+  }
+}
+
+export async function sendDigitalReceipt({ to, customerName = null, order = null } = {}) {
+  const recipient = toWacliPhone(to);
+  if (!recipient || !order) return { ok: false, reason: 'missing-data' };
+
+  // Fetch order items from DB
+  let items = [];
+  let ongkir = 0;
+  try {
+    const { getSupabase } = await import('../supabase.js');
+    const sb = getSupabase();
+    const { data } = await sb.from('order_items').select('menu_name, qty, price, temperature, notes').eq('order_id', order.id);
+    items = data || [];
+
+    // Check for ongkir in order notes or delivery fee
+    if (order.delivery_fee) ongkir = Number(order.delivery_fee);
+  } catch (_) {}
+
+  const name = customerName || order.customer_name_snapshot || 'kak';
+  const orderId = order.client_order_id || '-';
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Jakarta' });
+  const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' });
+
+  const fmtRp = (n) => 'Rp' + Number(n || 0).toLocaleString('id-ID');
+
+  // Build item lines
+  const itemLines = items.map(i => {
+    const qty = i.qty || 1;
+    const price = Number(i.price || 0) * qty;
+    const temp = i.temperature === 'iced' ? 'Es ' : i.temperature === 'hot' ? 'Hot ' : '';
+    return `- ${temp}${i.menu_name} x${qty}   ${fmtRp(price)}`;
+  });
+
+  const subtotal = items.reduce((sum, i) => sum + (Number(i.price || 0) * (i.qty || 1)), 0);
+  const total = subtotal + ongkir;
+
+  const paymentMethod = (order.payment_method || 'qris').toUpperCase();
+  const fulfillment = order.fulfillment_method === 'delivery' ? 'Delivery (Go Ngupi)' : 'Pickup';
+
+  let receipt = `🧾 *STRUK PESANAN*\n`;
+  receipt += `──────────────────────\n`;
+  receipt += `Kedai Ngupi Ngupi Purwakarta\n`;
+  receipt += `Jl. K.K. Singawinata No.9\n\n`;
+  receipt += `Order: ${orderId}\n`;
+  receipt += `Tanggal: ${dateStr}, ${timeStr} WIB\n`;
+  receipt += `Atas nama: ${name}\n`;
+  receipt += `${fulfillment}\n\n`;
+  receipt += itemLines.join('\n') + '\n';
+  if (ongkir > 0) {
+    receipt += `- Ongkir Go Ngupi   ${fmtRp(ongkir)}\n`;
+  }
+  receipt += `──────────────────────\n`;
+  receipt += `*Total: ${fmtRp(total)}*\n`;
+  receipt += `Bayar: ${paymentMethod} ✅\n\n`;
+  receipt += `Terima kasih kak ${name}! ☕\n`;
+  receipt += `@kedaingupingupi`;
+
+  try {
+    await runWacli(['send', 'text', '--to', recipient, '--message', receipt]);
+    logger.info('[whatsapp] Digital receipt sent to %s', to);
+    return { ok: true };
+  } catch (err) {
+    logger.warn('[whatsapp] Receipt send failed: %s', err.message);
+    return { ok: false, error: err.message };
   }
 }
