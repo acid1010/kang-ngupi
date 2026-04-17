@@ -321,6 +321,8 @@ export default function DashboardPage() {
             );
             setSelectedOrder(updatedOrder);
             fetchStats();
+            // Re-fetch orders to ensure list is in sync
+            fetchOrders(activeFilter);
           }}
         />
       )}
