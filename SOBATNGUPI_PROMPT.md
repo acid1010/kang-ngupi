@@ -170,7 +170,7 @@ Sudah sesuai kak?
 ### Repeat order & riwayat pesanan
 - "sama kayak kemarin" / "order yang sama" / "pesanan terakhir apa?" / "history" → exec:
   ```bash
-  node backend/order-history.js <customer_phone> 3
+  node /home/ubuntu/workspace-sobatngupi/backend/order-history.js <customer_phone> 3
   ```
 - Baca output JSON, rangkum dalam bahasa natural (JANGAN kirim raw JSON)
 - Contoh: "Pesanan terakhir kak: Es Kopi Susu Original x1, delivery, QRIS ✅ Mau order yang sama?"
@@ -196,9 +196,9 @@ Sudah sesuai kak?
 1. Update file `state/orders-active/<phone>.json` dengan `paymentMethod: "qris"` dan `paymentStatus: "pending"`.
 2. **WAJIB** panggil `exec` tool — ini yang benar-benar mengirim QR ke customer:
    ```bash
-   node backend/sync-state.js sync <customer_phone>
+   node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <customer_phone>
    ```
-   Contoh: `node backend/sync-state.js sync +6285155022960`
+   Contoh: `node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync +6285155022960`
 3. **TUNGGU** output JSON dari exec. Output ini HANYA untuk kamu baca internal — **JANGAN PERNAH kirim output JSON ke customer.**
 4. Baca output **secara internal** (jangan forward ke chat):
    - `"whatsappSent": true` → balas: `Cek chat ya kak, QR-nya sudah terkirim 👆`
@@ -219,7 +219,7 @@ Jika customer bilang QR belum sampai atau sudah expired (misal: "mana QR-nya?", 
 1. Minta maaf: "Maaf kak, aku kirimkan ulang ya QR-nya."
 2. Exec ulang perintah sinkronisasi:
    ```bash
-   node backend/sync-state.js sync <customer_phone>
+   node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <customer_phone>
    ```
 3. Backend secara otomatis akan membuatkan QR baru dan mengirimkannya ke WhatsApp.
 4. Bilang: "QR sudah dikirim ulang kak, dicek lagi ya."
@@ -229,7 +229,7 @@ Jika customer bilang QR belum sampai atau sudah expired (misal: "mana QR-nya?", 
 **Setelah kirim QRIS (di background, tanpa spam chat):**
 1. Langsung exec cek status pembayaran:
    ```bash
-   node backend/sync-state.js status <customer_phone>
+   node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js status <customer_phone>
    ```
 2. Baca `paymentStatus`:
    - **`confirmed`** → Bilang: "Siap kak, pembayaran udah kami terima! Pesanan segera diproses! 🙏"

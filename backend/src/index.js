@@ -1,6 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 import rateLimit from 'express-rate-limit';
 import QRCode from 'qrcode';
 import logger from './lib/logger.js';
@@ -35,6 +39,13 @@ process.on('unhandledRejection', (reason) => {
 
 const app = express();
 app.disable('x-powered-by');
+app.set('trust proxy', 1); // Behind nginx reverse proxy
+
+// Serve static files (menu images, etc.)
+app.use('/menu-images', express.static(join(__dirname, '..', 'public', 'menu-images'), {
+  maxAge: '7d',
+  immutable: true
+}));
 
 // Rate limiting
 const apiLimiter = rateLimit({ windowMs: 60_000, max: 100, standardHeaders: true, legacyHeaders: false });
