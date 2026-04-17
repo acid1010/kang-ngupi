@@ -35,3 +35,6 @@ backend/tmp/
 # Memory archives (large session transcripts)
 memory/archive/
 memory/.dreams/
+
+# Self-improvement learnings (local)
+.learnings/

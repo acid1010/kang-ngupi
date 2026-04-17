@@ -71,7 +71,7 @@ export async function createOrUpdateOrder(eventType, order) {
     location_lat: order.fulfillment?.shareloc?.lat ?? null,
     location_lng: order.fulfillment?.shareloc?.lng ?? null,
     location_label: order.fulfillment?.shareloc?.label ?? null,
-    delivery_provider: order.fulfillment?.delivery_provider ?? null,
+    delivery_provider: (order.fulfillment?.delivery_provider === 'go_ngupi' ? 'ngupi_express' : order.fulfillment?.delivery_provider) ?? null,
     notes: Array.isArray(order.notes) ? order.notes.filter(n => typeof n === 'string' && n.length > 1) : (typeof order.notes === 'string' ? [order.notes] : [])
   };
 

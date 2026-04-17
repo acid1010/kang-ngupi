@@ -4,7 +4,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "Ngupi Express - Dashboard",
+  title: "Go Ngupi - Dashboard",
   description: "Coffee shop delivery management dashboard",
   icons: {
     icon: [
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Ngupi Express",
+    title: "Go Ngupi",
   },
 };
 

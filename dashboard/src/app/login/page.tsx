@@ -56,7 +56,7 @@ export default function LoginPage() {
             <img src="/app/logo.jpg" alt="Ngupi Ngupi" className="w-full h-full object-cover" />
           </div>
           <CardTitle className="text-xl font-bold text-[#3CC8C8]">
-            Ngupi Express
+            Go Ngupi
           </CardTitle>
           <p className="text-white/40 text-xs mt-1">Dashboard Kedai Kopi Ngupi Ngupi</p>
         </CardHeader>

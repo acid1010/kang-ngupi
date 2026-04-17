@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -40,6 +41,13 @@ process.on('unhandledRejection', (reason) => {
 const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', 1); // Behind nginx reverse proxy
+
+// Security headers
+app.use(helmet({
+  contentSecurityPolicy: false, // Disabled for dashboard static files
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: { policy: 'cross-origin' } // Allow QR images
+}));
 
 // Serve static files (menu images, etc.)
 app.use('/menu-images', express.static(join(__dirname, '..', 'public', 'menu-images'), {
@@ -390,35 +398,19 @@ app.post('/payments/qris/direct', async (req, res) => {
       });
     }
 
-    // Wait a moment for draft to be queued, then process
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // Process queue to persist draft to DB
-    try {
-      await Promise.race([
-        processAllQueues(),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Queue timeout')), 30000))
-      ]);
-    } catch (e) {
-      logger.warn('[qris/direct] Queue processing warning: %s', e.message);
-    }
-
-    logger.info('[qris/direct] queue processing completed');
-
-    // Ensure order exists in DB — fallback create if queue didn't persist it
+    // Ensure order exists in DB (direct create, skip slow queue)
     try {
       const { getSupabase } = await import('./supabase.js');
       const sb = getSupabase();
       const { data: existingOrder } = await sb.from('orders').select('id').eq('client_order_id', clientOrderId).limit(1);
       if (!existingOrder || existingOrder.length === 0) {
-        logger.info('[qris/direct] Order not in DB, creating fallback for %s', clientOrderId);
         const { createOrderFromContext } = await import('./repositories/orders.js');
         const ctx = stateResult.state.orderContext;
         await createOrderFromContext(ctx);
-        logger.info('[qris/direct] Fallback order created for %s', clientOrderId);
+        logger.info('[qris/direct] Order created in DB for %s', clientOrderId);
       }
-    } catch (fallbackErr) {
-      logger.warn('[qris/direct] Fallback order creation failed: %s', fallbackErr.message);
+    } catch (dbErr) {
+      logger.warn('[qris/direct] DB order creation failed: %s', dbErr.message);
     }
 
     // Create QRIS payment
@@ -646,6 +638,51 @@ app.get('/orders/:id', async (req, res) => {
     }
 
     res.status(500).json({ ok: false, error: sanitizeError(error) });
+  }
+});
+
+// Pawoon Webhook — receive stock/product updates from POS
+app.post('/webhooks/pawoon', async (req, res) => {
+  try {
+    const payload = req.body;
+
+    // Basic payload validation — reject empty/non-object
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+      logger.warn('[pawoon-webhook] Rejected: invalid payload type');
+      return res.status(400).json({ ok: false, error: 'Invalid payload' });
+    }
+
+    // Limit payload size (prevent abuse)
+    const payloadStr = JSON.stringify(payload);
+    if (payloadStr.length > 50_000) {
+      logger.warn('[pawoon-webhook] Rejected: payload too large (%d bytes)', payloadStr.length);
+      return res.status(413).json({ ok: false, error: 'Payload too large' });
+    }
+
+    logger.info({ type: payload?.type, event: payload?.event, data: payload?.data?.id || payload?.id }, '[pawoon-webhook] Received');
+    logger.info({ payload: payloadStr.slice(0, 500) }, '[pawoon-webhook] Payload');
+
+    // Handle product/stock updates
+    const eventType = payload?.type || payload?.event || 'unknown';
+
+    if (eventType.includes('product') || eventType.includes('stock') || eventType.includes('inventory')) {
+      // Trigger menu re-sync
+      logger.info('[pawoon-webhook] Product/stock change detected, triggering menu sync');
+      try {
+        const { execFile } = await import('node:child_process');
+        const { promisify } = await import('node:util');
+        const execFileAsync = promisify(execFile);
+        const { stdout } = await execFileAsync('node', ['/home/ubuntu/workspace-sobatngupi/backend/pawoon-sync-menu.js'], { timeout: 30_000 });
+        logger.info('[pawoon-webhook] Menu sync completed: %s', stdout.trim().split('\n').pop());
+      } catch (syncErr) {
+        logger.warn('[pawoon-webhook] Menu sync failed: %s', syncErr.message);
+      }
+    }
+
+    res.json({ ok: true, received: true });
+  } catch (error) {
+    logger.error({ err: error }, '[pawoon-webhook] Error processing webhook');
+    res.status(500).json({ ok: false, error: 'Internal error' });
   }
 });
 

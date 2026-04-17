@@ -50,7 +50,7 @@ function buildCourierMessage(order, items, payment) {
   // Phone link
   const waLink = phone.startsWith('+') ? phone : `+${phone}`;
 
-  return `🛵 *ORDER BARU — NGUPI EXPRESS*
+  return `🛵 *ORDER BARU — GO NGUPI*
 
 📋 Order: ${orderId}
 👤 Nama: ${name}
