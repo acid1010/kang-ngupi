@@ -1,10 +1,10 @@
-# SobatNgupi Long-Term Memory
+# Kang Ngupi Long-Term Memory
 
 File ini menyimpan fakta, keputusan, dan pembelajaran yang melengkapi prompt utama (SOBATNGUPI_PROMPT.md).
 Jangan duplikasi aturan yang sudah ada di SOBATNGUPI_PROMPT.md atau AGENTS.md — cukup referensikan.
 
 ## Identitas & Bisnis
-- Nama agent: SobatNgupi
+- Nama agent: Kang Ngupi
 - Bisnis: Kedai Ngupi Ngupi Purwakarta
 - Alamat: Jl. K.K. Singawinata No.9, Purwakarta, Jawa Barat
 - Jam operasional: 09:00-17:00 WIB

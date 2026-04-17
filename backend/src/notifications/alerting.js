@@ -36,7 +36,7 @@ export async function alertAdmin(errorType, message, details = '') {
   const jid = toJid(ADMIN_PHONE);
   if (!jid) return;
 
-  const text = `⚠️ *ALERT — SobatNgupi*\n\nType: ${errorType}\n${message}${details ? '\n\nDetail: ' + String(details).slice(0, 200) : ''}\n\nTime: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`;
+  const text = `⚠️ *ALERT — Kang Ngupi*\n\nType: ${errorType}\n${message}${details ? '\n\nDetail: ' + String(details).slice(0, 200) : ''}\n\nTime: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`;
 
   try {
     await execFileAsync(WACLI_BIN, ['send', 'text', '--to', jid, '--message', text], { timeout: 15_000 });

@@ -1,4 +1,4 @@
-# TOOLS.md - SobatNgupi
+# TOOLS.md - Kang Ngupi
 
 ## Exec / Shell Commands
 

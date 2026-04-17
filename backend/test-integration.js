@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * SobatNgupi Integration Test
+ * Kang Ngupi Integration Test
  * Tests the full order flow: create → sync → QRIS → payment → courier → Pawoon
  * 
  * Usage: node test-integration.js [phone]
@@ -277,7 +277,7 @@ function cleanup() {
 
 // ─── Run All ───
 async function run() {
-  console.log('🧪 SobatNgupi Integration Test');
+  console.log('🧪 Kang Ngupi Integration Test');
   console.log(`📱 Test phone: ${TEST_PHONE}`);
   console.log(`🕐 ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`);
   

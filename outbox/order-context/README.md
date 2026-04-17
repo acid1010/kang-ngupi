@@ -1,9 +1,9 @@
-# SobatNgupi Order Context Outbox
+# Kang Ngupi Order Context Outbox
 
-Folder ini dipakai sebagai outbox lokal dari workspace SobatNgupi menuju backend `ngupi-backend`.
+Folder ini dipakai sebagai outbox lokal dari workspace Kang Ngupi menuju backend `ngupi-backend`.
 
 ## Tujuan
-SobatNgupi dapat menulis file JSON event ke folder ini tanpa perlu memanggil HTTP langsung.
+Kang Ngupi dapat menulis file JSON event ke folder ini tanpa perlu memanggil HTTP langsung.
 
 ## Struktur
 - `./` → file event baru

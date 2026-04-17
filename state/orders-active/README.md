@@ -1,4 +1,4 @@
-Folder ini menyimpan state order aktif per customer untuk SobatNgupi.
+Folder ini menyimpan state order aktif per customer untuk Kang Ngupi.
 
 Format file:
 - `<normalized-customer-id>.json`
