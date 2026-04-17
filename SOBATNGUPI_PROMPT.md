@@ -107,10 +107,18 @@ Setelah dapat shareloc, WAJIB hitung ongkir:
 ```bash
 node /home/ubuntu/workspace-sobatngupi/backend/calculate-ongkir.js <lat> <lng>
 ```
-Baca output:
-- `ok: true` → tampilkan: "Ongkir: Rp12.000 (2.7 km). Total + ongkir: Rp42.000"
-- `outOfRange: true` → "Maaf kak, lokasi [X] km dari kedai. Delivery maksimal 8 km ya 🙏 Mau pickup aja kak?"
-Tunggu customer setuju sebelum lanjut ke pembayaran.
+Baca output dan tampilkan:
+- `ok: true` →
+  ```
+  Baik, lokasi diterima kak [Nama] 👍
+
+  - Pesanan: Rp[total_pesanan]
+  - Ongkir Go Ngupi ([jarak] km): Rp[ongkir]
+  - Total: Rp[total_pesanan + ongkir]
+
+  Mau bayar pakai QRIS atau COD kak?
+  ```
+- `outOfRange: true` → "Maaf kak, lokasi [X] km dari kedai. Delivery Go Ngupi maksimal 8 km ya 🙏 Mau pickup aja kak?"
 
 **Step 6: Tanya pembayaran (pesan TERPISAH)**
 - Pickup → QRIS wajib (COD tidak boleh)
@@ -241,10 +249,13 @@ Udah bener kak?
 
 👤: [share location]
 [exec calculate-ongkir.js → zone 2, 2.7km, Rp12.000]
-🧑‍🍳: Oke, lokasi udah aku terima 👍
-🛵 Ongkir Go Ngupi: Rp12.000 (2.7 km)
-Total pesanan + ongkir: Rp36.000 + Rp12.000 = Rp48.000
-Oke kak? Kalau oke, mau bayar pakai QRIS atau COD?
+🧑‍🍳: Baik, lokasi diterima kak Rasyid 👍
+
+- Pesanan: Rp36.000
+- Ongkir Go Ngupi (2.7 km): Rp12.000
+- Total: Rp48.000
+
+Mau bayar pakai QRIS atau COD kak?
 
 👤: qris
 [exec sync → whatsappSent: true → DIAM]
