@@ -70,6 +70,12 @@ router.get('/', async (req, res) => {
     if (payment_status) query = query.eq('payment_status', payment_status);
     if (fulfillment) query = query.eq('fulfillment_method', fulfillment);
 
+    // By default, hide unpaid orders (draft/pending payment) unless explicitly filtered
+    const showAll = req.query.show_all === 'true';
+    if (!showAll && !payment_status) {
+      query = query.in('payment_status', ['confirmed', 'paid', 'settled']);
+    }
+
     query = query
       .order(sort, { ascending: order === 'asc' })
       .range((page - 1) * per_page, page * per_page - 1);
@@ -138,8 +144,8 @@ router.get('/stats/summary', async (req, res) => {
       { count: onTheWay },
       { count: completed }
     ] = await Promise.all([
-      supabase.from('orders').select('*', { count: 'exact', head: true }).gte('created_at', today),
-      supabase.from('orders').select('*', { count: 'exact', head: true }).in('order_status', ['ready_to_submit', 'preparing', 'ready_for_pickup']),
+      supabase.from('orders').select('*', { count: 'exact', head: true }).gte('created_at', today).in('payment_status', ['confirmed', 'paid', 'settled']),
+      supabase.from('orders').select('*', { count: 'exact', head: true }).in('order_status', ['ready_to_submit', 'preparing', 'ready_for_pickup']).in('payment_status', ['confirmed', 'paid', 'settled']),
       supabase.from('orders').select('*', { count: 'exact', head: true }).eq('order_status', 'on_the_way'),
       supabase.from('orders').select('*', { count: 'exact', head: true }).eq('order_status', 'completed').gte('created_at', today)
     ]);

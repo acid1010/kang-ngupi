@@ -174,8 +174,8 @@ async function cmdSync(phone) {
       paymentMethod: ctx.paymentMethod || state.paymentMethod || null,
       paymentStatus: ctx.paymentStatus || state.paymentStatus || null,
       deliveryProvider: ctx.deliveryProvider || state.deliveryProvider || null,
-      notes: ctx.notes || [],
-      customerNotes: ctx.customerNotes ? [ctx.customerNotes] : (state.customerNotes ? [state.customerNotes] : []),
+      notes: Array.isArray(ctx.notes) ? ctx.notes : (typeof ctx.notes === 'string' ? [ctx.notes] : []),
+      customerNotes: Array.isArray(ctx.customerNotes) ? ctx.customerNotes : (typeof ctx.customerNotes === 'string' ? [ctx.customerNotes] : (state.customerNotes ? (Array.isArray(state.customerNotes) ? state.customerNotes : [state.customerNotes]) : [])),
       channel: ctx.channel || 'whatsapp'
     }
   };
