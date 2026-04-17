@@ -86,10 +86,13 @@ export function OrderDetailModal({
     setUpdating(newStatus);
     try {
       const updated = await updateOrderStatus(order.id, newStatus);
-      // Merge with existing order data (PATCH response doesn't include items/payment)
       const merged = { ...order, ...updated, items: order.items, payment: order.payment };
       toast.success(`Status diubah ke ${getStatusLabel(newStatus)}`);
       onStatusUpdate(merged);
+      // Close modal after successful update so list refreshes cleanly
+      if (newStatus === "completed" || newStatus === "cancelled") {
+        onClose();
+      }
     } catch {
       toast.error("Gagal mengubah status");
     } finally {
