@@ -1,0 +1,32 @@
+{
+  "customer_phone": "+6281917002373",
+  "order_id": "ORD-20260417-A14C",
+  "updates": {
+    "customerName": "Budi",
+    "rawMessage": "kopsus 1 aja",
+    "items": [
+      {
+        "menuId": "es-kopi-susu-original",
+        "menuName": "Es Kopi Susu Original",
+        "quantity": 1,
+        "price": 18000
+      }
+    ],
+    "fulfillmentMethod": "delivery",
+    "locationStatus": "shareloc_received",
+    "shareloc": {
+      "lat": -6.55331,
+      "lng": 107.445877,
+      "label": "Wisata Kuliner — Jalan Affandi 8, Purwakarta, 55283, ID",
+      "source": "whatsapp"
+    },
+    "address": "Wisata Kuliner — Jalan Affandi 8, Purwakarta, 55283, ID",
+    "paymentMethod": "qris",
+    "paymentStatus": "pending",
+    "notes": [
+      "shareloc_received",
+      "qris_pending"
+    ],
+    "customerNotes": []
+  }
+}

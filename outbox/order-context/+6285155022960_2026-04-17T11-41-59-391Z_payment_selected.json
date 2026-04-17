@@ -1,0 +1,28 @@
+{
+  "customer_phone": "+6285155022960",
+  "order_id": "ORD-20260417-D5EC",
+  "updates": {
+    "customerName": "acidjp",
+    "rawMessage": "kopi susu 4",
+    "items": [
+      {
+        "menuId": "es-kopi-susu-original",
+        "menuName": "Es Kopi Susu Original",
+        "quantity": 4,
+        "price": 18000
+      }
+    ],
+    "fulfillmentMethod": "delivery",
+    "locationStatus": "address_manual",
+    "address": "Perum Bumi Jaya Indah, Blok D4 No. 5, dekat mesjid, Munjul Jaya, Kecamatan Purwakarta",
+    "paymentMethod": "qris",
+    "paymentStatus": "pending",
+    "deliveryProvider": "Go Ngupi",
+    "notes": [
+      "address_manual",
+      "payment_selected_qris",
+      "ongkir_estimated_manual"
+    ],
+    "customerNotes": []
+  }
+}

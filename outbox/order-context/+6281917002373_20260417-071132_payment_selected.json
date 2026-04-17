@@ -1,0 +1,44 @@
+{
+  "customer_phone": "+6281917002373",
+  "order_id": "ORD-20260417-8D3F",
+  "updates": {
+    "customerName": "Budi",
+    "rawMessage": "kopi susu ori 2, original 1, sama kentang goreng 1",
+    "items": [
+      {
+        "menuId": "es-kopi-susu-original",
+        "menuName": "Es Kopi Susu Original",
+        "quantity": 2,
+        "price": 18000
+      },
+      {
+        "menuId": "es-kopi-susu-cream-cheese",
+        "menuName": "Es Kopi Susu Cream Cheese",
+        "quantity": 1,
+        "price": 23000
+      },
+      {
+        "menuId": "kentang-goreng",
+        "menuName": "Kentang Goreng",
+        "quantity": 1,
+        "price": 15000
+      }
+    ],
+    "fulfillmentMethod": "delivery",
+    "locationStatus": "shareloc_received",
+    "shareloc": {
+      "lat": -6.552011,
+      "lng": 107.445045,
+      "label": "Kedai Kopi Ngupi-Ngupi — Jalan Singawinata 9, Purwakarta, 41114, ID",
+      "source": "whatsapp"
+    },
+    "address": "Kedai Kopi Ngupi-Ngupi — Jalan Singawinata 9, Purwakarta, 41114, ID",
+    "paymentMethod": "qris",
+    "paymentStatus": "pending",
+    "notes": [
+      "shareloc_received",
+      "qris_pending"
+    ],
+    "customerNotes": []
+  }
+}

@@ -208,3 +208,39 @@ export async function updateOrderPaymentSummary(clientOrderId, updates = {}) {
   if (error) throw error;
   return getOrderByClientOrderId(clientOrderId);
 }
+
+/**
+ * Create order from orderContext (bridge state format) — fallback for when queue doesn't persist
+ */
+export async function createOrderFromContext(ctx) {
+  const order = {
+    client_order_id: ctx.clientOrderId,
+    customer: {
+      name: ctx.customerName,
+      phone: ctx.customerPhone
+    },
+    channel: ctx.channel || 'whatsapp',
+    raw_message: ctx.rawMessage,
+    items: (ctx.items || []).map(i => ({
+      menu_id: i.menuId,
+      menu_name: i.menuName,
+      qty: i.qty || i.quantity || 1,
+      temperature: i.temperature,
+      notes: i.notes
+    })),
+    fulfillment: {
+      method: ctx.fulfillmentMethod,
+      location_status: ctx.locationStatus,
+      shareloc: ctx.shareloc,
+      delivery_provider: ctx.deliveryProvider === 'go_ngupi' ? 'ngupi_express' : (ctx.deliveryProvider || null)
+    },
+    payment: {
+      method: ctx.paymentMethod,
+      status: ctx.paymentStatus
+    },
+    status: ctx.paymentStatus === 'pending' ? 'awaiting_payment' : 'ready_to_submit',
+    notes: ctx.notes || []
+  };
+
+  return createOrUpdateOrder('final_order', order);
+}

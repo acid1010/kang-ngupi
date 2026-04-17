@@ -36,16 +36,16 @@ import { OrderDetailModal } from "@/components/order-detail-modal";
 const filterTabs = [
   { key: "all", label: "Semua" },
   { key: "new", label: "Baru" },
-  { key: "process", label: "Proses" },
+  { key: "process", label: "Dibuat" },
   { key: "delivery", label: "Diantar" },
   { key: "done", label: "Selesai" },
 ];
 
 const statusMap: Record<string, string> = {
   new: "awaiting_payment,ready_to_submit",
-  process: "preparing,ready_for_pickup",
-  delivery: "picked_up,on_the_way",
-  done: "delivered,completed",
+  process: "preparing",
+  delivery: "on_the_way,ready_for_pickup",
+  done: "completed",
 };
 
 export default function DashboardPage() {

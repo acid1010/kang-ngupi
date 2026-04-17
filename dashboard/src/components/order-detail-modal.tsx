@@ -35,12 +35,8 @@ import { toast } from "sonner";
 
 const STATUS_FLOW = [
   "awaiting_payment",
-  "ready_to_submit",
   "preparing",
-  "ready_for_pickup",
-  "picked_up",
   "on_the_way",
-  "delivered",
   "completed",
 ];
 
@@ -49,19 +45,28 @@ const STATUS_ICONS: Record<string, React.ElementType> = {
   ready_to_submit: Clock,
   preparing: Coffee,
   ready_for_pickup: PackageCheck,
-  picked_up: ShoppingBag,
   on_the_way: Navigation,
-  delivered: Truck,
   completed: CheckCircle2,
   cancelled: XCircle,
 };
 
-function getNextStatuses(current: string): string[] {
+function getNextStatuses(current: string, fulfillment?: string): string[] {
   if (current === "cancelled" || current === "completed") return [];
-  const idx = STATUS_FLOW.indexOf(current);
-  if (idx === -1) return [];
-  const next = STATUS_FLOW.slice(idx + 1, idx + 3); // Show next 2 possible statuses
-  return [...next, "cancelled"];
+  
+  // Simplified 3-step flow
+  if (current === "awaiting_payment" || current === "ready_to_submit") {
+    return ["preparing", "cancelled"];
+  }
+  if (current === "preparing") {
+    if (fulfillment === "pickup") {
+      return ["completed", "cancelled"]; // Pickup: ready → done
+    }
+    return ["on_the_way", "cancelled"]; // Delivery: preparing → diantar
+  }
+  if (current === "on_the_way") {
+    return ["completed", "cancelled"];
+  }
+  return ["cancelled"];
 }
 
 interface OrderDetailModalProps {
@@ -81,8 +86,10 @@ export function OrderDetailModal({
     setUpdating(newStatus);
     try {
       const updated = await updateOrderStatus(order.id, newStatus);
+      // Merge with existing order data (PATCH response doesn't include items/payment)
+      const merged = { ...order, ...updated, items: order.items, payment: order.payment };
       toast.success(`Status diubah ke ${getStatusLabel(newStatus)}`);
-      onStatusUpdate(updated);
+      onStatusUpdate(merged);
     } catch {
       toast.error("Gagal mengubah status");
     } finally {
@@ -90,7 +97,7 @@ export function OrderDetailModal({
     }
   }
 
-  const nextStatuses = getNextStatuses(order.order_status);
+  const nextStatuses = getNextStatuses(order.order_status, order.fulfillment_method);
   const currentIdx = STATUS_FLOW.indexOf(order.order_status);
 
   return (
