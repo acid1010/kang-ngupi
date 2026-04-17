@@ -169,7 +169,7 @@ export async function sendQrisSuccessWhatsApp({ to, customerName = null, order =
       try {
         await sendDigitalReceipt({ to, customerName, order });
       } catch (receiptErr) {
-        logger.warn('[whatsapp] Failed to send receipt: %s', receiptErr.message);
+        console.warn('[whatsapp] Failed to send receipt: %s', receiptErr.message);
       }
     }
 
@@ -250,10 +250,10 @@ export async function sendDigitalReceipt({ to, customerName = null, order = null
 
   try {
     await runWacli(['send', 'text', '--to', recipient, '--message', receipt]);
-    logger.info('[whatsapp] Digital receipt sent to %s', to);
+    console.log('[whatsapp] Digital receipt sent to %s', to);
     return { ok: true };
   } catch (err) {
-    logger.warn('[whatsapp] Receipt send failed: %s', err.message);
+    console.warn('[whatsapp] Receipt send failed: %s', err.message);
     return { ok: false, error: err.message };
   }
 }
