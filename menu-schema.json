@@ -587,6 +587,437 @@
       "image": "/menu-images/vanilla-milkshake.jpg"
     },
     {
+      "id": "air-mineral",
+      "name": "Air Mineral",
+      "aliases": [
+        "air mineral"
+      ],
+      "price": 5000,
+      "pawoonId": "83134010-23f4-11f0-9528-f92d5ff4f1e6",
+      "category": "other"
+    },
+    {
+      "id": "bakmi-godok-jawa",
+      "name": "Bakmi Godok Jawa",
+      "aliases": [
+        "bakmi godok jawa"
+      ],
+      "price": 23000,
+      "pawoonId": "57259130-23e2-11f0-a240-bdd8d8b5704a",
+      "category": "other"
+    },
+    {
+      "id": "bakmi-goreng-jawa",
+      "name": "Bakmi Goreng Jawa",
+      "aliases": [
+        "bakmi goreng jawa"
+      ],
+      "price": 23000,
+      "pawoonId": "29309880-23e2-11f0-92d1-d5f469583b57",
+      "category": "other"
+    },
+    {
+      "id": "banana-split-ice-cream",
+      "name": "Banana Split Ice Cream",
+      "aliases": [
+        "banana split ice cream"
+      ],
+      "price": 23000,
+      "pawoonId": "a08d8990-23f2-11f0-9926-05567fb07317",
+      "category": "other"
+    },
+    {
+      "id": "chicken-cordon-bleu",
+      "name": "Chicken Cordon Bleu",
+      "aliases": [
+        "chicken cordon bleu"
+      ],
+      "price": 30000,
+      "pawoonId": "2e16ec80-23c7-11f0-9b3f-d533e81810dc",
+      "category": "other"
+    },
+    {
+      "id": "chicken-katsu",
+      "name": "Chicken Katsu",
+      "aliases": [
+        "chicken katsu"
+      ],
+      "price": 25000,
+      "pawoonId": "a10b73c0-2d89-11f0-93ba-d1a429374c82",
+      "category": "other"
+    },
+    {
+      "id": "chicken-steak",
+      "name": "Chicken Steak",
+      "aliases": [
+        "chicken steak"
+      ],
+      "price": 35000,
+      "pawoonId": "775fb860-23c7-11f0-8b22-4126e2629086",
+      "category": "other"
+    },
+    {
+      "id": "chocolate-single-origin-sachet",
+      "name": "Chocolate Single Origin Sachet",
+      "aliases": [
+        "chocolate single origin sachet"
+      ],
+      "price": 18000,
+      "pawoonId": "c7586720-23f4-11f0-b8e9-a3409a62c9a7",
+      "category": "other"
+    },
+    {
+      "id": "cireng-bumbu-rujak",
+      "name": "Cireng Bumbu Rujak",
+      "aliases": [
+        "cireng bumbu rujak"
+      ],
+      "price": 17000,
+      "pawoonId": "e474f410-23ea-11f0-af2d-abb7fa66199e",
+      "category": "other"
+    },
+    {
+      "id": "dimsum",
+      "name": "Dimsum",
+      "aliases": [
+        "dimsum"
+      ],
+      "price": 17000,
+      "pawoonId": "37a0b380-23eb-11f0-a0ce-a5b83223f26e",
+      "category": "other"
+    },
+    {
+      "id": "es-batu-cup",
+      "name": "Es Batu + Cup",
+      "aliases": [
+        "es batu + cup",
+        "batu + cup"
+      ],
+      "price": 2000,
+      "pawoonId": "53d78870-2d88-11f0-a41d-e9d318162137",
+      "category": "other"
+    },
+    {
+      "id": "ice-cream",
+      "name": "Ice Cream",
+      "aliases": [
+        "ice cream"
+      ],
+      "price": 15000,
+      "pawoonId": "5096aad0-23f4-11f0-8af0-ff0391d25fd2",
+      "category": "other"
+    },
+    {
+      "id": "indomie-telor-sosis",
+      "name": "Indomie Telor Sosis",
+      "aliases": [
+        "indomie telor sosis"
+      ],
+      "price": 18000,
+      "pawoonId": "e4028220-23e2-11f0-80d9-11fece00f5d1",
+      "category": "other"
+    },
+    {
+      "id": "kentang-goreng",
+      "name": "Kentang Goreng",
+      "aliases": [
+        "kentang goreng"
+      ],
+      "price": 17000,
+      "pawoonId": "d2e01200-23eb-11f0-a1c8-afe0124dbcb3",
+      "category": "other"
+    },
+    {
+      "id": "lotus-biscoff-biscuit",
+      "name": "Lotus Biscoff Biscuit",
+      "aliases": [
+        "lotus biscoff biscuit"
+      ],
+      "price": 2000,
+      "pawoonId": "9d7ae150-23f4-11f0-a3a2-5de8d815dfcb",
+      "category": "other"
+    },
+    {
+      "id": "mie-ramen-instan",
+      "name": "Mie Ramen Instan",
+      "aliases": [
+        "mie ramen instan"
+      ],
+      "price": 20000,
+      "pawoonId": "91938570-23e2-11f0-b0f7-83ba1b907c1d",
+      "category": "other"
+    },
+    {
+      "id": "nasi",
+      "name": "Nasi",
+      "aliases": [
+        "nasi"
+      ],
+      "price": 5000,
+      "pawoonId": "2a3265f0-23f5-11f0-89a3-9139bcf3d8e9",
+      "category": "other"
+    },
+    {
+      "id": "nasi-ayam-rica-rica",
+      "name": "Nasi Ayam Rica-rica",
+      "aliases": [
+        "nasi ayam rica-rica"
+      ],
+      "price": 28000,
+      "pawoonId": "58195fe0-23cc-11f0-9b2e-f93b2cccbbff",
+      "category": "other"
+    },
+    {
+      "id": "nasi-goreng-chicken-katsu",
+      "name": "Nasi Goreng Chicken Katsu",
+      "aliases": [
+        "nasi goreng chicken katsu"
+      ],
+      "price": 28000,
+      "pawoonId": "84f99990-23de-11f0-850a-3f929139cbc8",
+      "category": "other"
+    },
+    {
+      "id": "nasi-goreng-hongkong",
+      "name": "Nasi Goreng Hongkong",
+      "aliases": [
+        "nasi goreng hongkong"
+      ],
+      "price": 23000,
+      "pawoonId": "b04801b0-23df-11f0-9d96-e7eae574ef36",
+      "category": "other"
+    },
+    {
+      "id": "nasi-goreng-kambing",
+      "name": "Nasi Goreng Kambing",
+      "aliases": [
+        "nasi goreng kambing"
+      ],
+      "price": 32000,
+      "pawoonId": "e6fbdb30-23de-11f0-bd16-67aadea1fe96",
+      "category": "other"
+    },
+    {
+      "id": "nasi-goreng-kampung",
+      "name": "Nasi Goreng Kampung",
+      "aliases": [
+        "nasi goreng kampung"
+      ],
+      "price": 23000,
+      "pawoonId": "718ec580-23df-11f0-b876-2fa0dfaa9af7",
+      "category": "other"
+    },
+    {
+      "id": "nasi-goreng-seafood",
+      "name": "Nasi Goreng Seafood",
+      "aliases": [
+        "nasi goreng seafood"
+      ],
+      "price": 30000,
+      "pawoonId": "f426f500-23df-11f0-8fd5-41299087e284",
+      "category": "other"
+    },
+    {
+      "id": "nasi-soto-bandung",
+      "name": "Nasi Soto Bandung",
+      "aliases": [
+        "nasi soto bandung"
+      ],
+      "price": 35000,
+      "pawoonId": "70306600-23cc-11f0-8b16-9d0abed5750b",
+      "category": "other"
+    },
+    {
+      "id": "nasi-telor-fuyunghai",
+      "name": "Nasi Telor Fuyunghai",
+      "aliases": [
+        "nasi telor fuyunghai"
+      ],
+      "price": 20000,
+      "pawoonId": "411d9f50-23cd-11f0-8e2b-f32ba65ad61f",
+      "category": "other"
+    },
+    {
+      "id": "nasi-tongseng-ayam",
+      "name": "Nasi Tongseng Ayam",
+      "aliases": [
+        "nasi tongseng ayam"
+      ],
+      "price": 28000,
+      "pawoonId": "9489f900-23cc-11f0-8896-d38a8ac618e4",
+      "category": "other"
+    },
+    {
+      "id": "nasi-tongseng-kambing",
+      "name": "Nasi Tongseng Kambing",
+      "aliases": [
+        "nasi tongseng kambing"
+      ],
+      "price": 38000,
+      "pawoonId": "d4d872c0-23cc-11f0-8164-cdd58befda52",
+      "category": "other"
+    },
+    {
+      "id": "nasi-tongseng-sapi",
+      "name": "Nasi Tongseng Sapi",
+      "aliases": [
+        "nasi tongseng sapi"
+      ],
+      "price": 35000,
+      "pawoonId": "b6de2d30-23cc-11f0-b11c-a9e16f621115",
+      "category": "other"
+    },
+    {
+      "id": "nasi-udang-bumbu-asam-manis",
+      "name": "Nasi Udang Bumbu Asam Manis",
+      "aliases": [
+        "nasi udang bumbu asam manis"
+      ],
+      "price": 30000,
+      "pawoonId": "03531e90-23cd-11f0-b119-3d8b924740ac",
+      "category": "other"
+    },
+    {
+      "id": "nasi-udang-bumbu-saos-padang",
+      "name": "Nasi Udang Bumbu Saos Padang",
+      "aliases": [
+        "nasi udang bumbu saos padang"
+      ],
+      "price": 30000,
+      "pawoonId": "1f532370-23cd-11f0-a124-0d2b50bfad89",
+      "category": "other"
+    },
+    {
+      "id": "pempek-pasundan",
+      "name": "Pempek Pasundan",
+      "aliases": [
+        "pempek pasundan"
+      ],
+      "price": 25000,
+      "pawoonId": "cac27390-23ea-11f0-9d11-e3d090416a38",
+      "category": "other"
+    },
+    {
+      "id": "pisang-dan-roti-bakar",
+      "name": "Pisang dan Roti Bakar",
+      "aliases": [
+        "pisang dan roti bakar"
+      ],
+      "price": 14000,
+      "pawoonId": "d4fce090-23ef-11f0-8269-6bd872683994",
+      "category": "other"
+    },
+    {
+      "id": "pisang-goreng-crispy",
+      "name": "Pisang Goreng Crispy",
+      "aliases": [
+        "pisang goreng crispy"
+      ],
+      "price": 17000,
+      "pawoonId": "f1abe9c0-23ef-11f0-a47d-01f087837ac9",
+      "category": "other"
+    },
+    {
+      "id": "potato-cheese-ball",
+      "name": "Potato Cheese Ball",
+      "aliases": [
+        "potato cheese ball"
+      ],
+      "price": 17000,
+      "pawoonId": "fb099640-23ea-11f0-a58c-63085f84f87a",
+      "category": "other"
+    },
+    {
+      "id": "rice-bowl-ayam-asam-manis",
+      "name": "Rice Bowl Ayam Asam Manis",
+      "aliases": [
+        "rice bowl ayam asam manis"
+      ],
+      "price": 25000,
+      "pawoonId": "3c462d50-23ea-11f0-85f5-dde740e791c3",
+      "category": "other"
+    },
+    {
+      "id": "rice-bowl-ayam-lada-hitam",
+      "name": "Rice Bowl Ayam Lada Hitam",
+      "aliases": [
+        "rice bowl ayam lada hitam"
+      ],
+      "price": 25000,
+      "pawoonId": "54b9c880-23ea-11f0-a795-791f985c10d4",
+      "category": "other"
+    },
+    {
+      "id": "rice-bowl-ayam-teriyaki",
+      "name": "Rice Bowl Ayam Teriyaki",
+      "aliases": [
+        "rice bowl ayam teriyaki"
+      ],
+      "price": 25000,
+      "pawoonId": "7423a660-23ea-11f0-87ec-b58453407236",
+      "category": "other"
+    },
+    {
+      "id": "rice-bowl-telor-sosis",
+      "name": "Rice Bowl Telor Sosis",
+      "aliases": [
+        "rice bowl telor sosis"
+      ],
+      "price": 22000,
+      "pawoonId": "a63354c0-23ea-11f0-be59-8591d771cda1",
+      "category": "other"
+    },
+    {
+      "id": "roti-karamel-ice-cream",
+      "name": "Roti Karamel Ice Cream",
+      "aliases": [
+        "roti karamel ice cream"
+      ],
+      "price": 23000,
+      "pawoonId": "50643ed0-23f3-11f0-b989-9370c55f4b41",
+      "category": "other"
+    },
+    {
+      "id": "sosis-barbeque-kentang",
+      "name": "Sosis Barbeque Kentang",
+      "aliases": [
+        "sosis barbeque kentang"
+      ],
+      "price": 23000,
+      "pawoonId": "130d2af0-23ec-11f0-890e-87d665b3794d",
+      "category": "other"
+    },
+    {
+      "id": "topping-minuman",
+      "name": "Topping Minuman",
+      "aliases": [
+        "topping minuman"
+      ],
+      "price": 4000,
+      "pawoonId": "04d07f10-23f5-11f0-bf6e-e3f5fc81bc4f",
+      "category": "other"
+    },
+    {
+      "id": "udang-keju-lumer",
+      "name": "Udang Keju Lumer",
+      "aliases": [
+        "udang keju lumer"
+      ],
+      "price": 23000,
+      "pawoonId": "ecd6e100-23f3-11f0-9af6-3dcd4d327806",
+      "category": "other"
+    },
+    {
+      "id": "wagyu-steak",
+      "name": "Wagyu Steak",
+      "aliases": [
+        "wagyu steak"
+      ],
+      "price": 45000,
+      "pawoonId": "149401c0-23c8-11f0-9c0e-df474fe5a14f",
+      "category": "other"
+    },
+    {
       "id": "cappuccino-hot-creme-brulee",
       "name": "Cappuccino Hot Creme Brulee",
       "aliases": [
@@ -760,6 +1191,6 @@
       "category": "tea"
     }
   ],
-  "lastSyncedAt": "2026-04-17T02:21:07.039Z",
+  "lastSyncedAt": "2026-04-17T07:14:29.460Z",
   "syncSource": "pawoon"
 }

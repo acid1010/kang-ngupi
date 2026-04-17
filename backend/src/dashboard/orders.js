@@ -66,7 +66,13 @@ router.get('/', async (req, res) => {
       .from('orders')
       .select('*', { count: 'exact' });
 
-    if (status) query = query.eq('order_status', status);
+    if (status) {
+      if (status.includes(',')) {
+        query = query.in('order_status', status.split(',').map(s => s.trim()));
+      } else {
+        query = query.eq('order_status', status);
+      }
+    }
     if (payment_status) query = query.eq('payment_status', payment_status);
     if (fulfillment) query = query.eq('fulfillment_method', fulfillment);
 
@@ -224,10 +230,8 @@ router.patch('/:id/status', async (req, res) => {
     };
     if (notes) updates.notes = notes;
 
-    // Add delivery tracking fields
-    if (status === 'picked_up') updates.picked_up_at = new Date().toISOString();
-    if (status === 'on_the_way') updates.on_the_way_at = new Date().toISOString();
-    if (status === 'delivered') updates.delivered_at = new Date().toISOString();
+    // Note: picked_up_at, on_the_way_at, delivered_at columns not yet in DB
+    // Status changes are tracked via updated_at for now
 
     const { data, error } = await supabase
       .from('orders')
@@ -242,6 +246,17 @@ router.patch('/:id/status', async (req, res) => {
 
     // Broadcast to SSE clients
     broadcastOrderUpdate(data);
+
+    // Send WA notification to customer
+    try {
+      const { notifyCustomerStatus } = await import('../notifications/status.js');
+      const notifResult = await notifyCustomerStatus(data, status);
+      if (notifResult.ok) {
+        logger.info('[dashboard] Customer notified: %s -> %s', req.params.id, status);
+      }
+    } catch (notifErr) {
+      logger.warn('[dashboard] Customer notification error: %s', notifErr.message);
+    }
 
     // Send feedback request when order is delivered
     if (status === 'delivered') {

@@ -405,6 +405,22 @@ app.post('/payments/qris/direct', async (req, res) => {
 
     logger.info('[qris/direct] queue processing completed');
 
+    // Ensure order exists in DB — fallback create if queue didn't persist it
+    try {
+      const { getSupabase } = await import('./supabase.js');
+      const sb = getSupabase();
+      const { data: existingOrder } = await sb.from('orders').select('id').eq('client_order_id', clientOrderId).limit(1);
+      if (!existingOrder || existingOrder.length === 0) {
+        logger.info('[qris/direct] Order not in DB, creating fallback for %s', clientOrderId);
+        const { createOrderFromContext } = await import('./repositories/orders.js');
+        const ctx = stateResult.state.orderContext;
+        await createOrderFromContext(ctx);
+        logger.info('[qris/direct] Fallback order created for %s', clientOrderId);
+      }
+    } catch (fallbackErr) {
+      logger.warn('[qris/direct] Fallback order creation failed: %s', fallbackErr.message);
+    }
+
     // Create QRIS payment
     logger.info('[qris/direct] creating QRIS payment for %s', clientOrderId);
     const baseUrl = buildPaymentBaseUrl(req);

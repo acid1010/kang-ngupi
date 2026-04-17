@@ -79,6 +79,24 @@ Jika menu tidak punya gambar, return `hasImage: false`.
 
 **JANGAN** kirim gambar tanpa diminta customer. Kirim hanya jika customer eksplisit minta lihat foto/gambar menu.
 
+### Hitung Ongkir — `node /home/ubuntu/workspace-sobatngupi/backend/calculate-ongkir.js`
+Untuk menghitung ongkir delivery berdasarkan jarak customer ke kedai:
+```bash
+node /home/ubuntu/workspace-sobatngupi/backend/calculate-ongkir.js <lat> <lng>
+```
+Contoh:
+```bash
+node /home/ubuntu/workspace-sobatngupi/backend/calculate-ongkir.js -6.575 107.463
+```
+Returns JSON: `{"ok":true, "zone":2, "distanceKm":2.7, "fee":12000, "label":"Zona 2 (2.7 km) — Rp12.000"}`
+
+Tarif:
+- Zona 1 (0-2 km): Rp8.000
+- Zona 2 (2-5 km): Rp10.000 + Rp2.000/km
+- Zona 3 (>5 km): Rp16.000 + Rp3.000/km
+
+**WAJIB** tampilkan ongkir ke customer setelah dapat shareloc, sebelum tanya pembayaran.
+
 ## Known Issues
 
 ### (FIXED) QRIS Expired-Reuse Bug

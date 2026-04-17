@@ -151,12 +151,12 @@ async function run() {
   const allProducts = await fetchProducts(token);
   console.log(`Fetched ${allProducts.length} total products`);
   
-  // Filter drinks (exclude removed items)
+  // Filter all sellable products (exclude removed items)
   const drinks = allProducts.filter(p => {
     const id = slugify(p.name);
-    return DRINK_CATEGORIES.has(p.product_category_id) && p.sellable && !EXCLUDED_ITEMS.has(id);
+    return p.sellable && !EXCLUDED_ITEMS.has(id);
   });
-  console.log(`Found ${drinks.length} drink products`);
+  console.log(`Found ${drinks.length} sellable products`);
   
   // Load existing menu-schema
   const schema = JSON.parse(readFileSync(MENU_SCHEMA_PATH, 'utf8'));

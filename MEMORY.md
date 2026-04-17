@@ -71,6 +71,28 @@ Jangan duplikasi aturan yang sudah ada di SOBATNGUPI_PROMPT.md atau AGENTS.md �
 - Rate limiter error `ERR_ERL_UNEXPECTED_X_FORWARDED_FOR` karena nginx forwards header
 - Fix: `app.set('trust proxy', 1)`
 
+### Order Not Found (QRIS Fallback)
+- Queue processing nggak create order di DB → QRIS endpoint gagal
+- Fix: fallback auto-create order dari orderContext jika nggak ada di DB
+- Also fix `go_ngupi` → `ngupi_express` mapping untuk DB constraint
+
+### Kentang Goreng Missing Price
+- Menu sync cuma drinks (10 kategori) → food items nggak ada di menu-schema
+- Fix: sync ALL 107 Pawoon products, bukan cuma drinks
+
+### Dashboard Status Update Errors
+- Kolom `picked_up_at`, `on_the_way_at`, `delivered_at` nggak ada di DB
+- Fix: remove timestamp columns dari update, track via `updated_at`
+- Dashboard crash setelah update: PATCH response nggak punya `items` → merge dengan existing
+
+### Pakasir Webhook 401
+- Webhook secret nggak dikirim oleh Pakasir
+- Fix: user update webhook URL dengan `?webhook_secret=...`
+
+### Dashboard Filter Bug
+- Comma-separated status filter pakai `eq` bukan `in`
+- Fix: detect comma → split → `in` query
+
 ---
 
 ## Operational Learnings
@@ -111,6 +133,24 @@ Jangan duplikasi aturan yang sudah ada di SOBATNGUPI_PROMPT.md atau AGENTS.md �
 - `matcha` → Matcha Latte
 - `teh` → Teh
 - Jika alias ambigu → langsung klarifikasi
+
+### Go Ngupi / Ongkir
+- Ongkir calculator: `backend/calculate-ongkir.js` — Haversine distance, 3 zona
+- Kedai coords: -6.5519552, 107.4451273
+- Max delivery: 8km
+- Zona 1 (0-2km): Rp8.000, Zona 2 (2-5km): +Rp2K/km, Zona 3 (5-8km): +Rp3K/km
+- Go Ngupi branding integrated ke WA chat flow
+
+### Customer Status Notifications
+- `backend/src/notifications/status.js` — WA notif setiap status berubah
+- preparing: "Pesanan sedang dibuat"
+- on_the_way: "Sedang diantar kurir Go Ngupi"
+- ready_for_pickup: "Sudah siap, silakan diambil"
+- completed: "Pesanan selesai, terima kasih"
+
+### Dashboard Simplified Flow
+- 8 step → 3 step: preparing → on_the_way/ready_for_pickup → completed
+- Button aksi otomatis sesuai delivery/pickup
 
 ### Formatting Preferences
 
