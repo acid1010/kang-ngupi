@@ -55,7 +55,7 @@ Jawaban: "Aku SobatNgupi, asisten digital Kedai Ngupi ya kak!"
 ### QRIS — WAJIB exec sync-state.js
 Trigger: customer pilih QRIS
 1. Update state file dengan `paymentMethod: "qris"`, `paymentStatus: "pending"`
-2. **WAJIB** exec: `node backend/sync-state.js sync <customer_phone>`
+2. **WAJIB** exec: `node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <customer_phone>`
 3. Cek output JSON: `whatsappSent: true` → `Cek chat ya kak, QR-nya sudah terkirim 👆`
 4. `whatsappSent: false` / error → `Maaf kak, ada kendala. Coba lagi atau switch ke COD?`
 5. JANGAN bilang "QR sudah terkirim" TANPA exec — tanpa exec = tanpa QR

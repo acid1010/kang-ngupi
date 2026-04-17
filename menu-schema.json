@@ -44,7 +44,8 @@
       ],
       "price": 25000,
       "pawoonId": "6e04efe0-2373-11f0-90d1-7d5dc334a1a1",
-      "category": "blend"
+      "category": "blend",
+      "image": "/menu-images/caramel-frappuccino.jpg"
     },
     {
       "id": "choco-cookies-frappuccino",
@@ -54,7 +55,8 @@
       ],
       "price": 27000,
       "pawoonId": "8b944ec0-2373-11f0-bd85-b362a7936ed3",
-      "category": "blend"
+      "category": "blend",
+      "image": "/menu-images/choco-cookies-frappuccino.jpg"
     },
     {
       "id": "hazelnut-frappuccino",
@@ -64,7 +66,8 @@
       ],
       "price": 25000,
       "pawoonId": "c39b1110-2373-11f0-ad7f-a3d1ddd06ce0",
-      "category": "blend"
+      "category": "blend",
+      "image": "/menu-images/hazelnut-frappuccino.jpg"
     },
     {
       "id": "mocha-frappuccino",
@@ -74,7 +77,8 @@
       ],
       "price": 25000,
       "pawoonId": "e7eb0b30-2373-11f0-9f92-e969dee968bc",
-      "category": "blend"
+      "category": "blend",
+      "image": "/menu-images/mocha-frappuccino.jpg"
     },
     {
       "id": "oreo-frappuccino",
@@ -84,7 +88,8 @@
       ],
       "price": 27000,
       "pawoonId": "0755e0a0-2374-11f0-96b3-59f352513996",
-      "category": "blend"
+      "category": "blend",
+      "image": "/menu-images/oreo-frappuccino.jpeg"
     },
     {
       "id": "vanilla-frappuccino",
@@ -94,7 +99,8 @@
       ],
       "price": 25000,
       "pawoonId": "21ba5350-2374-11f0-9659-3312c314587e",
-      "category": "blend"
+      "category": "blend",
+      "image": "/menu-images/vanilla-frappuccino.jpg"
     },
     {
       "id": "choco-pandan-latte",
@@ -104,7 +110,8 @@
       ],
       "price": 23000,
       "pawoonId": "4c9ac530-23c3-11f0-b001-15100a669de2",
-      "category": "chocolate"
+      "category": "chocolate",
+      "image": "/menu-images/choco-pandan-latte.jpg"
     },
     {
       "id": "chocolate",
@@ -119,7 +126,8 @@
       ],
       "price": 18000,
       "pawoonId": "175ee0b0-239e-11f0-9a30-95624376ca0f",
-      "category": "chocolate"
+      "category": "chocolate",
+      "image": "/menu-images/chocolate.jpg"
     },
     {
       "id": "chocolate-cinnamon",
@@ -129,7 +137,8 @@
       ],
       "price": 20000,
       "pawoonId": "3d539a60-23be-11f0-845d-0beab639828e",
-      "category": "chocolate"
+      "category": "chocolate",
+      "image": "/menu-images/chocolate-cinnamon.jpg"
     },
     {
       "id": "double-choco-chips",
@@ -149,7 +158,8 @@
       ],
       "price": 23000,
       "pawoonId": "8c8390d0-23c3-11f0-8246-9d3e7eb529c5",
-      "category": "chocolate"
+      "category": "chocolate",
+      "image": "/menu-images/hazelnut-choco-blend.jpg"
     },
     {
       "id": "ice-choco-mint",
@@ -159,7 +169,8 @@
       ],
       "price": 23000,
       "pawoonId": "025b6760-23c3-11f0-b199-29cf2b9a1460",
-      "category": "chocolate"
+      "category": "chocolate",
+      "image": "/menu-images/ice-choco-mint.jpg"
     },
     {
       "id": "red-velvet-latte",
@@ -169,7 +180,8 @@
       ],
       "price": 18000,
       "pawoonId": "3ee9f310-239e-11f0-81b8-dfa8f32e0b9d",
-      "category": "chocolate"
+      "category": "chocolate",
+      "image": "/menu-images/red-velvet-latte.jpg"
     },
     {
       "id": "single-origin-chocolate",
@@ -179,7 +191,8 @@
       ],
       "price": 25000,
       "pawoonId": "81208160-23be-11f0-a0b7-a92ae6218ca3",
-      "category": "chocolate"
+      "category": "chocolate",
+      "image": "/menu-images/single-origin-chocolate.jpg"
     },
     {
       "id": "affogato",
@@ -189,7 +202,8 @@
       ],
       "price": 20000,
       "pawoonId": "20324010-22c2-11f0-abf7-3bc5232f32b8",
-      "category": "espresso"
+      "category": "espresso",
+      "image": "/menu-images/affogato.jpg"
     },
     {
       "id": "americano",
@@ -201,7 +215,8 @@
       ],
       "price": 17000,
       "pawoonId": "25425460-227c-11f0-b74c-f1bac691bc7c",
-      "category": "espresso"
+      "category": "espresso",
+      "image": "/menu-images/americano.jpg"
     },
     {
       "id": "espresso",
@@ -211,7 +226,8 @@
       ],
       "price": 15000,
       "pawoonId": "5defd4c0-22c2-11f0-9722-b37fa3aa82a9",
-      "category": "espresso"
+      "category": "espresso",
+      "image": "/menu-images/espresso.jpg"
     },
     {
       "id": "v60-single-origin",
@@ -221,7 +237,8 @@
       ],
       "price": 23000,
       "pawoonId": "374a14b0-22c3-11f0-ae60-b9c113229e69",
-      "category": "espresso"
+      "category": "espresso",
+      "image": "/menu-images/v60-single-origin.jpg"
     },
     {
       "id": "vietnam-drip",
@@ -231,7 +248,8 @@
       ],
       "price": 18000,
       "pawoonId": "dd41a410-2369-11f0-8ac4-c300c16ceb70",
-      "category": "espresso"
+      "category": "espresso",
+      "image": "/menu-images/vietnam-drip.jpg"
     },
     {
       "id": "best-green-smoothie",
@@ -241,7 +259,8 @@
       ],
       "price": 20000,
       "pawoonId": "d56c3830-2396-11f0-8416-3176cc58c23c",
-      "category": "fresh"
+      "category": "fresh",
+      "image": "/menu-images/best-green-smoothie.jpg"
     },
     {
       "id": "blue-lagoon-mocktail",
@@ -251,7 +270,8 @@
       ],
       "price": 20000,
       "pawoonId": "b15e93c0-239b-11f0-9448-55a4217d47b2",
-      "category": "fresh"
+      "category": "fresh",
+      "image": "/menu-images/blue-lagoon-mocktail.jpeg"
     },
     {
       "id": "chocolate-smoothie",
@@ -261,7 +281,8 @@
       ],
       "price": 20000,
       "pawoonId": "d645f540-239b-11f0-8cd7-6dd2a77d93d4",
-      "category": "fresh"
+      "category": "fresh",
+      "image": "/menu-images/chocolate-smoothie.jpg"
     },
     {
       "id": "green-leaf-juice",
@@ -271,7 +292,8 @@
       ],
       "price": 17000,
       "pawoonId": "fc26ce70-239b-11f0-bf25-63133d9cb1d1",
-      "category": "fresh"
+      "category": "fresh",
+      "image": "/menu-images/green-leaf-juice.jpg"
     },
     {
       "id": "strawberry-milky-latte",
@@ -281,7 +303,8 @@
       ],
       "price": 20000,
       "pawoonId": "37960230-239c-11f0-84e8-4524b0905560",
-      "category": "fresh"
+      "category": "fresh",
+      "image": "/menu-images/strawberry-milky-latte.jpg"
     },
     {
       "id": "strawberry-smoothie",
@@ -291,160 +314,137 @@
       ],
       "price": 20000,
       "pawoonId": "51b2ce60-239c-11f0-a554-b78b21adf3d1",
-      "category": "fresh"
+      "category": "fresh",
+      "image": "/menu-images/strawberry-smoothie.jpg"
     },
     {
       "id": "kopi-susu-botol-cheese",
       "name": "Kopi Susu Botol Cheese",
       "aliases": [
-        "kopi susu botol cheese",
-        "kopsu",
-        "kopi susu"
+        "kopi susu botol cheese"
       ],
       "price": 25000,
       "pawoonId": "bb9d6080-2395-11f0-bab3-cdeb7e88caf1",
-      "category": "kopi-botol"
+      "category": "kopi-botol",
+      "image": "/menu-images/kopi-susu-botol-cheese.jpg"
     },
     {
       "id": "kopi-susu-botol-cinnamon",
       "name": "Kopi Susu Botol Cinnamon",
       "aliases": [
-        "kopi susu botol cinnamon",
-        "kopsu",
-        "kopi susu"
+        "kopi susu botol cinnamon"
       ],
       "price": 25000,
       "pawoonId": "8e5d0310-2395-11f0-921f-19de9851f444",
-      "category": "kopi-botol"
+      "category": "kopi-botol",
+      "image": "/menu-images/kopi-susu-botol-cinnamon.jpg"
     },
     {
       "id": "kopi-susu-botol-karamel",
       "name": "Kopi Susu Botol Karamel",
       "aliases": [
-        "kopi susu botol karamel",
-        "kopsu",
-        "kopi susu"
+        "kopi susu botol karamel"
       ],
       "price": 25000,
       "pawoonId": "50726650-2395-11f0-8d6e-db8a24cb3cea",
-      "category": "kopi-botol"
+      "category": "kopi-botol",
+      "image": "/menu-images/kopi-susu-botol-karamel.jpg"
     },
     {
       "id": "kopi-susu-botol-mint",
       "name": "Kopi Susu Botol Mint",
       "aliases": [
-        "kopi susu botol mint",
-        "kopsu",
-        "kopi susu"
+        "kopi susu botol mint"
       ],
       "price": 25000,
       "pawoonId": "ea1fad80-2395-11f0-9e69-5bb7fde9d59f",
-      "category": "kopi-botol"
+      "category": "kopi-botol",
+      "image": "/menu-images/kopi-susu-botol-mint.jpg"
     },
     {
       "id": "kopi-susu-botol-original",
       "name": "Kopi Susu Botol Original",
       "aliases": [
-        "kopi susu botol original",
-        "kopsu",
-        "kopi susu"
+        "kopi susu botol original"
       ],
       "price": 20000,
       "pawoonId": "86346e10-2394-11f0-874f-05ba6d445419",
-      "category": "kopi-botol"
+      "category": "kopi-botol",
+      "image": "/menu-images/kopi-susu-botol-original.jpg"
     },
     {
       "id": "kopi-susu-botol-pop-corn",
       "name": "Kopi Susu Botol Pop Corn",
       "aliases": [
-        "kopi susu botol pop corn",
-        "kopsu",
-        "kopi susu"
+        "kopi susu botol pop corn"
       ],
       "price": 25000,
       "pawoonId": "7ff92760-2396-11f0-8bbf-c9a338427a66",
-      "category": "kopi-botol"
+      "category": "kopi-botol",
+      "image": "/menu-images/kopi-susu-botol-pop-corn.jpg"
     },
     {
       "id": "es-kopi-susu-cream-cheese",
       "name": "Es Kopi Susu Cream Cheese",
       "aliases": [
         "es kopi susu cream cheese",
-        "kopi susu cream cheese",
-        "kopsu",
-        "kopi susu"
+        "kopi susu cream cheese"
       ],
       "price": 23000,
       "pawoonId": "a75c0bb0-2370-11f0-9946-ffbb304d7fd6",
-      "category": "kopi-susu"
+      "category": "kopi-susu",
+      "image": "/menu-images/es-kopi-susu-cream-cheese.jpg"
     },
     {
       "id": "es-kopi-susu-dalgona",
       "name": "Es Kopi Susu Dalgona",
       "aliases": [
         "es kopi susu dalgona",
-        "kopi susu dalgona",
-        "kopsu",
-        "kopi susu"
+        "kopi susu dalgona"
       ],
       "price": 23000,
       "pawoonId": "e0b58440-2370-11f0-bf3d-b15ac8cd0fb8",
-      "category": "kopi-susu"
+      "category": "kopi-susu",
+      "image": "/menu-images/es-kopi-susu-dalgona.jpg"
     },
     {
       "id": "es-kopi-susu-flavour",
       "name": "Es Kopi Susu Flavour",
       "aliases": [
         "es kopi susu flavour",
-        "kopi susu flavour",
-        "kopsu",
-        "kopi susu"
+        "kopi susu flavour"
       ],
       "price": 18000,
       "pawoonId": "b8f50be0-22b6-11f0-a05e-35c4c2b74db8",
-      "category": "kopi-susu"
+      "category": "kopi-susu",
+      "image": "/menu-images/es-kopi-susu-flavour.jpg"
     },
     {
       "id": "es-kopi-susu-float",
       "name": "Es Kopi Susu Float",
       "aliases": [
         "es kopi susu float",
-        "kopi susu float",
-        "kopsu",
-        "kopi susu"
+        "kopi susu float"
       ],
       "price": 23000,
       "pawoonId": "80a3b310-2370-11f0-b472-518a68c0f591",
-      "category": "kopi-susu"
+      "category": "kopi-susu",
+      "image": "/menu-images/es-kopi-susu-float.jpg"
     },
     {
       "id": "es-kopi-susu-original",
       "name": "Es Kopi Susu Original",
       "aliases": [
-        "es kopi susu original",
-        "kopi susu original",
-        "kopsu",
-        "kopi susu"
-      ],
-      "price": 18000,
-      "pawoonId": "affe6a00-23d3-11f0-92e9-f17ab0e57743",
-      "category": "kopi-susu"
-    },
-    {
-      "id": "kopi-susu-original",
-      "name": "Es Kopi Susu Original",
-      "aliases": [
-        "kopi susu",
-        "kopi susu original",
-        "kopi susu biasa",
-        "es kopi",
-        "es kopi susu original",
         "es kopi susu",
-        "kopsu"
+        "es kopi susu original",
+        "kopsu",
+        "kopi susu",
+        "kopi susu original"
       ],
       "price": 18000,
       "pawoonId": "affe6a00-23d3-11f0-92e9-f17ab0e57743",
-      "category": "kopi-susu"
+      "category": "kopi-susu",
+      "image": "/menu-images/es-kopi-susu-original.jpg"
     },
     {
       "id": "caffe-bon-bon",
@@ -454,7 +454,8 @@
       ],
       "price": 18000,
       "pawoonId": "93232ff0-236e-11f0-8e51-91c0b027cede",
-      "category": "milk-coffee"
+      "category": "milk-coffee",
+      "image": "/menu-images/caffe-bon-bon.jpg"
     },
     {
       "id": "caffe-latte",
@@ -467,7 +468,8 @@
       ],
       "price": 23000,
       "pawoonId": "e9eded40-236a-11f0-8d5b-41805575f860",
-      "category": "milk-coffee"
+      "category": "milk-coffee",
+      "image": "/menu-images/caffe-latte.jpg"
     },
     {
       "id": "caffe-macchiato",
@@ -477,7 +479,8 @@
       ],
       "price": 23000,
       "pawoonId": "559a5990-232d-11f0-8835-214c2f2ef8bd",
-      "category": "milk-coffee"
+      "category": "milk-coffee",
+      "image": "/menu-images/caffe-macchiato.jpg"
     },
     {
       "id": "cappuccino",
@@ -493,7 +496,8 @@
       ],
       "price": 23000,
       "pawoonId": "30c08ca0-232d-11f0-bc86-2b1e4076772d",
-      "category": "milk-coffee"
+      "category": "milk-coffee",
+      "image": "/menu-images/cappuccino.jpg"
     },
     {
       "id": "mochaccino",
@@ -503,7 +507,8 @@
       ],
       "price": 23000,
       "pawoonId": "c2220820-236e-11f0-b9ae-5157d6b655f9",
-      "category": "milk-coffee"
+      "category": "milk-coffee",
+      "image": "/menu-images/mochaccino.jpg"
     },
     {
       "id": "chocolate-milkshake",
@@ -513,7 +518,8 @@
       ],
       "price": 20000,
       "pawoonId": "0934ee40-239d-11f0-8c4a-e31f5ca60dbd",
-      "category": "milkshake"
+      "category": "milkshake",
+      "image": "/menu-images/chocolate-milkshake.jpg"
     },
     {
       "id": "cookies-cream",
@@ -523,7 +529,8 @@
       ],
       "price": 23000,
       "pawoonId": "41059900-239d-11f0-aabf-bbcc9f66d310",
-      "category": "milkshake"
+      "category": "milkshake",
+      "image": "/menu-images/cookies-cream.jpg"
     },
     {
       "id": "kurma-milkshake",
@@ -533,7 +540,8 @@
       ],
       "price": 23000,
       "pawoonId": "6ab6e6a0-239d-11f0-b273-6377f937afc5",
-      "category": "milkshake"
+      "category": "milkshake",
+      "image": "/menu-images/kurma-milkshake.jpg"
     },
     {
       "id": "matcha-mint-milkshake",
@@ -544,7 +552,8 @@
       ],
       "price": 25000,
       "pawoonId": "8648e670-239d-11f0-9ffd-dd3f1cdc8cf6",
-      "category": "milkshake"
+      "category": "milkshake",
+      "image": "/menu-images/matcha-mint-milkshake.jpg"
     },
     {
       "id": "oreo-milkshake",
@@ -554,7 +563,8 @@
       ],
       "price": 23000,
       "pawoonId": "a042e4d0-239d-11f0-93eb-45c7182a6e5f",
-      "category": "milkshake"
+      "category": "milkshake",
+      "image": "/menu-images/oreo-milkshake.jpg"
     },
     {
       "id": "red-velvet-milkshake",
@@ -574,7 +584,8 @@
       ],
       "price": 20000,
       "pawoonId": "d1088510-239d-11f0-ad8f-1b5b4dde6866",
-      "category": "milkshake"
+      "category": "milkshake",
+      "image": "/menu-images/strawberry-milkshake.jpg"
     },
     {
       "id": "vanilla-milkshake",
@@ -584,7 +595,8 @@
       ],
       "price": 20000,
       "pawoonId": "e708db20-239d-11f0-913a-1fc74f2a392b",
-      "category": "milkshake"
+      "category": "milkshake",
+      "image": "/menu-images/vanilla-milkshake.jpg"
     },
     {
       "id": "cappuccino-hot-creme-brulee",
@@ -612,9 +624,7 @@
       "id": "kopi-susu-madu-jahe-panas",
       "name": "Kopi Susu Madu Jahe Panas",
       "aliases": [
-        "kopi susu madu jahe panas",
-        "kopsu",
-        "kopi susu"
+        "kopi susu madu jahe panas"
       ],
       "price": 23000,
       "pawoonId": "34fa1d90-2371-11f0-aad0-0de7febaa14b",
@@ -762,6 +772,6 @@
       "category": "tea"
     }
   ],
-  "lastSyncedAt": "2026-04-15T23:00:25.309Z",
+  "lastSyncedAt": "2026-04-17T02:21:07.039Z",
   "syncSource": "pawoon"
 }

@@ -63,19 +63,36 @@ function slugify(name) {
     .trim();
 }
 
-function generateAliases(name) {
+// Short aliases that should only map to ONE canonical item
+// key = alias, value = canonical menu id that owns it
+const EXCLUSIVE_ALIASES = {
+  'kopsu': 'es-kopi-susu-original',
+  'kopi susu': 'es-kopi-susu-original',
+  'amer': 'americano',
+  'latte': 'caffe-latte',
+  'matcha': 'matcha-latte',
+  'coklat': 'chocolate',
+  'cokelat': 'chocolate',
+  'teh': 'reguler-tea',
+  'teh manis': 'reguler-tea',
+  'es teh': 'reguler-tea',
+  'cappuccino': 'cappuccino',
+  'capuccino': 'cappuccino',
+};
+
+function generateAliases(name, menuId) {
   const lower = name.toLowerCase();
   const aliases = [lower];
   
-  // Common alias patterns
+  // Strip "es " prefix as alias
   if (lower.startsWith('es ')) aliases.push(lower.slice(3));
-  if (lower.includes('kopi susu')) aliases.push('kopsu', 'kopi susu');
-  if (lower.includes('americano')) aliases.push('amer', 'americano');
-  if (lower.includes('cappuccino')) aliases.push('cappuccino', 'capuccino');
-  if (lower.includes('caffe latte')) aliases.push('latte', 'cafe latte');
-  if (lower.includes('matcha')) aliases.push('matcha');
-  if (lower.includes('chocolate') && !lower.includes('choco')) aliases.push('coklat', 'cokelat');
-  if (lower.includes('reguler tea')) aliases.push('teh', 'teh manis', 'es teh');
+  
+  // Only add short aliases if this item is the canonical owner
+  for (const [alias, ownerId] of Object.entries(EXCLUSIVE_ALIASES)) {
+    if (menuId === ownerId) {
+      aliases.push(alias);
+    }
+  }
   
   return [...new Set(aliases)];
 }
@@ -167,7 +184,7 @@ async function run() {
       updatedMenus.push({
         id,
         name: drink.name,
-        aliases: generateAliases(drink.name),
+        aliases: generateAliases(drink.name, id),
         price: drink.price,
         pawoonId: drink.id,
         category
