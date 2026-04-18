@@ -19,11 +19,45 @@ Jangan duplikasi aturan yang sudah ada di SOBATNGUPI_PROMPT.md atau AGENTS.md �
 - Order ID format: `ORD-YYYYMMDD-XXXX` (hex), dibuat saat items_captured
 - Reservation ID format: `RSV-YYYYMMDD-XXXX` (hex)
 
-## Cron Jobs
-- `cancel-unpaid-orders` — every :15 and :45, auto-cancel QRIS unpaid >1hr
-- `expire-stale-orders` — hourly, move stale orders >24h to expired
+## Cron Jobs (OpenClaw)
+- `daily-sales-report` — 21:00 WIB, kirim summary ke WA admin (+6285155022960)
 - `pawoon-menu-sync` — daily 06:00 WIB, sync menu from Pawoon
 - `wacli-auto-update` — weekly Monday 04:00 WIB, rebuild wacli from source
+
+## Backend Internal Scheduler (node-cron, no agent wake)
+- QRIS remind (30min) + cancel (1hr) — every 10min during 09-22 WIB
+- Expire stale orders (>24h) — every 6 hours
+- Cleanup draft orders — midnight WIB
+
+## Digital Receipt
+- Auto-send struk ke WA customer setelah QRIS payment confirmed
+- Format: order ID, items, ongkir, total, payment method, branding kedai
+- Trigger: `sendDigitalReceipt()` in `whatsapp.js`
+
+## QRIS Fire-and-Forget
+- Agent langsung reply "Siap kak, QR sedang disiapkan ya 🙏" tanpa tunggu exec result
+- Backend kirim QR async (~5s)
+- Perceived latency: ~2-3s (dari ~20s sebelumnya)
+
+## Daily Sales Report
+- Script: `backend/daily-report.js`
+- Cron: 21:00 WIB ke WA admin
+- Content: revenue, order count, top menu, pickup/delivery split, QRIS/COD split
+
+## Pawoon Webhook
+- Endpoint: `POST /webhooks/pawoon`
+- Pawoon kirim setiap transaksi POS (dine-in)
+- Currently: log only, belum diproses
+- Data: receipt_code, customer_name, amount, meja
+
+## Pawoon Sales Type
+- SB - Delivery: `995d3100-3a70-11f1-89d1-d1ccf556d896`
+- SB - Pickup: `995dfb80-3a70-11f1-8056-5b0a4298eb41`
+
+## Rebranding
+- SobatNgupi → Kang Ngupi (April 2026)
+- Ngupi Express → Go Ngupi (customer-facing)
+- DB internal tetap `ngupi_express` (no migration)
 
 ## Menu Images
 - 76 images downloaded from Pawoon → `backend/public/menu-images/`
@@ -151,6 +185,26 @@ Jangan duplikasi aturan yang sudah ada di SOBATNGUPI_PROMPT.md atau AGENTS.md �
 ### Dashboard Simplified Flow
 - 8 step → 3 step: preparing → on_the_way/ready_for_pickup → completed
 - Button aksi otomatis sesuai delivery/pickup
+
+### Security Hardening (2026-04-18)
+- Anti prompt injection rules added (ignore instructions, act as, jailbreak)
+- 10+ trigger words blocked (system, instruction, ignore, override, sudo, admin, root, hack, jailbreak)
+- Helmet security headers (X-Frame, HSTS, X-Content-Type, X-DNS)
+- Pawoon webhook payload validation (type check, 50KB limit)
+- UUID validation on dashboard order status update
+
+### Model Testing Results (2026-04-18)
+- GLM-5: 40% compliance (skip template, wrong bullets)
+- Gemini 3 Flash: 70% (miss ongkir format)
+- GPT-4.1 (Copilot): 75% (miss konfirmasi format)
+- GPT-5.2 (Copilot): 95% (best quality, very slow)
+- GPT-5.4 (direct OpenAI): best balance speed + quality ← production choice
+
+### Skills Installed (2026-04-18)
+- `skill-vetter` — security audit before installing skills
+- `self-improving-agent` — log learnings/errors to .learnings/
+- `nano-pdf` — edit PDF with natural language
+- `humanizer` — remove AI writing patterns
 
 ### Formatting Preferences
 
