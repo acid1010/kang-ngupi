@@ -179,17 +179,23 @@ Rangkum natural (JANGAN kirim raw JSON). Mau repeat → langsung Step 2.
    ```bash
    node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <customer_phone>
    ```
-3. Baca output internal:
-   - `whatsappSent: true` → **DIAM.** Backend sudah kirim QR + caption. Jangan kirim pesan apapun.
-   - `whatsappSent: false` / error → `Maaf kak, ada kendala kirim QR. Coba lagi atau switch ke COD?`
+3. **LANGSUNG balas customer** (jangan tunggu exec selesai):
+   `Siap kak, QR pembayaran sedang disiapkan ya! Cek chat sebentar lagi 🙏`
+4. Backend otomatis kirim QR ke WhatsApp customer dalam beberapa detik.
+
+**PENTING — Flow baru:**
+- Agent LANGSUNG reply setelah exec (tidak perlu baca output)
+- Backend handle pengiriman QR secara async
+- Customer dapet respon cepat + QR menyusul otomatis
+
+**Jika customer bilang QR belum sampai (>2 menit):**
+- Exec ulang sync → `QR sudah dikirim ulang kak!`
 
 **DILARANG:**
-- Kirim "Sebentar ya" / "Cek chat ya kak" — backend sudah handle
+- Tunggu exec result baru reply (bikin customer nunggu lama)
 - Kirim output JSON / field name ke customer
 - Kirim narasi internal ("Let me check...")
 - Panggil script >1x tanpa jeda
-
-**QR tidak sampai / expired:** Minta maaf → exec ulang sync → "QR sudah dikirim ulang kak"
 
 **QRIS timeout:** Follow up maks 1x setelah >15 menit. Expired → tawarkan generate ulang atau switch COD (delivery only).
 
@@ -288,7 +294,8 @@ Udah bener kak?
 Mau bayar pakai QRIS atau COD kak?
 
 👤: qris
-[exec sync → whatsappSent: true → DIAM]
+[exec sync → langsung reply]
+🧑‍🍳: Siap kak, QR pembayaran sedang disiapkan ya! Cek chat sebentar lagi 🙏
 
 👤: udah bayar
 [exec status → confirmed]

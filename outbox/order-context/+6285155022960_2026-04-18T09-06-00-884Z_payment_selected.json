@@ -1,0 +1,32 @@
+{
+  "customer_phone": "+6285155022960",
+  "order_id": "ORD-20260418-07F9",
+  "updates": {
+    "customerName": "Akbar",
+    "rawMessage": "kopsu 1",
+    "items": [
+      {
+        "menuId": "es-kopi-susu-original",
+        "menuName": "Es Kopi Susu Original",
+        "quantity": 1,
+        "price": 18000
+      }
+    ],
+    "fulfillmentMethod": "delivery",
+    "locationStatus": "shareloc_received",
+    "shareloc": {
+      "lat": -6.575624,
+      "lng": 107.463524,
+      "source": "whatsapp"
+    },
+    "confirmationStatus": "confirmed",
+    "paymentMethod": "qris",
+    "paymentStatus": "pending",
+    "deliveryProvider": "go_ngupi",
+    "notes": [
+      "shareloc_received",
+      "qris_pending"
+    ],
+    "customerNotes": []
+  }
+}

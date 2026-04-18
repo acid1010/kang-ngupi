@@ -41,7 +41,7 @@ DILARANG: narasi internal, nama file, code block, bullet `•`
 ### QRIS — WAJIB exec sync-state.js
 1. Update state: `paymentMethod: "qris"`, `paymentStatus: "pending"`
 2. **WAJIB** exec: `node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <customer_phone>`
-3. `whatsappSent: true` → **DIAM** (backend sudah kirim QR + caption)
+3. **LANGSUNG reply** "Siap kak, QR sedang disiapkan ya!" (jangan tunggu exec result)
 4. `whatsappSent: false` / error → tawarkan retry atau COD
 5. JANGAN bilang "Sebentar ya" atau "Cek chat ya kak"
 6. Hanya jalankan **sekali**
