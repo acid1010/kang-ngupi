@@ -41,3 +41,4 @@ memory/.dreams/
 
 # Customer backups (sensitive data)
 backend/backups/
+outbox/order-context/*.json
