@@ -415,6 +415,23 @@ export async function evaluateAndEnqueue(state) {
     events.push({ type: 'final_order', ...queued });
   }
 
+  // Pre-generate QRIS in background when order has items + total + fulfillment decided
+  // Wait until fulfillment is set (pickup/delivery + ongkir) so totalPrice is final
+  const ctx = state.orderContext ?? {};
+  const hasFulfillment = ctx.fulfillmentMethod === 'pickup' || (ctx.fulfillmentMethod === 'delivery' && ctx.shareloc);
+  if (ctx.clientOrderId && ctx.items?.length > 0 && ctx.totalPrice > 0 && hasFulfillment && !state._qrisPregenStarted) {
+    state._qrisPregenStarted = true;
+    // Fire and forget — don't block the response
+    import('../payments/qrisCache.js').then(({ preGenerateQris }) => {
+      preGenerateQris({
+        clientOrderId: ctx.clientOrderId,
+        amount: ctx.totalPrice,
+        customerPhone: ctx.customerPhone || state.customerId,
+        customerName: ctx.customerName || state.customerName
+      }).catch(() => {});
+    }).catch(() => {});
+  }
+
   // Auto-create QRIS payment if conditions met
   const qrisResult = await maybeAutoCreateQris(state, events);
   if (qrisResult) {
