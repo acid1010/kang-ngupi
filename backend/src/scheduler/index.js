@@ -221,5 +221,18 @@ export function startScheduler() {
   // Cleanup drafts: midnight WIB
   cron.schedule('0 0 * * *', cleanupDrafts, { timezone: 'Asia/Jakarta' });
 
-  logger.info('[scheduler] Internal scheduler started — QRIS(*/10 9-22), expire(*/6h), drafts(midnight)');
+  // Customer data backup: 22:00 WIB daily
+  cron.schedule('0 22 * * *', async () => {
+    try {
+      const { execFile } = await import('node:child_process');
+      const { promisify } = await import('node:util');
+      const execFileAsync = promisify(execFile);
+      const { stdout } = await execFileAsync('node', ['/home/ubuntu/workspace-sobatngupi/backend/backup-customers.js'], { timeout: 30_000 });
+      logger.info('[scheduler] Customer backup: %s', stdout.trim());
+    } catch (err) {
+      logger.warn('[scheduler] Customer backup failed: %s', err.message);
+    }
+  }, { timezone: 'Asia/Jakarta' });
+
+  logger.info('[scheduler] Internal scheduler started — QRIS(*/10 9-22), expire(*/6h), drafts(midnight), backup(22:00)');
 }
