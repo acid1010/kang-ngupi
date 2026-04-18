@@ -1,14 +1,13 @@
 {
-  "orderId": "ORD-20260418-A2D9",
+  "orderId": "ORD-20260418-07F9",
   "customerId": "+6285155022960",
-  "customerName": "Acid",
+  "customerName": "Rahmat",
   "items": [
     {
       "menuId": "es-kopi-susu-original",
       "menuName": "Es Kopi Susu Original",
       "quantity": 1,
-      "price": 18000,
-      "temperature": "iced"
+      "price": 18000
     }
   ],
   "totalPrice": 32000,
@@ -16,15 +15,17 @@
   "paymentMethod": "qris",
   "paymentStatus": "pending",
   "fulfillmentMethod": "delivery",
-  "shareloc": {"lat": -6.575624, "lng": 107.463524 },
-  "customerNotes": "",
+  "shareloc": {
+    "lat": -6.575624,
+    "lng": 107.463524,
+    "source": "whatsapp"
+  },
+  "deliveryFee": 14000,
+  "customerNotes": [],
   "notes": [
-    "Items captured",
-    "Fulfillment captured: delivery",
-    "Shareloc captured",
-    "Ongkir added: 14000",
-    "Payment method captured: qris"
+    "shareloc_received",
+    "qris_pending"
   ],
-  "createdAt": "2026-04-18T01:58:00.000Z",
-  "updatedAt": "2026-04-18T01:58:00.000Z"
+  "createdAt": "2026-04-18T09:06:00.884Z",
+  "updatedAt": "2026-04-18T09:13:00.000Z"
 }
