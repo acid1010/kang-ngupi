@@ -30,7 +30,7 @@ import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
 const WACLI_BIN = process.env.WACLI_BIN || 'wacli';
-const ADMIN_PHONE = process.env.ADMIN_PHONE || '+6283872201310';
+const ADMIN_PHONE = process.env.ADMIN_PHONE || '+6285155022960';
 
 const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 

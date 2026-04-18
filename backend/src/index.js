@@ -703,8 +703,12 @@ if (!Number.isInteger(port) || port <= 0 || port > 65535) {
 }
 await ensureQueueDirs();
 await ensureStateDirs();
+// Start internal scheduler (QRIS cancel, expire, drafts)
+import { startScheduler } from './scheduler/index.js';
+
 const server = app.listen(port, () => {
   logger.info(`Ngupi backend listening on port ${port}`);
+  startScheduler();
 });
 
 // Graceful shutdown
