@@ -38,3 +38,6 @@ memory/.dreams/
 
 # Self-improvement learnings (local)
 .learnings/
+
+# Customer backups (sensitive data)
+backend/backups/
