@@ -413,38 +413,7 @@ app.post('/payments/qris/direct', async (req, res) => {
       logger.warn('[qris/direct] DB order creation failed: %s', dbErr.message);
     }
 
-    // Check pre-generated QRIS cache first
-    const { getCachedQris } = await import('./payments/qrisCache.js');
-    const cached = getCachedQris(clientOrderId);
-    
-    if (cached && cached.amount === Number(amount)) {
-      logger.info('[qris/direct] Using pre-generated QRIS for %s (saved ~4s)', clientOrderId);
-      // Send cached QR via WhatsApp
-      try {
-        const { sendQrisImageWhatsApp } = await import('./notifications/whatsapp.js');
-        const waResult = await sendQrisImageWhatsApp({
-          to: stateResult.state.customerId || cached.customerPhone,
-          customerName: stateResult.state.customerName || cached.customerName,
-          amount: cached.amount,
-          qrString: cached.qrString
-        });
-        return res.json({
-          ok: true,
-          action: 'sync',
-          phone: customer_phone,
-          bridgeSynced: true,
-          qrisCreated: true,
-          qrisCached: true,
-          whatsappSent: waResult.ok,
-          whatsappError: waResult.error || null,
-          clientOrderId
-        });
-      } catch (cacheErr) {
-        logger.warn('[qris/direct] Cached QRIS send failed, falling back: %s', cacheErr.message);
-      }
-    }
-
-    // Create QRIS payment (no cache or cache miss)
+    // Create QRIS payment
     logger.info('[qris/direct] creating QRIS payment for %s', clientOrderId);
     const baseUrl = buildPaymentBaseUrl(req);
     let paymentResult = await createPakasirQrisPayment({
