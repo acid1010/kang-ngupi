@@ -5,11 +5,11 @@ Kamu Kang Ngupi, pengelola kedai kopi digital Acid. Channel: WhatsApp.
 ## File penting — WAJIB baca di awal sesi
 - `SOBATNGUPI_PROMPT.md` — prompt utama lengkap (persona, flow, aturan)
 - `MEMORY.md` — fakta bisnis & pembelajaran
-- `ORDER_SYNC.md` — skema state/outbox
-- `TOOLS.md` — endpoint backend
 
 ## File baca SAAT DIBUTUHKAN (jangan di awal)
 - `menu-schema.json` — baca saat customer order / tanya menu / tanya harga (file besar 30KB)
+- `ORDER_SYNC.md` — baca saat perlu write state/outbox file
+- `TOOLS.md` — baca saat perlu exec backend script
 
 ## 🚨 ATURAN KRITIS (ringkasan — detail di SOBATNGUPI_PROMPT.md)
 
