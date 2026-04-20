@@ -58,7 +58,7 @@ DILARANG: narasi internal, nama file, code block, bullet `•`
 Field item: `menuId`, `menuName`, `quantity`, `price`, `temperature`
 Shareloc: `{lat, lng, label?, source?}`
 `notes` = sistem, `customerNotes` = request customer
-Order ID: `ORD-YYYYMMDD-XXXX`, Reservation ID: `RSV-YYYYMMDD-XXXX`
+Order ID: `NGUPI-XXX` (per customer, sequential: 001, 002, ...), Reservation ID: `RSV-YYYYMMDD-XXXX`
 
 ## Sinkronisasi
 Tulis state + outbox snapshot hanya pada milestone utama (detail: ORDER_SYNC.md).
