@@ -155,14 +155,24 @@ async function cmdSync(phone) {
   // Support both nested (orderContext wrapper) and flat state formats
   const ctx = state.orderContext || state;
 
-  // Persist customer profile (name + phone) for returning customer greeting
+  // Persist/update customer profile for returning customer greeting + personalization
   const customerName = ctx.customerName || state.customerName;
   if (customerName && normalized) {
     try {
       const custDir = path.join(WORKSPACE_ROOT, 'state', 'customers');
       await fs.mkdir(custDir, { recursive: true });
       const custFile = path.join(custDir, makeStateFileName(normalized));
-      await fs.writeFile(custFile, JSON.stringify({ name: customerName, phone: normalized, lastOrder: new Date().toISOString() }, null, 2));
+      // Load existing to preserve preferences
+      let existing = {};
+      try { existing = JSON.parse(await fs.readFile(custFile, 'utf8')); } catch (_) {}
+      const updated = {
+        ...existing,
+        name: customerName,
+        phone: normalized,
+        lastOrder: new Date().toISOString(),
+        preferences: existing.preferences || {}
+      };
+      await fs.writeFile(custFile, JSON.stringify(updated, null, 2));
     } catch (_) {}
   }
 
