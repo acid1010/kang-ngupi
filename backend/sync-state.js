@@ -300,6 +300,11 @@ async function cmdSync(phone) {
 }
 
 async function cmdSyncQrisDirect(phone, ctx) {
+  // Calculate total amount including delivery fee
+  const itemsTotal = (ctx.items || []).reduce((sum, i) => sum + (Number(i.price || 0) * (i.quantity || 1)), 0);
+  const deliveryFee = Number(ctx.deliveryFee || ctx.ongkir || 0);
+  const totalAmount = itemsTotal + deliveryFee;
+
   // Fallback: use /payments/qris/direct which handles the full flow in one call
   const directPayload = {
     customer_phone: phone,
@@ -308,7 +313,8 @@ async function cmdSyncQrisDirect(phone, ctx) {
     fulfillment_method: ctx.fulfillmentMethod || ctx.fulfillment || null,
     shareloc: ctx.shareloc || null,
     delivery_provider: ctx.deliveryProvider || null,
-    raw_message: ctx.rawMessage || null
+    raw_message: ctx.rawMessage || null,
+    amount: totalAmount > 0 ? totalAmount : null
   };
 
   const result = await fetchJson(`${BACKEND_BASE_URL}/payments/qris/direct`, {
