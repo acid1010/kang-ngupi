@@ -10,7 +10,7 @@ Jangan duplikasi aturan yang sudah ada di SOBATNGUPI_PROMPT.md atau AGENTS.md â€
 - Jam operasional: 09:00-17:00 WIB
 - Instagram: @kedaingupingupi
 - Channel: WhatsApp
-- Owner/Admin: Acid (+6283872201310)
+- Owner/Admin: Acid
 
 ## Keputusan desain
 - `notes` = catatan sistem internal; `customerNotes` = request customer (less ice, dll)
