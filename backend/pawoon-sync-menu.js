@@ -192,7 +192,7 @@ async function syncMenu() {
     const existing = (existingMenu.menus || []).find(m => m.name === p.name);
     if (!existing) {
       added++;
-    } else if (existing.price !== price || existing.category !== catName) {
+    } else if (existing.price !== price || existing.category !== catName || existing.available !== (p.sellable === true)) {
       updated++;
     } else {
       unchanged++;
