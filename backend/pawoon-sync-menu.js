@@ -1,16 +1,17 @@
 #!/usr/bin/env node
 
 /**
- * Pawoon Menu Sync — Pull products from Pawoon POS and update menu-schema.json
+ * Pawoon Menu Sync v2 — Pull ALL products from Pawoon POS with categories, variants, modifiers
  * 
  * Usage: node pawoon-sync-menu.js
  * 
- * What it does:
- * 1. Authenticates with Pawoon API
- * 2. Pulls all sellable products for the outlet
- * 3. Filters drink categories
- * 4. Updates menu-schema.json with Pawoon prices as source of truth
- * 5. Adds new products, updates existing, preserves aliases
+ * Syncs EXACTLY what's in Pawoon:
+ * - All 17 categories
+ * - All sellable products
+ * - Variants (e.g. Hot/Iced, size options)
+ * - Modifier groups (e.g. toppings, extras)
+ * - Prices from Pawoon as source of truth
+ * - Preserves local aliases
  */
 
 import { config } from 'dotenv';
@@ -27,33 +28,68 @@ const PAWOON_CLIENT_SECRET = process.env.PAWOON_CLIENT_SECRET;
 const PAWOON_OUTLET_ID = process.env.PAWOON_OUTLET_ID || 'c531acc0-3205-11ea-a231-e565033da4bd';
 const MENU_SCHEMA_PATH = join(__dirname, '..', 'menu-schema.json');
 
-// Drink category IDs from Pawoon
-const DRINK_CATEGORIES = new Set([
-  'bf2a8c80-227b-11f0-9d88-c9e89868a3fb', // Espresso & Manual Brew
-  '55ef51f0-22b5-11f0-970d-854a22dc6d7c', // Es Kopi Susu Gula Aren
-  '71b39e90-22b5-11f0-aa01-4d32c08285dc', // Kopi Susu Botol
-  'f1b03460-231c-11f0-8d2d-95f7debceadd', // Milk Based Coffee
-  '0360daa0-2371-11f0-bd97-9f2dc7b6ab5f', // Signature Coffee
-  '55d80260-2373-11f0-8c6a-579acc173d3e', // Es Kopi Blend
-  'bef1e990-2396-11f0-a756-05ffe487927b', // Fresh & Healthy
-  '0183bce0-239d-11f0-afe3-290c9db56300', // Milkshake
-  '01421bd0-239e-11f0-9163-31b4ab9c6547', // Chocolate
-  '9fabb400-23c3-11f0-9486-a3e3bceaa5ff', // Tea
-]);
+async function getToken() {
+  const res = await fetch(`${PAWOON_BASE_URL}/oauth/token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ grant_type: 'client_credentials', client_id: PAWOON_CLIENT_ID, client_secret: PAWOON_CLIENT_SECRET })
+  });
+  const data = await res.json();
+  return data.access_token;
+}
 
-// Category name mapping for menu-schema
-const CATEGORY_NAMES = {
-  'bf2a8c80-227b-11f0-9d88-c9e89868a3fb': 'espresso',
-  '55ef51f0-22b5-11f0-970d-854a22dc6d7c': 'kopi-susu',
-  '71b39e90-22b5-11f0-aa01-4d32c08285dc': 'kopi-botol',
-  'f1b03460-231c-11f0-8d2d-95f7debceadd': 'milk-coffee',
-  '0360daa0-2371-11f0-bd97-9f2dc7b6ab5f': 'signature',
-  '55d80260-2373-11f0-8c6a-579acc173d3e': 'blend',
-  'bef1e990-2396-11f0-a756-05ffe487927b': 'fresh',
-  '0183bce0-239d-11f0-afe3-290c9db56300': 'milkshake',
-  '01421bd0-239e-11f0-9163-31b4ab9c6547': 'chocolate',
-  '9fabb400-23c3-11f0-9486-a3e3bceaa5ff': 'tea',
-};
+async function fetchPaginated(token, endpoint) {
+  const all = [];
+  let page = 1;
+  while (true) {
+    const res = await fetch(`${PAWOON_BASE_URL}${endpoint}${endpoint.includes('?') ? '&' : '?'}per_page=100&page=${page}`, {
+      headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+    const items = data.data || [];
+    if (items.length === 0) break;
+    all.push(...items);
+    if (items.length < 100) break;
+    page++;
+  }
+  return all;
+}
+
+async function fetchVariants(token, productId) {
+  try {
+    const res = await fetch(`${PAWOON_BASE_URL}/products/${productId}/variants?outlet_id=${PAWOON_OUTLET_ID}`, {
+      headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+    return (data.data || []).map(v => ({
+      name: v.name,
+      price: Number(v.price || 0),
+      sku: v.sku || null
+    }));
+  } catch (_) {
+    return [];
+  }
+}
+
+async function fetchModifiers(token, productId) {
+  try {
+    const res = await fetch(`${PAWOON_BASE_URL}/products/${productId}/modifier-groups?outlet_id=${PAWOON_OUTLET_ID}`, {
+      headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+    return (data.data || []).map(mg => ({
+      name: mg.name,
+      required: mg.is_required || false,
+      maxSelect: mg.max_select || null,
+      options: (mg.modifiers || []).map(m => ({
+        name: m.name,
+        price: Number(m.price || 0)
+      }))
+    }));
+  } catch (_) {
+    return [];
+  }
+}
 
 function slugify(name) {
   return name.toLowerCase()
@@ -63,165 +99,134 @@ function slugify(name) {
     .trim();
 }
 
-// Items to exclude from sync (removed from menu by owner)
-const EXCLUDED_ITEMS = new Set([
-  'es-kopi-susu-flavour',
-]);
-
-// Short aliases that should only map to ONE canonical item
-// key = alias, value = canonical menu id that owns it
-const EXCLUSIVE_ALIASES = {
-  'kopsu': 'es-kopi-susu-original',
-  'kopi susu': 'es-kopi-susu-original',
-  'amer': 'americano',
-  'latte': 'caffe-latte',
-  'matcha': 'matcha-latte',
-  'coklat': 'chocolate',
-  'cokelat': 'chocolate',
-  'teh': 'reguler-tea',
-  'teh manis': 'reguler-tea',
-  'es teh': 'reguler-tea',
-  'cappuccino': 'cappuccino',
-  'capuccino': 'cappuccino',
-};
-
-function generateAliases(name, menuId) {
-  const lower = name.toLowerCase();
-  const aliases = [lower];
-  
-  // Strip "es " prefix as alias
-  if (lower.startsWith('es ')) aliases.push(lower.slice(3));
-  
-  // Only add short aliases if this item is the canonical owner
-  for (const [alias, ownerId] of Object.entries(EXCLUSIVE_ALIASES)) {
-    if (menuId === ownerId) {
-      aliases.push(alias);
-    }
-  }
-  
-  return [...new Set(aliases)];
-}
-
-async function getToken() {
-  const res = await fetch(`${PAWOON_BASE_URL}/oauth/token`, {
-    method: 'POST',
-    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      grant_type: 'client_credentials',
-      client_id: PAWOON_CLIENT_ID,
-      client_secret: PAWOON_CLIENT_SECRET
-    })
-  });
-  const data = await res.json();
-  if (!data.access_token) throw new Error('Failed to get Pawoon token');
-  return data.access_token;
-}
-
-async function fetchProducts(token) {
-  const allProducts = [];
-  let page = 1;
-  
-  while (true) {
-    const res = await fetch(
-      `${PAWOON_BASE_URL}/products?outlet_id=${PAWOON_OUTLET_ID}&is_sellable=true&per_page=100&page=${page}`,
-      { headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` } }
-    );
-    const data = await res.json();
-    const products = data.data || [];
-    allProducts.push(...products.filter(p => typeof p === 'object'));
-    
-    const meta = data.meta || {};
-    if (page >= Math.ceil((meta.total || 0) / (meta.per_page || 100))) break;
-    page++;
-  }
-  
-  return allProducts;
-}
-
-async function run() {
-  if (!PAWOON_CLIENT_ID || !PAWOON_CLIENT_SECRET) {
-    console.error('Missing PAWOON_CLIENT_ID or PAWOON_CLIENT_SECRET in .env');
-    process.exit(1);
-  }
-
+async function syncMenu() {
   console.log('Authenticating with Pawoon...');
   const token = await getToken();
-  
+
+  // Fetch categories
+  console.log('Fetching categories...');
+  const categories = await fetchPaginated(token, `/product-categories?outlet_id=${PAWOON_OUTLET_ID}`);
+  const catMap = {};
+  for (const c of categories) {
+    catMap[c.id] = c.name;
+  }
+  console.log(`Found ${categories.length} categories`);
+
+  // Fetch all sellable products
   console.log('Fetching products...');
-  const allProducts = await fetchProducts(token);
-  console.log(`Fetched ${allProducts.length} total products`);
-  
-  // Filter all sellable products (exclude removed items)
-  const drinks = allProducts.filter(p => {
-    const id = slugify(p.name);
-    return p.sellable && !EXCLUDED_ITEMS.has(id);
-  });
-  console.log(`Found ${drinks.length} sellable products`);
-  
-  // Load existing menu-schema
-  const schema = JSON.parse(readFileSync(MENU_SCHEMA_PATH, 'utf8'));
-  const existingMenus = new Map(schema.menus.map(m => [m.id, m]));
-  
-  // Build updated menus
-  const updatedMenus = [];
-  let added = 0, updated = 0, unchanged = 0;
-  
-  for (const drink of drinks) {
-    const id = slugify(drink.name);
-    const existing = existingMenus.get(id);
-    const category = CATEGORY_NAMES[drink.product_category_id] || 'other';
-    
-    if (existing) {
-      // Update price from Pawoon, preserve aliases
-      const priceChanged = existing.price !== drink.price;
-      updatedMenus.push({
-        ...existing,
-        price: drink.price,
-        pawoonId: drink.id,
-        category
-      });
-      if (priceChanged) {
-        console.log(`  Updated: ${drink.name} Rp${existing.price} → Rp${drink.price}`);
-        updated++;
-      } else {
-        unchanged++;
-      }
-      existingMenus.delete(id);
-    } else {
-      // New product
-      updatedMenus.push({
-        id,
-        name: drink.name,
-        aliases: generateAliases(drink.name, id),
-        price: drink.price,
-        pawoonId: drink.id,
-        category
-      });
-      console.log(`  Added: ${drink.name} — Rp${drink.price}`);
-      added++;
+  const products = await fetchPaginated(token, `/products?outlet_id=${PAWOON_OUTLET_ID}&is_sellable=true`);
+  console.log(`Found ${products.length} sellable products`);
+
+  // Load existing menu for alias preservation
+  let existingMenu = { menus: [] };
+  try {
+    existingMenu = JSON.parse(readFileSync(MENU_SCHEMA_PATH, 'utf8'));
+  } catch (_) {}
+
+  const existingAliases = {};
+  for (const item of (existingMenu.menus || [])) {
+    if (item.aliases?.length) {
+      existingAliases[item.name] = item.aliases;
     }
   }
-  
-  // Keep existing items not in Pawoon (manual additions)
-  for (const [id, menu] of existingMenus) {
-    updatedMenus.push({ ...menu, category: menu.category || 'manual' });
-    console.log(`  Kept (not in Pawoon): ${menu.name}`);
+
+  // Fetch variants and modifiers for products that have them
+  const withVariants = products.filter(p => p.has_variant);
+  const withModifiers = products.filter(p => p.has_modifier);
+  console.log(`Fetching variants for ${withVariants.length} products...`);
+  console.log(`Fetching modifiers for ${withModifiers.length} products...`);
+
+  const variantMap = {};
+  for (const p of withVariants) {
+    variantMap[p.id] = await fetchVariants(token, p.id);
   }
-  
-  // Sort by category then name
-  updatedMenus.sort((a, b) => (a.category || '').localeCompare(b.category || '') || a.name.localeCompare(b.name));
-  
-  // Write updated schema
-  schema.menus = updatedMenus;
-  schema.lastSyncedAt = new Date().toISOString();
-  schema.syncSource = 'pawoon';
-  writeFileSync(MENU_SCHEMA_PATH, JSON.stringify(schema, null, 2) + '\n');
-  
-  console.log(`\nSync complete: ${added} added, ${updated} price updated, ${unchanged} unchanged`);
-  console.log(`Total menu items: ${updatedMenus.length}`);
+
+  const modifierMap = {};
+  for (const p of withModifiers) {
+    modifierMap[p.id] = await fetchModifiers(token, p.id);
+  }
+
+  // Build new menu
+  let added = 0, updated = 0, unchanged = 0;
+  const newMenus = [];
+
+  // Exclude "Es Kopi Susu Flavour" (owner request)
+  const excludeNames = ['Es Kopi Susu Flavour'];
+
+  for (const p of products) {
+    if (excludeNames.includes(p.name)) continue;
+
+    const catName = catMap[p.product_category_id] || 'Lain-lain';
+    const menuId = slugify(p.name);
+    const price = Number(p.price || 0);
+
+    const item = {
+      id: menuId,
+      pawoonId: p.id,
+      name: p.name,
+      category: catName,
+      price,
+      sku: p.sku || null,
+      image: p.image || null,
+      description: p.description || null,
+      available: p.sellable !== false,
+    };
+
+    // Add variants
+    if (variantMap[p.id]?.length) {
+      item.variants = variantMap[p.id];
+    }
+
+    // Add modifiers
+    if (modifierMap[p.id]?.length) {
+      item.modifiers = modifierMap[p.id];
+    }
+
+    // Preserve existing aliases
+    if (existingAliases[p.name]) {
+      item.aliases = existingAliases[p.name];
+    }
+
+    // Check if changed
+    const existing = (existingMenu.menus || []).find(m => m.name === p.name);
+    if (!existing) {
+      added++;
+    } else if (existing.price !== price || existing.category !== catName) {
+      updated++;
+    } else {
+      unchanged++;
+    }
+
+    newMenus.push(item);
+  }
+
+  // Build category list
+  const categoryList = categories.map(c => ({
+    id: c.id,
+    name: c.name,
+    itemCount: newMenus.filter(m => m.category === c.name).length
+  })).filter(c => c.itemCount > 0);
+
+  // Write menu-schema.json
+  const schema = {
+    ...existingMenu,
+    categories: categoryList,
+    menus: newMenus,
+    lastSyncedAt: new Date().toISOString(),
+    syncSource: 'pawoon-v2',
+    totalItems: newMenus.length,
+    totalCategories: categoryList.length
+  };
+
+  writeFileSync(MENU_SCHEMA_PATH, JSON.stringify(schema, null, 2));
+
+  console.log(`\nSync complete: ${added} added, ${updated} price/category updated, ${unchanged} unchanged`);
+  console.log(`Total menu items: ${newMenus.length} (${categoryList.length} categories)`);
+  console.log(`Variants: ${Object.keys(variantMap).length} products`);
+  console.log(`Modifiers: ${Object.keys(modifierMap).length} products`);
 }
 
-run().catch(err => {
+syncMenu().catch(err => {
   console.error('Sync failed:', err.message);
   process.exit(1);
 });
