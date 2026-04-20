@@ -81,10 +81,12 @@ async function run() {
     process.exit(0);
   }
   
-  // Check if image exists
-  const imagePath = menu.image ? join(__dirname, 'public', menu.image) : null;
+  // Check if local image exists (by menu ID slug)
+  const localImagePath = join(IMAGES_DIR, `${menu.id}.jpg`);
+  const localImagePng = join(IMAGES_DIR, `${menu.id}.png`);
+  const imagePath = existsSync(localImagePath) ? localImagePath : existsSync(localImagePng) ? localImagePng : null;
   
-  if (!imagePath || !existsSync(imagePath)) {
+  if (!imagePath) {
     // No image — send text only
     const caption = `${menu.name} — ${formatPrice(menu.price)}`;
     console.log(JSON.stringify({ ok: true, sent: 'text', menu: menu.name, hasImage: false }));
