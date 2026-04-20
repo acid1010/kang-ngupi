@@ -37,6 +37,90 @@
   },
   "menus": [
     {
+      "id": "rice-bowl-ikan-dori-saus-mentai",
+      "pawoonId": "5fdd6970-c294-11f0-8a70-9b6a4a9f7dc3",
+      "name": "Rice Bowl Ikan Dori Saus Mentai",
+      "category": "Rice Bowls & Noodles",
+      "price": 25000,
+      "sku": "FOD-26D",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "bihun-goreng-seafood",
+      "pawoonId": "aa8890e0-c292-11f0-b143-338d6046130f",
+      "name": "Bihun Goreng Seafood",
+      "category": "Rice Bowls & Noodles",
+      "price": 27000,
+      "sku": "FOD-26C",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "rice-bowl-cumi-sambal-matah",
+      "pawoonId": "fe5ede00-c28f-11f0-adb3-2958c664da6f",
+      "name": "Rice Bowl Cumi Sambal Matah",
+      "category": "Rice Bowls & Noodles",
+      "price": 25000,
+      "sku": "FOD-26A",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "nasi-goreng-spesial-ngupingupi",
+      "pawoonId": "517cb780-c28f-11f0-8a56-bb8b965b0c02",
+      "name": "Nasi Goreng Spesial ngupi.ngupi",
+      "category": "Nasi Goreng",
+      "price": 25000,
+      "sku": "FOD-16A",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "tahu-baso-saos-mentai",
+      "pawoonId": "a7fd60a0-c28d-11f0-b649-3562d0db4e30",
+      "name": "Tahu Baso Saos Mentai",
+      "category": "Makanan Ringan",
+      "price": 23000,
+      "sku": "FOD-35B",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "nacos-bolognaise-sauce",
+      "pawoonId": "701d9140-c28d-11f0-8374-77051e5933b2",
+      "name": "Nacos Bolognaise Sauce",
+      "category": "Makanan Ringan",
+      "price": 23000,
+      "sku": "FOD-35A",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "chamomile-calming-mint-tea",
+      "pawoonId": "ed642780-c1d1-11f0-8cca-f35581970aa9",
+      "name": "Chamomile Calming Mint Tea",
+      "category": "Tea",
+      "price": 20000,
+      "sku": "NCF-28D",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
       "id": "chamomile-lime-iced-tea",
       "pawoonId": "6187caa0-c1d1-11f0-a57b-8daace07c997",
       "name": "Chamomile Lime Iced Tea",
@@ -46,9 +130,178 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "chamomile lime iced tea"
       ]
+    },
+    {
+      "id": "butterscotch-cream-coffee",
+      "pawoonId": "45073b00-c1d0-11f0-ba3a-d36426a77a6c",
+      "name": "Butterscotch Cream Coffee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "sku": "CFE-17A",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "kopi-sanger",
+      "pawoonId": "dcdfcc60-c1cc-11f0-a1bf-073c2c27de40",
+      "name": "Kopi Sanger",
+      "category": "Espresso & Manual Brew",
+      "price": 18000,
+      "sku": "CFE-09A",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "immune-booster-juice",
+      "pawoonId": "233317c0-c1cc-11f0-b77a-59e24c084a44",
+      "name": "Immune Booster Juice",
+      "category": "Fresh & Healthy",
+      "price": 20000,
+      "sku": "NCF-26E",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "chocolate-peanut-butter-smoothie",
+      "pawoonId": "c57c7290-c1ca-11f0-8bfb-3fafd58465e5",
+      "name": "Chocolate Peanut Butter Smoothie",
+      "category": "Fresh & Healthy",
+      "price": 25000,
+      "sku": "NCF-26D",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "kurma-smoothie",
+      "pawoonId": "26fd7e40-c12d-11f0-a54b-b5e8a13f1c2f",
+      "name": "Kurma Smoothie",
+      "category": "Fresh & Healthy",
+      "price": 23000,
+      "sku": "NCF-06B",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "lotus-biscoff-frappuccino",
+      "pawoonId": "ed82b620-c129-11f0-8307-65f577f3b7b5",
+      "name": "Lotus Biscoff Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 27000,
+      "sku": "CFE-26D",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "cinnamon-greek-frappuccino",
+      "pawoonId": "52fee260-c129-11f0-a4d7-d3f614c02711",
+      "name": "Cinnamon Greek Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 25000,
+      "sku": "CFE-26C",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "choco-mint-frappuccino",
+      "pawoonId": "c44ca900-c042-11f0-aa92-7d8c2a9d4dca",
+      "name": "Choco Mint Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 27000,
+      "sku": "CFE-26B",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "salted-caramel-frappuccino",
+      "pawoonId": "a51601e0-c042-11f0-a5fa-2b2ec1ea948a",
+      "name": "Salted Caramel Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 25000,
+      "sku": "CFE-26A",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "pop-corn-choco-blend",
+      "pawoonId": "883a9850-c03f-11f0-935b-b5ebe96fff54",
+      "name": "Pop Corn Choco Blend",
+      "category": "Chocolate",
+      "price": 25000,
+      "sku": "NCF-20B",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "chocolate-strawberry-cream",
+      "pawoonId": "2744a690-c03f-11f0-af8b-b7ae0ad7d567",
+      "name": "Chocolate Strawberry Cream",
+      "category": "Chocolate",
+      "price": 25000,
+      "sku": "NCF-20A",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "salted-caramel-coffee",
+      "pawoonId": "72a35040-8ebc-11f0-b523-9f2cd4c72007",
+      "name": "Salted Caramel Coffee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "sku": "CFE-21B",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "tiramisu-cream-coffee",
+      "pawoonId": "1ac8a920-8ebc-11f0-b31a-85a83aa9aa78",
+      "name": "Tiramisu Cream Coffee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "sku": "CFE-20B",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "matcha-strawberry-cream",
+      "pawoonId": "7fbc72a0-8ebb-11f0-9b6f-217134bddea5",
+      "name": "Matcha Strawberry Cream",
+      "category": "Tea",
+      "price": 23000,
+      "sku": "NCF-28B",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
     },
     {
       "id": "chicken-katsu",
@@ -60,6 +313,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Chicken Katsu - Kentang",
@@ -86,6 +340,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "es batu + cup",
         "batu + cup"
@@ -101,6 +356,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120060.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "nasi"
       ]
@@ -115,6 +371,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Topping Minuman - Ice Cream (Float)",
@@ -151,6 +408,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119679.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -173,6 +431,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119805.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "lotus biscoff biscuit"
       ]
@@ -187,6 +446,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119665.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Air Mineral - Biasa",
@@ -213,6 +473,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Ice Cream - Vanilla",
@@ -244,9 +505,22 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120248.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "udang keju lumer"
       ]
+    },
+    {
+      "id": "churros-with-choco-sauce",
+      "pawoonId": "b19f7800-23f3-11f0-941b-5f1752b2af1d",
+      "name": "Churros with Choco Sauce",
+      "category": "Dessert",
+      "price": 17000,
+      "sku": "FOD-38",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
     },
     {
       "id": "roti-karamel-ice-cream",
@@ -258,6 +532,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "roti karamel ice cream"
       ]
@@ -272,6 +547,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111458.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "banana split ice cream"
       ]
@@ -286,6 +562,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "pisang goreng crispy"
       ]
@@ -300,6 +577,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120188.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Pisang dan Roti Bakar - Roti Bakar",
@@ -334,6 +612,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120232.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "sosis barbeque kentang"
       ]
@@ -348,6 +627,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120152.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Kentang Goreng - Kentang Goreng",
@@ -384,6 +664,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120131.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Dimsum - Ayam",
@@ -415,6 +696,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120206.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "potato cheese ball"
       ]
@@ -429,6 +711,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120098.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "cireng bumbu rujak"
       ]
@@ -443,6 +726,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120168.jpeg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "pempek pasundan"
       ]
@@ -457,6 +741,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674920.jpeg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "rice bowl telor sosis"
       ]
@@ -471,6 +756,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674936.jpeg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "rice bowl ayam teriyaki"
       ]
@@ -485,6 +771,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674950.jpeg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "rice bowl ayam lada hitam"
       ]
@@ -499,6 +786,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "rice bowl ayam asam manis"
       ]
@@ -513,6 +801,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674969.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Indomie Telor Sosis - Indomie Rebus - Tidak Pedas",
@@ -569,6 +858,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Mie Ramen Instan - Pedas Sedang",
@@ -600,6 +890,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Bakmi Godok Jawa - Tidak Pedas",
@@ -636,6 +927,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Bakmi Goreng Jawa - Tidak Pedas",
@@ -672,6 +964,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674370.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Nasi Goreng Seafood - Tidak Pedas",
@@ -708,6 +1001,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674395.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Nasi Goreng Hongkong - Tidak Pedas",
@@ -752,6 +1046,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674409.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Nasi Goreng Kampung - Tidak Pedas",
@@ -796,6 +1091,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674844.jpeg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Nasi Goreng Kambing - Tidak Pedas",
@@ -832,6 +1128,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674867.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Nasi Goreng Chicken Katsu - Pedas Sedang",
@@ -871,6 +1168,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111886.jpg",
       "description": "Kopi Susu yang memiliki cita rasa khas Kedai Ngupi Ngupi dengan komposisi bahan yang berkualitas dan seimbang",
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Es Kopi Susu Original - Less Sugar - Less Ice",
@@ -944,6 +1242,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "nasi telor fuyunghai"
       ]
@@ -958,6 +1257,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118036.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Nasi Udang Bumbu Saos Padang - Pedas Sedang",
@@ -989,6 +1289,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118051.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "nasi udang bumbu asam manis"
       ]
@@ -1003,6 +1304,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118066.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Nasi Tongseng Kambing - Pedas Sedang",
@@ -1034,6 +1336,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118079.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Nasi Tongseng Sapi - Pedas Sedang",
@@ -1065,6 +1368,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118093.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Nasi Tongseng Ayam - Pedas Sedang",
@@ -1096,6 +1400,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118123.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "nasi soto bandung"
       ]
@@ -1110,6 +1415,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118164.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Nasi Ayam Rica-rica - Pedas Sedang",
@@ -1132,6 +1438,30 @@
       ]
     },
     {
+      "id": "spaghetti-bolognaise",
+      "pawoonId": "263a7110-23cc-11f0-9d63-93f16eb214e8",
+      "name": "Spaghetti Bolognaise",
+      "category": "Western Foods",
+      "price": 23000,
+      "sku": "FOD-05",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
+      "id": "fish-chips-with-tartar-sauce",
+      "pawoonId": "030d7150-23cc-11f0-aec6-73342e470544",
+      "name": "Fish & Chips with Tartar Sauce",
+      "category": "Western Foods",
+      "price": 35000,
+      "sku": "FOD-04",
+      "image": null,
+      "description": null,
+      "available": false,
+      "sellable": false
+    },
+    {
       "id": "wagyu-steak",
       "pawoonId": "149401c0-23c8-11f0-9c0e-df474fe5a14f",
       "name": "Wagyu Steak",
@@ -1141,6 +1471,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Wagyu Steak - Barbeque - Nasi",
@@ -1185,6 +1516,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Chicken Steak - Kentang - Barbeque",
@@ -1221,6 +1553,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Chicken Cordon Bleu - Kentang",
@@ -1247,6 +1580,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Matcha Latte - Hot",
@@ -1283,6 +1617,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Honey Milk Tea - Hot",
@@ -1309,6 +1644,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "lychee iced tea"
       ]
@@ -1323,6 +1659,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Lemon Tea - Hot",
@@ -1349,6 +1686,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Special Tea - Hot - No Sugar",
@@ -1405,6 +1743,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Reguler Tea - Hot - No Sugar",
@@ -1467,6 +1806,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746080710.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -1489,6 +1829,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "double choco chips"
       ]
@@ -1503,6 +1844,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746080732.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -1525,6 +1867,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746080747.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -1547,6 +1890,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746080882.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Single Origin Chocolate - Hot",
@@ -1581,6 +1925,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746080788.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Chocolate Cinnamon - Hot",
@@ -1615,6 +1960,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757315371.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Red Velvet Latte - Hot",
@@ -1649,6 +1995,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746080806.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Chocolate - Hot",
@@ -1688,6 +2035,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746159210.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -1710,6 +2058,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757315605.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -1732,6 +2081,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -1754,6 +2104,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757316124.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -1776,6 +2127,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757315916.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -1799,6 +2151,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757316217.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -1821,6 +2174,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757316182.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "cookies & cream"
       ]
@@ -1835,6 +2189,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757316158.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -1857,6 +2212,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746112934.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -1879,6 +2235,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746113261.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "strawberry milky latte"
       ]
@@ -1893,6 +2250,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746117587.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "green leaf juice"
       ]
@@ -1907,6 +2265,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746117802.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -1929,6 +2288,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746117979.jpeg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "blue lagoon mocktail"
       ]
@@ -1943,6 +2303,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746117638.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "best green smoothie"
       ]
@@ -1957,6 +2318,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119639.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Kopi Susu Botol Pop Corn - 250 ml",
@@ -1996,6 +2358,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119608.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Kopi Susu Botol Mint - 250 ml",
@@ -2035,6 +2398,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119439.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Kopi Susu Botol Cheese - 250 ml",
@@ -2074,6 +2438,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119466.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Kopi Susu Botol Cinnamon - 250 ml",
@@ -2113,6 +2478,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119486.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Kopi Susu Botol Karamel - 250 ml",
@@ -2152,6 +2518,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119624.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Kopi Susu Botol Original - 250 ml",
@@ -2191,6 +2558,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111529.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "vanilla frappuccino"
       ]
@@ -2205,6 +2573,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111603.jpeg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "oreo frappuccino"
       ]
@@ -2219,6 +2588,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111704.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "mocha frappuccino"
       ]
@@ -2233,6 +2603,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111723.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "hazelnut frappuccino"
       ]
@@ -2247,6 +2618,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111738.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "choco cookies frappuccino"
       ]
@@ -2261,6 +2633,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111753.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "caramel frappuccino"
       ]
@@ -2275,6 +2648,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "tropical coffee mocktail"
       ]
@@ -2289,6 +2663,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Caramel Macchiatto - Hot",
@@ -2315,6 +2690,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -2337,6 +2713,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Topping Minuman",
@@ -2359,6 +2736,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "lotus biscoff iced coffee"
       ]
@@ -2373,6 +2751,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "lemonade iced coffee"
       ]
@@ -2387,6 +2766,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "kopi susu madu jahe panas"
       ]
@@ -2401,6 +2781,7 @@
       "image": null,
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "cappuccino hot creme brulee",
         "cappuccino",
@@ -2417,6 +2798,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111907.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Es Kopi Susu Dalgona - Less Sugar",
@@ -2449,6 +2831,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111924.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Es Kopi Susu Cream Cheese - Less Sugar",
@@ -2481,6 +2864,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111946.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Es Kopi Susu Float - Less Sugar",
@@ -2513,6 +2897,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746158986.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Mochaccino - Hot",
@@ -2547,6 +2932,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120311.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "aliases": [
         "caffe bon bon"
       ]
@@ -2561,6 +2947,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120577.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Caffe Latte - Hot - No Syrup",
@@ -2630,6 +3017,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111982.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Vietnam Drip - Hot",
@@ -2656,6 +3044,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746157506.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Caffe Macchiato - Hot - No Sugar",
@@ -2712,6 +3101,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746158869.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Cappuccino - Hot - No Sugar",
@@ -2771,6 +3161,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746112480.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "V60 Single Origin - Hot",
@@ -2797,6 +3188,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746112821.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Extra Shot Espresso",
@@ -2819,6 +3211,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746112004.jpg",
       "description": null,
       "available": true,
+      "sellable": true,
       "modifiers": [
         {
           "name": "Extra Shot Espresso",
@@ -2841,6 +3234,7 @@
       "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746112019.jpg",
       "description": "Kopi hitam yang berasal dari espresso dan tambahan air mineral",
       "available": true,
+      "sellable": true,
       "variants": [
         {
           "name": "Americano - Hot - No Sugar",
@@ -2898,13 +3292,13 @@
       ]
     }
   ],
-  "lastSyncedAt": "2026-04-20T06:21:11.175Z",
+  "lastSyncedAt": "2026-04-20T06:27:05.961Z",
   "syncSource": "pawoon-v2",
   "categories": [
     {
       "id": "bf2a8c80-227b-11f0-9d88-c9e89868a3fb",
       "name": "Espresso & Manual Brew",
-      "itemCount": 5
+      "itemCount": 6
     },
     {
       "id": "55ef51f0-22b5-11f0-970d-854a22dc6d7c",
@@ -2924,17 +3318,17 @@
     {
       "id": "0360daa0-2371-11f0-bd97-9f2dc7b6ab5f",
       "name": "Signature Coffee",
-      "itemCount": 8
+      "itemCount": 11
     },
     {
       "id": "55d80260-2373-11f0-8c6a-579acc173d3e",
       "name": "Es Kopi Blend",
-      "itemCount": 6
+      "itemCount": 10
     },
     {
       "id": "bef1e990-2396-11f0-a756-05ffe487927b",
       "name": "Fresh & Healthy",
-      "itemCount": 6
+      "itemCount": 9
     },
     {
       "id": "0183bce0-239d-11f0-afe3-290c9db56300",
@@ -2944,17 +3338,17 @@
     {
       "id": "01421bd0-239e-11f0-9163-31b4ab9c6547",
       "name": "Chocolate",
-      "itemCount": 8
+      "itemCount": 10
     },
     {
       "id": "9fabb400-23c3-11f0-9486-a3e3bceaa5ff",
       "name": "Tea",
-      "itemCount": 7
+      "itemCount": 9
     },
     {
       "id": "e67bae60-23c6-11f0-8534-11153528f41c",
       "name": "Western Foods",
-      "itemCount": 4
+      "itemCount": 6
     },
     {
       "id": "3f5d19d0-23cc-11f0-9aa0-8f30dbac453c",
@@ -2964,22 +3358,22 @@
     {
       "id": "7c34eb80-23dd-11f0-b515-03850605e0e6",
       "name": "Nasi Goreng",
-      "itemCount": 5
+      "itemCount": 6
     },
     {
       "id": "e64eb920-23e1-11f0-9420-c3ea158194fd",
       "name": "Rice Bowls & Noodles",
-      "itemCount": 8
+      "itemCount": 11
     },
     {
       "id": "c0958e80-23ea-11f0-b621-99f209683c70",
       "name": "Makanan Ringan",
-      "itemCount": 9
+      "itemCount": 11
     },
     {
       "id": "922885c0-23f2-11f0-9932-17b7edfcfa24",
       "name": "Dessert",
-      "itemCount": 3
+      "itemCount": 4
     },
     {
       "id": "67522f50-23f4-11f0-9c5d-09935df75d15",
@@ -2987,6 +3381,6 @@
       "itemCount": 6
     }
   ],
-  "totalItems": 106,
+  "totalItems": 130,
   "totalCategories": 17
 }

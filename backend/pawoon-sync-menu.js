@@ -112,9 +112,9 @@ async function syncMenu() {
   }
   console.log(`Found ${categories.length} categories`);
 
-  // Fetch all sellable products
+  // Fetch ALL products (including non-sellable for stock tracking)
   console.log('Fetching products...');
-  const products = await fetchPaginated(token, `/products?outlet_id=${PAWOON_OUTLET_ID}&is_sellable=true`);
+  const products = await fetchPaginated(token, `/products?outlet_id=${PAWOON_OUTLET_ID}`);
   console.log(`Found ${products.length} sellable products`);
 
   // Load existing menu for alias preservation
@@ -169,7 +169,8 @@ async function syncMenu() {
       sku: p.sku || null,
       image: p.image || null,
       description: p.description || null,
-      available: p.sellable !== false,
+      available: p.sellable === true,
+      sellable: p.sellable === true,
     };
 
     // Add variants
