@@ -37,1136 +37,1416 @@
   },
   "menus": [
     {
-      "id": "caramel-frappuccino",
-      "name": "Caramel Frappuccino",
-      "aliases": [
-        "caramel frappuccino"
-      ],
-      "price": 25000,
-      "pawoonId": "6e04efe0-2373-11f0-90d1-7d5dc334a1a1",
-      "category": "blend",
-      "image": "/menu-images/caramel-frappuccino.jpg"
-    },
-    {
-      "id": "choco-cookies-frappuccino",
-      "name": "Choco Cookies Frappuccino",
-      "aliases": [
-        "choco cookies frappuccino"
-      ],
-      "price": 27000,
-      "pawoonId": "8b944ec0-2373-11f0-bd85-b362a7936ed3",
-      "category": "blend",
-      "image": "/menu-images/choco-cookies-frappuccino.jpg"
-    },
-    {
-      "id": "hazelnut-frappuccino",
-      "name": "Hazelnut Frappuccino",
-      "aliases": [
-        "hazelnut frappuccino"
-      ],
-      "price": 25000,
-      "pawoonId": "c39b1110-2373-11f0-ad7f-a3d1ddd06ce0",
-      "category": "blend",
-      "image": "/menu-images/hazelnut-frappuccino.jpg"
-    },
-    {
-      "id": "mocha-frappuccino",
-      "name": "Mocha Frappuccino",
-      "aliases": [
-        "mocha frappuccino"
-      ],
-      "price": 25000,
-      "pawoonId": "e7eb0b30-2373-11f0-9f92-e969dee968bc",
-      "category": "blend",
-      "image": "/menu-images/mocha-frappuccino.jpg"
-    },
-    {
-      "id": "oreo-frappuccino",
-      "name": "Oreo Frappuccino",
-      "aliases": [
-        "oreo frappuccino"
-      ],
-      "price": 27000,
-      "pawoonId": "0755e0a0-2374-11f0-96b3-59f352513996",
-      "category": "blend",
-      "image": "/menu-images/oreo-frappuccino.jpeg"
-    },
-    {
-      "id": "vanilla-frappuccino",
-      "name": "Vanilla Frappuccino",
-      "aliases": [
-        "vanilla frappuccino"
-      ],
-      "price": 25000,
-      "pawoonId": "21ba5350-2374-11f0-9659-3312c314587e",
-      "category": "blend",
-      "image": "/menu-images/vanilla-frappuccino.jpg"
-    },
-    {
-      "id": "choco-pandan-latte",
-      "name": "Choco Pandan Latte",
-      "aliases": [
-        "choco pandan latte"
-      ],
-      "price": 23000,
-      "pawoonId": "4c9ac530-23c3-11f0-b001-15100a669de2",
-      "category": "chocolate",
-      "image": "/menu-images/choco-pandan-latte.jpg"
-    },
-    {
-      "id": "chocolate",
-      "name": "Chocolate",
-      "aliases": [
-        "chocolate",
-        "coklat",
-        "cokelat",
-        "hot chocolate",
-        "es coklat",
-        "es cokelat"
-      ],
-      "price": 18000,
-      "pawoonId": "175ee0b0-239e-11f0-9a30-95624376ca0f",
-      "category": "chocolate",
-      "image": "/menu-images/chocolate.jpg"
-    },
-    {
-      "id": "chocolate-cinnamon",
-      "name": "Chocolate Cinnamon",
-      "aliases": [
-        "chocolate cinnamon"
-      ],
+      "id": "chamomile-lime-iced-tea",
+      "pawoonId": "6187caa0-c1d1-11f0-a57b-8daace07c997",
+      "name": "Chamomile Lime Iced Tea",
+      "category": "Tea",
       "price": 20000,
-      "pawoonId": "3d539a60-23be-11f0-845d-0beab639828e",
-      "category": "chocolate",
-      "image": "/menu-images/chocolate-cinnamon.jpg"
+      "sku": "NCF-28C",
+      "image": null,
+      "description": null,
+      "available": true,
+      "aliases": [
+        "chamomile lime iced tea"
+      ]
     },
     {
-      "id": "double-choco-chips",
-      "name": "Double Choco Chips",
-      "aliases": [
-        "double choco chips"
-      ],
-      "price": 23000,
-      "pawoonId": "68af9390-23c3-11f0-becb-ebcaf223a810",
-      "category": "chocolate"
-    },
-    {
-      "id": "hazelnut-choco-blend",
-      "name": "Hazelnut Choco Blend",
-      "aliases": [
-        "hazelnut choco blend"
-      ],
-      "price": 23000,
-      "pawoonId": "8c8390d0-23c3-11f0-8246-9d3e7eb529c5",
-      "category": "chocolate",
-      "image": "/menu-images/hazelnut-choco-blend.jpg"
-    },
-    {
-      "id": "ice-choco-mint",
-      "name": "Ice Choco Mint",
-      "aliases": [
-        "ice choco mint"
-      ],
-      "price": 23000,
-      "pawoonId": "025b6760-23c3-11f0-b199-29cf2b9a1460",
-      "category": "chocolate",
-      "image": "/menu-images/ice-choco-mint.jpg"
-    },
-    {
-      "id": "red-velvet-latte",
-      "name": "Red Velvet Latte",
-      "aliases": [
-        "red velvet latte"
-      ],
-      "price": 18000,
-      "pawoonId": "3ee9f310-239e-11f0-81b8-dfa8f32e0b9d",
-      "category": "chocolate",
-      "image": "/menu-images/red-velvet-latte.jpg"
-    },
-    {
-      "id": "single-origin-chocolate",
-      "name": "Single Origin Chocolate",
-      "aliases": [
-        "single origin chocolate"
-      ],
+      "id": "chicken-katsu",
+      "pawoonId": "a10b73c0-2d89-11f0-93ba-d1a429374c82",
+      "name": "Chicken Katsu",
+      "category": "Western Foods",
       "price": 25000,
-      "pawoonId": "81208160-23be-11f0-a0b7-a92ae6218ca3",
-      "category": "chocolate",
-      "image": "/menu-images/single-origin-chocolate.jpg"
+      "sku": "FOD30-1",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Chicken Katsu - Kentang",
+          "price": 25000,
+          "sku": "FOD30-1-1"
+        },
+        {
+          "name": "Chicken Katsu - Nasi",
+          "price": 25000,
+          "sku": "FOD30-1-2"
+        }
+      ],
+      "aliases": [
+        "chicken katsu"
+      ]
     },
     {
-      "id": "affogato",
-      "name": "Affogato",
+      "id": "es-batu-cup",
+      "pawoonId": "53d78870-2d88-11f0-a41d-e9d318162137",
+      "name": "Es Batu + Cup",
+      "category": "Lain-lain",
+      "price": 2000,
+      "sku": "LAN08",
+      "image": null,
+      "description": null,
+      "available": true,
       "aliases": [
-        "affogato"
-      ],
-      "price": 20000,
-      "pawoonId": "20324010-22c2-11f0-abf7-3bc5232f32b8",
-      "category": "espresso",
-      "image": "/menu-images/affogato.jpg"
+        "es batu + cup",
+        "batu + cup"
+      ]
     },
     {
-      "id": "americano",
-      "name": "Americano",
+      "id": "nasi",
+      "pawoonId": "2a3265f0-23f5-11f0-89a3-9139bcf3d8e9",
+      "name": "Nasi",
+      "category": "Lain-lain",
+      "price": 5000,
+      "sku": "LAN-06",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120060.jpg",
+      "description": null,
+      "available": true,
       "aliases": [
-        "americano",
-        "amer",
-        "kopi amer"
-      ],
-      "price": 17000,
-      "pawoonId": "25425460-227c-11f0-b74c-f1bac691bc7c",
-      "category": "espresso",
-      "image": "/menu-images/americano.jpg"
+        "nasi"
+      ]
     },
     {
-      "id": "espresso",
-      "name": "Espresso",
-      "aliases": [
-        "espresso"
+      "id": "topping-minuman",
+      "pawoonId": "04d07f10-23f5-11f0-bf6e-e3f5fc81bc4f",
+      "name": "Topping Minuman",
+      "category": "Lain-lain",
+      "price": 4000,
+      "sku": "LAN-05",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Topping Minuman - Ice Cream (Float)",
+          "price": 4000,
+          "sku": "LAN-05-1"
+        },
+        {
+          "name": "Topping Minuman - Cream Cheese",
+          "price": 4000,
+          "sku": "LAN-05-2"
+        },
+        {
+          "name": "Topping Minuman - Dalgona",
+          "price": 4000,
+          "sku": "LAN-05-3"
+        },
+        {
+          "name": "Topping Minuman - Whipped Cream",
+          "price": 4000,
+          "sku": "LAN-05-4"
+        }
       ],
+      "aliases": [
+        "topping minuman"
+      ]
+    },
+    {
+      "id": "chocolate-single-origin-sachet",
+      "pawoonId": "c7586720-23f4-11f0-b8e9-a3409a62c9a7",
+      "name": "Chocolate Single Origin Sachet",
+      "category": "Lain-lain",
+      "price": 18000,
+      "sku": "LAN-03",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119679.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "chocolate single origin sachet"
+      ]
+    },
+    {
+      "id": "lotus-biscoff-biscuit",
+      "pawoonId": "9d7ae150-23f4-11f0-a3a2-5de8d815dfcb",
+      "name": "Lotus Biscoff Biscuit",
+      "category": "Lain-lain",
+      "price": 2000,
+      "sku": "LAN-02",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119805.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "lotus biscoff biscuit"
+      ]
+    },
+    {
+      "id": "air-mineral",
+      "pawoonId": "83134010-23f4-11f0-9528-f92d5ff4f1e6",
+      "name": "Air Mineral",
+      "category": "Lain-lain",
+      "price": 5000,
+      "sku": "LAN-01",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119665.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Air Mineral - Biasa",
+          "price": 5000,
+          "sku": "LAN-01-1"
+        },
+        {
+          "name": "Air Mineral - Dingin",
+          "price": 5000,
+          "sku": "LAN-01-2"
+        }
+      ],
+      "aliases": [
+        "air mineral"
+      ]
+    },
+    {
+      "id": "ice-cream",
+      "pawoonId": "5096aad0-23f4-11f0-8af0-ff0391d25fd2",
+      "name": "Ice Cream",
+      "category": "Dessert",
       "price": 15000,
-      "pawoonId": "5defd4c0-22c2-11f0-9722-b37fa3aa82a9",
-      "category": "espresso",
-      "image": "/menu-images/espresso.jpg"
+      "sku": "FOD-40",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Ice Cream - Vanilla",
+          "price": 15000,
+          "sku": "FOD-40-1"
+        },
+        {
+          "name": "Ice Cream - Strawberry",
+          "price": 15000,
+          "sku": "FOD-40-2"
+        },
+        {
+          "name": "Ice Cream - Cokelat",
+          "price": 15000,
+          "sku": "FOD-40-3"
+        }
+      ],
+      "aliases": [
+        "ice cream"
+      ]
     },
     {
-      "id": "v60-single-origin",
-      "name": "V60 Single Origin",
-      "aliases": [
-        "v60 single origin"
-      ],
+      "id": "udang-keju-lumer",
+      "pawoonId": "ecd6e100-23f3-11f0-9af6-3dcd4d327806",
+      "name": "Udang Keju Lumer",
+      "category": "Makanan Ringan",
       "price": 23000,
-      "pawoonId": "374a14b0-22c3-11f0-ae60-b9c113229e69",
-      "category": "espresso",
-      "image": "/menu-images/v60-single-origin.jpg"
+      "sku": "FOD-34.1",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120248.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "udang keju lumer"
+      ]
     },
     {
-      "id": "vietnam-drip",
-      "name": "Vietnam Drip",
+      "id": "roti-karamel-ice-cream",
+      "pawoonId": "50643ed0-23f3-11f0-b989-9370c55f4b41",
+      "name": "Roti Karamel Ice Cream",
+      "category": "Dessert",
+      "price": 23000,
+      "sku": "FOD-36",
+      "image": null,
+      "description": null,
+      "available": true,
       "aliases": [
-        "vietnam drip"
-      ],
-      "price": 18000,
-      "pawoonId": "dd41a410-2369-11f0-8ac4-c300c16ceb70",
-      "category": "espresso",
-      "image": "/menu-images/vietnam-drip.jpg"
+        "roti karamel ice cream"
+      ]
     },
     {
-      "id": "best-green-smoothie",
-      "name": "Best Green Smoothie",
+      "id": "banana-split-ice-cream",
+      "pawoonId": "a08d8990-23f2-11f0-9926-05567fb07317",
+      "name": "Banana Split Ice Cream",
+      "category": "Dessert",
+      "price": 23000,
+      "sku": "FOD-35",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111458.jpg",
+      "description": null,
+      "available": true,
       "aliases": [
-        "best green smoothie"
-      ],
-      "price": 20000,
-      "pawoonId": "d56c3830-2396-11f0-8416-3176cc58c23c",
-      "category": "fresh",
-      "image": "/menu-images/best-green-smoothie.jpg"
+        "banana split ice cream"
+      ]
     },
     {
-      "id": "blue-lagoon-mocktail",
-      "name": "Blue Lagoon Mocktail",
-      "aliases": [
-        "blue lagoon mocktail"
-      ],
-      "price": 20000,
-      "pawoonId": "b15e93c0-239b-11f0-9448-55a4217d47b2",
-      "category": "fresh",
-      "image": "/menu-images/blue-lagoon-mocktail.jpeg"
-    },
-    {
-      "id": "chocolate-smoothie",
-      "name": "Chocolate Smoothie",
-      "aliases": [
-        "chocolate smoothie"
-      ],
-      "price": 20000,
-      "pawoonId": "d645f540-239b-11f0-8cd7-6dd2a77d93d4",
-      "category": "fresh",
-      "image": "/menu-images/chocolate-smoothie.jpg"
-    },
-    {
-      "id": "green-leaf-juice",
-      "name": "Green Leaf Juice",
-      "aliases": [
-        "green leaf juice"
-      ],
+      "id": "pisang-goreng-crispy",
+      "pawoonId": "f1abe9c0-23ef-11f0-a47d-01f087837ac9",
+      "name": "Pisang Goreng Crispy",
+      "category": "Makanan Ringan",
       "price": 17000,
-      "pawoonId": "fc26ce70-239b-11f0-bf25-63133d9cb1d1",
-      "category": "fresh",
-      "image": "/menu-images/green-leaf-juice.jpg"
+      "sku": "FOD-34",
+      "image": null,
+      "description": null,
+      "available": true,
+      "aliases": [
+        "pisang goreng crispy"
+      ]
     },
     {
-      "id": "strawberry-milky-latte",
-      "name": "Strawberry Milky Latte",
-      "aliases": [
-        "strawberry milky latte"
+      "id": "pisang-dan-roti-bakar",
+      "pawoonId": "d4fce090-23ef-11f0-8269-6bd872683994",
+      "name": "Pisang dan Roti Bakar",
+      "category": "Makanan Ringan",
+      "price": 14000,
+      "sku": "FOD-33",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120188.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Pisang dan Roti Bakar - Roti Bakar",
+          "price": 14000,
+          "sku": "FOD-33-1"
+        },
+        {
+          "name": "Pisang dan Roti Bakar - Pisang Bakar",
+          "price": 14000,
+          "sku": "FOD-33-2"
+        }
       ],
-      "price": 20000,
-      "pawoonId": "37960230-239c-11f0-84e8-4524b0905560",
-      "category": "fresh",
-      "image": "/menu-images/strawberry-milky-latte.jpg"
+      "modifiers": [
+        {
+          "name": "Topping Roti & Pisang",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "pisang dan roti bakar"
+      ]
     },
     {
-      "id": "strawberry-smoothie",
-      "name": "Strawberry Smoothie",
-      "aliases": [
-        "strawberry smoothie"
-      ],
-      "price": 20000,
-      "pawoonId": "51b2ce60-239c-11f0-a554-b78b21adf3d1",
-      "category": "fresh",
-      "image": "/menu-images/strawberry-smoothie.jpg"
-    },
-    {
-      "id": "kopi-susu-botol-cheese",
-      "name": "Kopi Susu Botol Cheese",
-      "aliases": [
-        "kopi susu botol cheese"
-      ],
-      "price": 25000,
-      "pawoonId": "bb9d6080-2395-11f0-bab3-cdeb7e88caf1",
-      "category": "kopi-botol",
-      "image": "/menu-images/kopi-susu-botol-cheese.jpg"
-    },
-    {
-      "id": "kopi-susu-botol-cinnamon",
-      "name": "Kopi Susu Botol Cinnamon",
-      "aliases": [
-        "kopi susu botol cinnamon"
-      ],
-      "price": 25000,
-      "pawoonId": "8e5d0310-2395-11f0-921f-19de9851f444",
-      "category": "kopi-botol",
-      "image": "/menu-images/kopi-susu-botol-cinnamon.jpg"
-    },
-    {
-      "id": "kopi-susu-botol-karamel",
-      "name": "Kopi Susu Botol Karamel",
-      "aliases": [
-        "kopi susu botol karamel"
-      ],
-      "price": 25000,
-      "pawoonId": "50726650-2395-11f0-8d6e-db8a24cb3cea",
-      "category": "kopi-botol",
-      "image": "/menu-images/kopi-susu-botol-karamel.jpg"
-    },
-    {
-      "id": "kopi-susu-botol-mint",
-      "name": "Kopi Susu Botol Mint",
-      "aliases": [
-        "kopi susu botol mint"
-      ],
-      "price": 25000,
-      "pawoonId": "ea1fad80-2395-11f0-9e69-5bb7fde9d59f",
-      "category": "kopi-botol",
-      "image": "/menu-images/kopi-susu-botol-mint.jpg"
-    },
-    {
-      "id": "kopi-susu-botol-original",
-      "name": "Kopi Susu Botol Original",
-      "aliases": [
-        "kopi susu botol original"
-      ],
-      "price": 20000,
-      "pawoonId": "86346e10-2394-11f0-874f-05ba6d445419",
-      "category": "kopi-botol",
-      "image": "/menu-images/kopi-susu-botol-original.jpg"
-    },
-    {
-      "id": "kopi-susu-botol-pop-corn",
-      "name": "Kopi Susu Botol Pop Corn",
-      "aliases": [
-        "kopi susu botol pop corn"
-      ],
-      "price": 25000,
-      "pawoonId": "7ff92760-2396-11f0-8bbf-c9a338427a66",
-      "category": "kopi-botol",
-      "image": "/menu-images/kopi-susu-botol-pop-corn.jpg"
-    },
-    {
-      "id": "es-kopi-susu-cream-cheese",
-      "name": "Es Kopi Susu Cream Cheese",
-      "aliases": [
-        "es kopi susu cream cheese",
-        "kopi susu cream cheese"
-      ],
+      "id": "sosis-barbeque-kentang",
+      "pawoonId": "130d2af0-23ec-11f0-890e-87d665b3794d",
+      "name": "Sosis Barbeque Kentang",
+      "category": "Makanan Ringan",
       "price": 23000,
-      "pawoonId": "a75c0bb0-2370-11f0-9946-ffbb304d7fd6",
-      "category": "kopi-susu",
-      "image": "/menu-images/es-kopi-susu-cream-cheese.jpg"
+      "sku": "FOD-32",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120232.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "sosis barbeque kentang"
+      ]
     },
     {
-      "id": "es-kopi-susu-dalgona",
-      "name": "Es Kopi Susu Dalgona",
-      "aliases": [
-        "es kopi susu dalgona",
-        "kopi susu dalgona"
+      "id": "kentang-goreng",
+      "pawoonId": "d2e01200-23eb-11f0-a1c8-afe0124dbcb3",
+      "name": "Kentang Goreng",
+      "category": "Makanan Ringan",
+      "price": 17000,
+      "sku": "FOD-31",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120152.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Kentang Goreng - Kentang Goreng",
+          "price": 17000,
+          "sku": "FOD-31-1"
+        },
+        {
+          "name": "Kentang Goreng - Kentang Sosis",
+          "price": 23000,
+          "sku": "FOD-31-2"
+        },
+        {
+          "name": "Kentang Goreng - Kentang Fishcake",
+          "price": 23000,
+          "sku": "FOD-31-3"
+        },
+        {
+          "name": "Kentang Goreng - Mix Platter",
+          "price": 25000,
+          "sku": "FOD-31-4"
+        }
       ],
-      "price": 23000,
-      "pawoonId": "e0b58440-2370-11f0-bf3d-b15ac8cd0fb8",
-      "category": "kopi-susu",
-      "image": "/menu-images/es-kopi-susu-dalgona.jpg"
+      "aliases": [
+        "kentang goreng"
+      ]
     },
     {
-      "id": "es-kopi-susu-float",
-      "name": "Es Kopi Susu Float",
-      "aliases": [
-        "es kopi susu float",
-        "kopi susu float"
+      "id": "dimsum",
+      "pawoonId": "37a0b380-23eb-11f0-a0ce-a5b83223f26e",
+      "name": "Dimsum",
+      "category": "Makanan Ringan",
+      "price": 17000,
+      "sku": "FOD-30",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120131.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Dimsum - Ayam",
+          "price": 17000,
+          "sku": "FOD-30-1"
+        },
+        {
+          "name": "Dimsum - Udang",
+          "price": 17000,
+          "sku": "FOD-30-2"
+        },
+        {
+          "name": "Dimsum - Combo",
+          "price": 23000,
+          "sku": "FOD-30-3"
+        }
       ],
+      "aliases": [
+        "dimsum"
+      ]
+    },
+    {
+      "id": "potato-cheese-ball",
+      "pawoonId": "fb099640-23ea-11f0-a58c-63085f84f87a",
+      "name": "Potato Cheese Ball",
+      "category": "Makanan Ringan",
+      "price": 17000,
+      "sku": "FOD-29",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120206.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "potato cheese ball"
+      ]
+    },
+    {
+      "id": "cireng-bumbu-rujak",
+      "pawoonId": "e474f410-23ea-11f0-af2d-abb7fa66199e",
+      "name": "Cireng Bumbu Rujak",
+      "category": "Makanan Ringan",
+      "price": 17000,
+      "sku": "FOD-28",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120098.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "cireng bumbu rujak"
+      ]
+    },
+    {
+      "id": "pempek-pasundan",
+      "pawoonId": "cac27390-23ea-11f0-9d11-e3d090416a38",
+      "name": "Pempek Pasundan",
+      "category": "Makanan Ringan",
+      "price": 25000,
+      "sku": "FOD-27",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120168.jpeg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "pempek pasundan"
+      ]
+    },
+    {
+      "id": "rice-bowl-telor-sosis",
+      "pawoonId": "a63354c0-23ea-11f0-be59-8591d771cda1",
+      "name": "Rice Bowl Telor Sosis",
+      "category": "Rice Bowls & Noodles",
+      "price": 22000,
+      "sku": "FOD-26",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674920.jpeg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "rice bowl telor sosis"
+      ]
+    },
+    {
+      "id": "rice-bowl-ayam-teriyaki",
+      "pawoonId": "7423a660-23ea-11f0-87ec-b58453407236",
+      "name": "Rice Bowl Ayam Teriyaki",
+      "category": "Rice Bowls & Noodles",
+      "price": 25000,
+      "sku": "FOD-25",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674936.jpeg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "rice bowl ayam teriyaki"
+      ]
+    },
+    {
+      "id": "rice-bowl-ayam-lada-hitam",
+      "pawoonId": "54b9c880-23ea-11f0-a795-791f985c10d4",
+      "name": "Rice Bowl Ayam Lada Hitam",
+      "category": "Rice Bowls & Noodles",
+      "price": 25000,
+      "sku": "FOD-24",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674950.jpeg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "rice bowl ayam lada hitam"
+      ]
+    },
+    {
+      "id": "rice-bowl-ayam-asam-manis",
+      "pawoonId": "3c462d50-23ea-11f0-85f5-dde740e791c3",
+      "name": "Rice Bowl Ayam Asam Manis",
+      "category": "Rice Bowls & Noodles",
+      "price": 25000,
+      "sku": "FOD-23",
+      "image": null,
+      "description": null,
+      "available": true,
+      "aliases": [
+        "rice bowl ayam asam manis"
+      ]
+    },
+    {
+      "id": "indomie-telor-sosis",
+      "pawoonId": "e4028220-23e2-11f0-80d9-11fece00f5d1",
+      "name": "Indomie Telor Sosis",
+      "category": "Rice Bowls & Noodles",
+      "price": 18000,
+      "sku": "FOD-22",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674969.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Indomie Telor Sosis - Indomie Rebus - Tidak Pedas",
+          "price": 18000,
+          "sku": "FOD-22-1"
+        },
+        {
+          "name": "Indomie Telor Sosis - Indomie Rebus - Pedas",
+          "price": 18000,
+          "sku": "FOD-22-3"
+        },
+        {
+          "name": "Indomie Telor Sosis - Indomie Rebus - Extra Pedas",
+          "price": 18000,
+          "sku": "FOD-22-4"
+        },
+        {
+          "name": "Indomie Telor Sosis - Indomie Goreng - Tidak Pedas",
+          "price": 18000,
+          "sku": "FOD-22-5"
+        },
+        {
+          "name": "Indomie Telor Sosis - Indomie Goreng - Pedas",
+          "price": 18000,
+          "sku": "FOD-22-7"
+        },
+        {
+          "name": "Indomie Telor Sosis - Indomie Goreng - Extra Pedas",
+          "price": 18000,
+          "sku": "FOD-22-8"
+        },
+        {
+          "name": "Indomie Telor Sosis - Indomie Rebus - Pedas Sedang",
+          "price": 18000,
+          "sku": "FOD-22-2"
+        },
+        {
+          "name": "Indomie Telor Sosis - Indomie Goreng - Pedas Sedang",
+          "price": 18000,
+          "sku": "FOD-22-6"
+        }
+      ],
+      "aliases": [
+        "indomie telor sosis"
+      ]
+    },
+    {
+      "id": "mie-ramen-instan",
+      "pawoonId": "91938570-23e2-11f0-b0f7-83ba1b907c1d",
+      "name": "Mie Ramen Instan",
+      "category": "Rice Bowls & Noodles",
+      "price": 20000,
+      "sku": "FOD-21",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Mie Ramen Instan - Pedas Sedang",
+          "price": 20000,
+          "sku": "FOD-21-1"
+        },
+        {
+          "name": "Mie Ramen Instan - Pedas",
+          "price": 20000,
+          "sku": "FOD-21-2"
+        },
+        {
+          "name": "Mie Ramen Instan - Extra Pedas",
+          "price": 20000,
+          "sku": "FOD-21-3"
+        }
+      ],
+      "aliases": [
+        "mie ramen instan"
+      ]
+    },
+    {
+      "id": "bakmi-godok-jawa",
+      "pawoonId": "57259130-23e2-11f0-a240-bdd8d8b5704a",
+      "name": "Bakmi Godok Jawa",
+      "category": "Rice Bowls & Noodles",
       "price": 23000,
-      "pawoonId": "80a3b310-2370-11f0-b472-518a68c0f591",
-      "category": "kopi-susu",
-      "image": "/menu-images/es-kopi-susu-float.jpg"
+      "sku": "FOD-20",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Bakmi Godok Jawa - Tidak Pedas",
+          "price": 23000,
+          "sku": "FOD-20-1"
+        },
+        {
+          "name": "Bakmi Godok Jawa - Pedas Sedang",
+          "price": 23000,
+          "sku": "FOD-20-2"
+        },
+        {
+          "name": "Bakmi Godok Jawa - Pedas",
+          "price": 23000,
+          "sku": "FOD-20-3"
+        },
+        {
+          "name": "Bakmi Godok Jawa - Extra Pedas",
+          "price": 23000,
+          "sku": "FOD-20-4"
+        }
+      ],
+      "aliases": [
+        "bakmi godok jawa"
+      ]
+    },
+    {
+      "id": "bakmi-goreng-jawa",
+      "pawoonId": "29309880-23e2-11f0-92d1-d5f469583b57",
+      "name": "Bakmi Goreng Jawa",
+      "category": "Rice Bowls & Noodles",
+      "price": 23000,
+      "sku": "FOD-19",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Bakmi Goreng Jawa - Tidak Pedas",
+          "price": 23000,
+          "sku": "FOD-19-1"
+        },
+        {
+          "name": "Bakmi Goreng Jawa - Pedas Sedang",
+          "price": 23000,
+          "sku": "FOD-19-2"
+        },
+        {
+          "name": "Bakmi Goreng Jawa - Pedas",
+          "price": 23000,
+          "sku": "FOD-19-3"
+        },
+        {
+          "name": "Bakmi Goreng Jawa - Extra Pedas",
+          "price": 23000,
+          "sku": "FOD-19-4"
+        }
+      ],
+      "aliases": [
+        "bakmi goreng jawa"
+      ]
+    },
+    {
+      "id": "nasi-goreng-seafood",
+      "pawoonId": "f426f500-23df-11f0-8fd5-41299087e284",
+      "name": "Nasi Goreng Seafood",
+      "category": "Nasi Goreng",
+      "price": 30000,
+      "sku": "FOD-18",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674370.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Nasi Goreng Seafood - Tidak Pedas",
+          "price": 30000,
+          "sku": "FOD-18-1"
+        },
+        {
+          "name": "Nasi Goreng Seafood - Pedas Sedang",
+          "price": 30000,
+          "sku": "FOD-18-2"
+        },
+        {
+          "name": "Nasi Goreng Seafood - Pedas",
+          "price": 30000,
+          "sku": "FOD-18-3"
+        },
+        {
+          "name": "Nasi Goreng Seafood - Extra Pedas",
+          "price": 30000,
+          "sku": "FOD-18-4"
+        }
+      ],
+      "aliases": [
+        "nasi goreng seafood"
+      ]
+    },
+    {
+      "id": "nasi-goreng-hongkong",
+      "pawoonId": "b04801b0-23df-11f0-9d96-e7eae574ef36",
+      "name": "Nasi Goreng Hongkong",
+      "category": "Nasi Goreng",
+      "price": 23000,
+      "sku": "FOD-17",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674395.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Nasi Goreng Hongkong - Tidak Pedas",
+          "price": 23000,
+          "sku": "FOD-17-1"
+        },
+        {
+          "name": "Nasi Goreng Hongkong - Pedas Sedang",
+          "price": 23000,
+          "sku": "FOD-17-2"
+        },
+        {
+          "name": "Nasi Goreng Hongkong - Pedas",
+          "price": 23000,
+          "sku": "FOD-17-3"
+        },
+        {
+          "name": "Nasi Goreng Hongkong - Extra Pedas",
+          "price": 23000,
+          "sku": "FOD-17-4"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Topping Nasgor HK-Kampung",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "nasi goreng hongkong"
+      ]
+    },
+    {
+      "id": "nasi-goreng-kampung",
+      "pawoonId": "718ec580-23df-11f0-b876-2fa0dfaa9af7",
+      "name": "Nasi Goreng Kampung",
+      "category": "Nasi Goreng",
+      "price": 23000,
+      "sku": "FOD-16",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674409.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Nasi Goreng Kampung - Tidak Pedas",
+          "price": 23000,
+          "sku": "FOD-16-1"
+        },
+        {
+          "name": "Nasi Goreng Kampung - Pedas Sedang",
+          "price": 23000,
+          "sku": "FOD-16-2"
+        },
+        {
+          "name": "Nasi Goreng Kampung - Pedas",
+          "price": 23000,
+          "sku": "FOD-16-3"
+        },
+        {
+          "name": "Nasi Goreng Kampung - Extra Pedas",
+          "price": 23000,
+          "sku": "FOD-16-4"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Topping Nasgor HK-Kampung",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "nasi goreng kampung"
+      ]
+    },
+    {
+      "id": "nasi-goreng-kambing",
+      "pawoonId": "e6fbdb30-23de-11f0-bd16-67aadea1fe96",
+      "name": "Nasi Goreng Kambing",
+      "category": "Nasi Goreng",
+      "price": 32000,
+      "sku": "FOD-15",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674844.jpeg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Nasi Goreng Kambing - Tidak Pedas",
+          "price": 32000,
+          "sku": "FOD-15-1"
+        },
+        {
+          "name": "Nasi Goreng Kambing - Pedas Sedang",
+          "price": 32000,
+          "sku": "FOD-15-2"
+        },
+        {
+          "name": "Nasi Goreng Kambing - Pedas",
+          "price": 32000,
+          "sku": "FOD-15-3"
+        },
+        {
+          "name": "Nasi Goreng Kambing - Extra Pedas",
+          "price": 32000,
+          "sku": "FOD-15-4"
+        }
+      ],
+      "aliases": [
+        "nasi goreng kambing"
+      ]
+    },
+    {
+      "id": "nasi-goreng-chicken-katsu",
+      "pawoonId": "84f99990-23de-11f0-850a-3f929139cbc8",
+      "name": "Nasi Goreng Chicken Katsu",
+      "category": "Nasi Goreng",
+      "price": 28000,
+      "sku": "FOD-14",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746674867.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Nasi Goreng Chicken Katsu - Pedas Sedang",
+          "price": 28000,
+          "sku": "FOD-14-1"
+        },
+        {
+          "name": "Nasi Goreng Chicken Katsu - Pedas",
+          "price": 28000,
+          "sku": "FOD-14-2"
+        },
+        {
+          "name": "Nasi Goreng Chicken Katsu - Extra Pedas",
+          "price": 28000,
+          "sku": "FOD-14-3"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Topping Nasgor Katsu",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "nasi goreng chicken katsu"
+      ]
     },
     {
       "id": "es-kopi-susu-original",
+      "pawoonId": "affe6a00-23d3-11f0-92e9-f17ab0e57743",
       "name": "Es Kopi Susu Original",
+      "category": "Es Kopi Susu Gula Aren",
+      "price": 18000,
+      "sku": "CFE-11.1",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111886.jpg",
+      "description": "Kopi Susu yang memiliki cita rasa khas Kedai Ngupi Ngupi dengan komposisi bahan yang berkualitas dan seimbang",
+      "available": true,
+      "variants": [
+        {
+          "name": "Es Kopi Susu Original - Less Sugar - Less Ice",
+          "price": 18000,
+          "sku": "CFE-11.1-1"
+        },
+        {
+          "name": "Es Kopi Susu Original - Less Sugar - Normal",
+          "price": 18000,
+          "sku": "CFE-11.1-2"
+        },
+        {
+          "name": "Es Kopi Susu Original - Less Sugar - Extra Ice",
+          "price": 18000,
+          "sku": "CFE-11.1-3"
+        },
+        {
+          "name": "Es Kopi Susu Original - Normal - Less Ice",
+          "price": 18000,
+          "sku": "CFE-11.1-4"
+        },
+        {
+          "name": "Es Kopi Susu Original - Normal - Normal",
+          "price": 18000,
+          "sku": "CFE-11.1-5"
+        },
+        {
+          "name": "Es Kopi Susu Original - Normal - Extra Ice",
+          "price": 18000,
+          "sku": "CFE-11.1-6"
+        },
+        {
+          "name": "Es Kopi Susu Original - Extra Sugar - Less Ice",
+          "price": 18000,
+          "sku": "CFE-11.1-7"
+        },
+        {
+          "name": "Es Kopi Susu Original - Extra Sugar - Normal",
+          "price": 18000,
+          "sku": "CFE-11.1-8"
+        },
+        {
+          "name": "Es Kopi Susu Original - Extra Sugar - Extra Ice",
+          "price": 18000,
+          "sku": "CFE-11.1-9"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Extra Creamy",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
       "aliases": [
         "es kopi susu",
         "es kopi susu original",
         "kopsu",
         "kopi susu",
         "kopi susu original"
-      ],
-      "price": 18000,
-      "pawoonId": "affe6a00-23d3-11f0-92e9-f17ab0e57743",
-      "category": "kopi-susu",
-      "image": "/menu-images/es-kopi-susu-original.jpg"
-    },
-    {
-      "id": "caffe-bon-bon",
-      "name": "Caffe Bon Bon",
-      "aliases": [
-        "caffe bon bon"
-      ],
-      "price": 18000,
-      "pawoonId": "93232ff0-236e-11f0-8e51-91c0b027cede",
-      "category": "milk-coffee",
-      "image": "/menu-images/caffe-bon-bon.jpg"
-    },
-    {
-      "id": "caffe-latte",
-      "name": "Caffe Latte",
-      "aliases": [
-        "latte",
-        "cafe latte",
-        "caffe latte",
-        "kopi latte"
-      ],
-      "price": 23000,
-      "pawoonId": "e9eded40-236a-11f0-8d5b-41805575f860",
-      "category": "milk-coffee",
-      "image": "/menu-images/caffe-latte.jpg"
-    },
-    {
-      "id": "caffe-macchiato",
-      "name": "Caffe Macchiato",
-      "aliases": [
-        "caffe macchiato"
-      ],
-      "price": 23000,
-      "pawoonId": "559a5990-232d-11f0-8835-214c2f2ef8bd",
-      "category": "milk-coffee",
-      "image": "/menu-images/caffe-macchiato.jpg"
-    },
-    {
-      "id": "cappuccino",
-      "name": "Cappuccino",
-      "aliases": [
-        "cappuccino",
-        "capuccino",
-        "cappucino",
-        "capucino"
-      ],
-      "ambiguousAliases": [
-        "cap"
-      ],
-      "price": 23000,
-      "pawoonId": "30c08ca0-232d-11f0-bc86-2b1e4076772d",
-      "category": "milk-coffee",
-      "image": "/menu-images/cappuccino.jpg"
-    },
-    {
-      "id": "mochaccino",
-      "name": "Mochaccino",
-      "aliases": [
-        "mochaccino"
-      ],
-      "price": 23000,
-      "pawoonId": "c2220820-236e-11f0-b9ae-5157d6b655f9",
-      "category": "milk-coffee",
-      "image": "/menu-images/mochaccino.jpg"
-    },
-    {
-      "id": "chocolate-milkshake",
-      "name": "Chocolate Milkshake",
-      "aliases": [
-        "chocolate milkshake"
-      ],
-      "price": 20000,
-      "pawoonId": "0934ee40-239d-11f0-8c4a-e31f5ca60dbd",
-      "category": "milkshake",
-      "image": "/menu-images/chocolate-milkshake.jpg"
-    },
-    {
-      "id": "cookies-cream",
-      "name": "Cookies & Cream",
-      "aliases": [
-        "cookies & cream"
-      ],
-      "price": 23000,
-      "pawoonId": "41059900-239d-11f0-aabf-bbcc9f66d310",
-      "category": "milkshake",
-      "image": "/menu-images/cookies-cream.jpg"
-    },
-    {
-      "id": "kurma-milkshake",
-      "name": "Kurma Milkshake",
-      "aliases": [
-        "kurma milkshake"
-      ],
-      "price": 23000,
-      "pawoonId": "6ab6e6a0-239d-11f0-b273-6377f937afc5",
-      "category": "milkshake",
-      "image": "/menu-images/kurma-milkshake.jpg"
-    },
-    {
-      "id": "matcha-mint-milkshake",
-      "name": "Matcha Mint Milkshake",
-      "aliases": [
-        "matcha mint milkshake",
-        "matcha"
-      ],
-      "price": 25000,
-      "pawoonId": "8648e670-239d-11f0-9ffd-dd3f1cdc8cf6",
-      "category": "milkshake",
-      "image": "/menu-images/matcha-mint-milkshake.jpg"
-    },
-    {
-      "id": "oreo-milkshake",
-      "name": "Oreo Milkshake",
-      "aliases": [
-        "oreo milkshake"
-      ],
-      "price": 23000,
-      "pawoonId": "a042e4d0-239d-11f0-93eb-45c7182a6e5f",
-      "category": "milkshake",
-      "image": "/menu-images/oreo-milkshake.jpg"
-    },
-    {
-      "id": "red-velvet-milkshake",
-      "name": "Red Velvet Milkshake",
-      "aliases": [
-        "red velvet milkshake"
-      ],
-      "price": 20000,
-      "pawoonId": "bd208270-239d-11f0-9c06-9bc9cc8e3ce2",
-      "category": "milkshake"
-    },
-    {
-      "id": "strawberry-milkshake",
-      "name": "Strawberry Milkshake",
-      "aliases": [
-        "strawberry milkshake"
-      ],
-      "price": 20000,
-      "pawoonId": "d1088510-239d-11f0-ad8f-1b5b4dde6866",
-      "category": "milkshake",
-      "image": "/menu-images/strawberry-milkshake.jpg"
-    },
-    {
-      "id": "vanilla-milkshake",
-      "name": "Vanilla Milkshake",
-      "aliases": [
-        "vanilla milkshake"
-      ],
-      "price": 20000,
-      "pawoonId": "e708db20-239d-11f0-913a-1fc74f2a392b",
-      "category": "milkshake",
-      "image": "/menu-images/vanilla-milkshake.jpg"
-    },
-    {
-      "id": "air-mineral",
-      "name": "Air Mineral",
-      "aliases": [
-        "air mineral"
-      ],
-      "price": 5000,
-      "pawoonId": "83134010-23f4-11f0-9528-f92d5ff4f1e6",
-      "category": "other"
-    },
-    {
-      "id": "bakmi-godok-jawa",
-      "name": "Bakmi Godok Jawa",
-      "aliases": [
-        "bakmi godok jawa"
-      ],
-      "price": 23000,
-      "pawoonId": "57259130-23e2-11f0-a240-bdd8d8b5704a",
-      "category": "other"
-    },
-    {
-      "id": "bakmi-goreng-jawa",
-      "name": "Bakmi Goreng Jawa",
-      "aliases": [
-        "bakmi goreng jawa"
-      ],
-      "price": 23000,
-      "pawoonId": "29309880-23e2-11f0-92d1-d5f469583b57",
-      "category": "other"
-    },
-    {
-      "id": "banana-split-ice-cream",
-      "name": "Banana Split Ice Cream",
-      "aliases": [
-        "banana split ice cream"
-      ],
-      "price": 23000,
-      "pawoonId": "a08d8990-23f2-11f0-9926-05567fb07317",
-      "category": "other"
-    },
-    {
-      "id": "chicken-cordon-bleu",
-      "name": "Chicken Cordon Bleu",
-      "aliases": [
-        "chicken cordon bleu"
-      ],
-      "price": 30000,
-      "pawoonId": "2e16ec80-23c7-11f0-9b3f-d533e81810dc",
-      "category": "other"
-    },
-    {
-      "id": "chicken-katsu",
-      "name": "Chicken Katsu",
-      "aliases": [
-        "chicken katsu"
-      ],
-      "price": 25000,
-      "pawoonId": "a10b73c0-2d89-11f0-93ba-d1a429374c82",
-      "category": "other"
-    },
-    {
-      "id": "chicken-steak",
-      "name": "Chicken Steak",
-      "aliases": [
-        "chicken steak"
-      ],
-      "price": 35000,
-      "pawoonId": "775fb860-23c7-11f0-8b22-4126e2629086",
-      "category": "other"
-    },
-    {
-      "id": "chocolate-single-origin-sachet",
-      "name": "Chocolate Single Origin Sachet",
-      "aliases": [
-        "chocolate single origin sachet"
-      ],
-      "price": 18000,
-      "pawoonId": "c7586720-23f4-11f0-b8e9-a3409a62c9a7",
-      "category": "other"
-    },
-    {
-      "id": "cireng-bumbu-rujak",
-      "name": "Cireng Bumbu Rujak",
-      "aliases": [
-        "cireng bumbu rujak"
-      ],
-      "price": 17000,
-      "pawoonId": "e474f410-23ea-11f0-af2d-abb7fa66199e",
-      "category": "other"
-    },
-    {
-      "id": "dimsum",
-      "name": "Dimsum",
-      "aliases": [
-        "dimsum"
-      ],
-      "price": 17000,
-      "pawoonId": "37a0b380-23eb-11f0-a0ce-a5b83223f26e",
-      "category": "other"
-    },
-    {
-      "id": "es-batu-cup",
-      "name": "Es Batu + Cup",
-      "aliases": [
-        "es batu + cup",
-        "batu + cup"
-      ],
-      "price": 2000,
-      "pawoonId": "53d78870-2d88-11f0-a41d-e9d318162137",
-      "category": "other"
-    },
-    {
-      "id": "ice-cream",
-      "name": "Ice Cream",
-      "aliases": [
-        "ice cream"
-      ],
-      "price": 15000,
-      "pawoonId": "5096aad0-23f4-11f0-8af0-ff0391d25fd2",
-      "category": "other"
-    },
-    {
-      "id": "indomie-telor-sosis",
-      "name": "Indomie Telor Sosis",
-      "aliases": [
-        "indomie telor sosis"
-      ],
-      "price": 18000,
-      "pawoonId": "e4028220-23e2-11f0-80d9-11fece00f5d1",
-      "category": "other"
-    },
-    {
-      "id": "kentang-goreng",
-      "name": "Kentang Goreng",
-      "aliases": [
-        "kentang goreng"
-      ],
-      "price": 17000,
-      "pawoonId": "d2e01200-23eb-11f0-a1c8-afe0124dbcb3",
-      "category": "other"
-    },
-    {
-      "id": "lotus-biscoff-biscuit",
-      "name": "Lotus Biscoff Biscuit",
-      "aliases": [
-        "lotus biscoff biscuit"
-      ],
-      "price": 2000,
-      "pawoonId": "9d7ae150-23f4-11f0-a3a2-5de8d815dfcb",
-      "category": "other"
-    },
-    {
-      "id": "mie-ramen-instan",
-      "name": "Mie Ramen Instan",
-      "aliases": [
-        "mie ramen instan"
-      ],
-      "price": 20000,
-      "pawoonId": "91938570-23e2-11f0-b0f7-83ba1b907c1d",
-      "category": "other"
-    },
-    {
-      "id": "nasi",
-      "name": "Nasi",
-      "aliases": [
-        "nasi"
-      ],
-      "price": 5000,
-      "pawoonId": "2a3265f0-23f5-11f0-89a3-9139bcf3d8e9",
-      "category": "other"
-    },
-    {
-      "id": "nasi-ayam-rica-rica",
-      "name": "Nasi Ayam Rica-rica",
-      "aliases": [
-        "nasi ayam rica-rica"
-      ],
-      "price": 28000,
-      "pawoonId": "58195fe0-23cc-11f0-9b2e-f93b2cccbbff",
-      "category": "other"
-    },
-    {
-      "id": "nasi-goreng-chicken-katsu",
-      "name": "Nasi Goreng Chicken Katsu",
-      "aliases": [
-        "nasi goreng chicken katsu"
-      ],
-      "price": 28000,
-      "pawoonId": "84f99990-23de-11f0-850a-3f929139cbc8",
-      "category": "other"
-    },
-    {
-      "id": "nasi-goreng-hongkong",
-      "name": "Nasi Goreng Hongkong",
-      "aliases": [
-        "nasi goreng hongkong"
-      ],
-      "price": 23000,
-      "pawoonId": "b04801b0-23df-11f0-9d96-e7eae574ef36",
-      "category": "other"
-    },
-    {
-      "id": "nasi-goreng-kambing",
-      "name": "Nasi Goreng Kambing",
-      "aliases": [
-        "nasi goreng kambing"
-      ],
-      "price": 32000,
-      "pawoonId": "e6fbdb30-23de-11f0-bd16-67aadea1fe96",
-      "category": "other"
-    },
-    {
-      "id": "nasi-goreng-kampung",
-      "name": "Nasi Goreng Kampung",
-      "aliases": [
-        "nasi goreng kampung"
-      ],
-      "price": 23000,
-      "pawoonId": "718ec580-23df-11f0-b876-2fa0dfaa9af7",
-      "category": "other"
-    },
-    {
-      "id": "nasi-goreng-seafood",
-      "name": "Nasi Goreng Seafood",
-      "aliases": [
-        "nasi goreng seafood"
-      ],
-      "price": 30000,
-      "pawoonId": "f426f500-23df-11f0-8fd5-41299087e284",
-      "category": "other"
-    },
-    {
-      "id": "nasi-soto-bandung",
-      "name": "Nasi Soto Bandung",
-      "aliases": [
-        "nasi soto bandung"
-      ],
-      "price": 35000,
-      "pawoonId": "70306600-23cc-11f0-8b16-9d0abed5750b",
-      "category": "other"
+      ]
     },
     {
       "id": "nasi-telor-fuyunghai",
+      "pawoonId": "411d9f50-23cd-11f0-8e2b-f32ba65ad61f",
       "name": "Nasi Telor Fuyunghai",
+      "category": "Indonesian Foods",
+      "price": 20000,
+      "sku": "FOD-13",
+      "image": null,
+      "description": null,
+      "available": true,
       "aliases": [
         "nasi telor fuyunghai"
-      ],
-      "price": 20000,
-      "pawoonId": "411d9f50-23cd-11f0-8e2b-f32ba65ad61f",
-      "category": "other"
-    },
-    {
-      "id": "nasi-tongseng-ayam",
-      "name": "Nasi Tongseng Ayam",
-      "aliases": [
-        "nasi tongseng ayam"
-      ],
-      "price": 28000,
-      "pawoonId": "9489f900-23cc-11f0-8896-d38a8ac618e4",
-      "category": "other"
-    },
-    {
-      "id": "nasi-tongseng-kambing",
-      "name": "Nasi Tongseng Kambing",
-      "aliases": [
-        "nasi tongseng kambing"
-      ],
-      "price": 38000,
-      "pawoonId": "d4d872c0-23cc-11f0-8164-cdd58befda52",
-      "category": "other"
-    },
-    {
-      "id": "nasi-tongseng-sapi",
-      "name": "Nasi Tongseng Sapi",
-      "aliases": [
-        "nasi tongseng sapi"
-      ],
-      "price": 35000,
-      "pawoonId": "b6de2d30-23cc-11f0-b11c-a9e16f621115",
-      "category": "other"
-    },
-    {
-      "id": "nasi-udang-bumbu-asam-manis",
-      "name": "Nasi Udang Bumbu Asam Manis",
-      "aliases": [
-        "nasi udang bumbu asam manis"
-      ],
-      "price": 30000,
-      "pawoonId": "03531e90-23cd-11f0-b119-3d8b924740ac",
-      "category": "other"
+      ]
     },
     {
       "id": "nasi-udang-bumbu-saos-padang",
+      "pawoonId": "1f532370-23cd-11f0-a124-0d2b50bfad89",
       "name": "Nasi Udang Bumbu Saos Padang",
+      "category": "Indonesian Foods",
+      "price": 30000,
+      "sku": "FOD-12",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118036.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Nasi Udang Bumbu Saos Padang - Pedas Sedang",
+          "price": 30000,
+          "sku": "FOD-12-1"
+        },
+        {
+          "name": "Nasi Udang Bumbu Saos Padang - Pedas",
+          "price": 30000,
+          "sku": "FOD-12-2"
+        },
+        {
+          "name": "Nasi Udang Bumbu Saos Padang - Extra Pedas",
+          "price": 30000,
+          "sku": "FOD-12-3"
+        }
+      ],
       "aliases": [
         "nasi udang bumbu saos padang"
-      ],
+      ]
+    },
+    {
+      "id": "nasi-udang-bumbu-asam-manis",
+      "pawoonId": "03531e90-23cd-11f0-b119-3d8b924740ac",
+      "name": "Nasi Udang Bumbu Asam Manis",
+      "category": "Indonesian Foods",
       "price": 30000,
-      "pawoonId": "1f532370-23cd-11f0-a124-0d2b50bfad89",
-      "category": "other"
+      "sku": "FOD-11",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118051.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "nasi udang bumbu asam manis"
+      ]
     },
     {
-      "id": "pempek-pasundan",
-      "name": "Pempek Pasundan",
-      "aliases": [
-        "pempek pasundan"
+      "id": "nasi-tongseng-kambing",
+      "pawoonId": "d4d872c0-23cc-11f0-8164-cdd58befda52",
+      "name": "Nasi Tongseng Kambing",
+      "category": "Indonesian Foods",
+      "price": 38000,
+      "sku": "FOD-10",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118066.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Nasi Tongseng Kambing - Pedas Sedang",
+          "price": 38000,
+          "sku": "FOD-10-1"
+        },
+        {
+          "name": "Nasi Tongseng Kambing - Pedas",
+          "price": 38000,
+          "sku": "FOD-10-2"
+        },
+        {
+          "name": "Nasi Tongseng Kambing - Extra Pedas",
+          "price": 38000,
+          "sku": "FOD-10-3"
+        }
       ],
-      "price": 25000,
-      "pawoonId": "cac27390-23ea-11f0-9d11-e3d090416a38",
-      "category": "other"
+      "aliases": [
+        "nasi tongseng kambing"
+      ]
     },
     {
-      "id": "pisang-dan-roti-bakar",
-      "name": "Pisang dan Roti Bakar",
-      "aliases": [
-        "pisang dan roti bakar"
+      "id": "nasi-tongseng-sapi",
+      "pawoonId": "b6de2d30-23cc-11f0-b11c-a9e16f621115",
+      "name": "Nasi Tongseng Sapi",
+      "category": "Indonesian Foods",
+      "price": 35000,
+      "sku": "FOD-09",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118079.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Nasi Tongseng Sapi - Pedas Sedang",
+          "price": 35000,
+          "sku": "FOD-09-1"
+        },
+        {
+          "name": "Nasi Tongseng Sapi - Pedas",
+          "price": 35000,
+          "sku": "FOD-09-2"
+        },
+        {
+          "name": "Nasi Tongseng Sapi - Extra Pedas",
+          "price": 35000,
+          "sku": "FOD-09-3"
+        }
       ],
-      "price": 14000,
-      "pawoonId": "d4fce090-23ef-11f0-8269-6bd872683994",
-      "category": "other"
+      "aliases": [
+        "nasi tongseng sapi"
+      ]
     },
     {
-      "id": "pisang-goreng-crispy",
-      "name": "Pisang Goreng Crispy",
-      "aliases": [
-        "pisang goreng crispy"
+      "id": "nasi-tongseng-ayam",
+      "pawoonId": "9489f900-23cc-11f0-8896-d38a8ac618e4",
+      "name": "Nasi Tongseng Ayam",
+      "category": "Indonesian Foods",
+      "price": 28000,
+      "sku": "FOD-08",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118093.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Nasi Tongseng Ayam - Pedas Sedang",
+          "price": 28000,
+          "sku": "FOD-08-1"
+        },
+        {
+          "name": "Nasi Tongseng Ayam - Pedas",
+          "price": 28000,
+          "sku": "FOD-08-2"
+        },
+        {
+          "name": "Nasi Tongseng Ayam - Extra Pedas",
+          "price": 28000,
+          "sku": "FOD-08-3"
+        }
       ],
-      "price": 17000,
-      "pawoonId": "f1abe9c0-23ef-11f0-a47d-01f087837ac9",
-      "category": "other"
+      "aliases": [
+        "nasi tongseng ayam"
+      ]
     },
     {
-      "id": "potato-cheese-ball",
-      "name": "Potato Cheese Ball",
+      "id": "nasi-soto-bandung",
+      "pawoonId": "70306600-23cc-11f0-8b16-9d0abed5750b",
+      "name": "Nasi Soto Bandung",
+      "category": "Indonesian Foods",
+      "price": 35000,
+      "sku": "FOD-07",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118123.jpg",
+      "description": null,
+      "available": true,
       "aliases": [
-        "potato cheese ball"
-      ],
-      "price": 17000,
-      "pawoonId": "fb099640-23ea-11f0-a58c-63085f84f87a",
-      "category": "other"
+        "nasi soto bandung"
+      ]
     },
     {
-      "id": "rice-bowl-ayam-asam-manis",
-      "name": "Rice Bowl Ayam Asam Manis",
-      "aliases": [
-        "rice bowl ayam asam manis"
+      "id": "nasi-ayam-rica-rica",
+      "pawoonId": "58195fe0-23cc-11f0-9b2e-f93b2cccbbff",
+      "name": "Nasi Ayam Rica-rica",
+      "category": "Indonesian Foods",
+      "price": 28000,
+      "sku": "FOD-06",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746118164.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Nasi Ayam Rica-rica - Pedas Sedang",
+          "price": 28000,
+          "sku": "FOD-06-1"
+        },
+        {
+          "name": "Nasi Ayam Rica-rica - Pedas",
+          "price": 28000,
+          "sku": "FOD-06-2"
+        },
+        {
+          "name": "Nasi Ayam Rica-rica - Extra Pedas",
+          "price": 28000,
+          "sku": "FOD-06-3"
+        }
       ],
-      "price": 25000,
-      "pawoonId": "3c462d50-23ea-11f0-85f5-dde740e791c3",
-      "category": "other"
-    },
-    {
-      "id": "rice-bowl-ayam-lada-hitam",
-      "name": "Rice Bowl Ayam Lada Hitam",
       "aliases": [
-        "rice bowl ayam lada hitam"
-      ],
-      "price": 25000,
-      "pawoonId": "54b9c880-23ea-11f0-a795-791f985c10d4",
-      "category": "other"
-    },
-    {
-      "id": "rice-bowl-ayam-teriyaki",
-      "name": "Rice Bowl Ayam Teriyaki",
-      "aliases": [
-        "rice bowl ayam teriyaki"
-      ],
-      "price": 25000,
-      "pawoonId": "7423a660-23ea-11f0-87ec-b58453407236",
-      "category": "other"
-    },
-    {
-      "id": "rice-bowl-telor-sosis",
-      "name": "Rice Bowl Telor Sosis",
-      "aliases": [
-        "rice bowl telor sosis"
-      ],
-      "price": 22000,
-      "pawoonId": "a63354c0-23ea-11f0-be59-8591d771cda1",
-      "category": "other"
-    },
-    {
-      "id": "roti-karamel-ice-cream",
-      "name": "Roti Karamel Ice Cream",
-      "aliases": [
-        "roti karamel ice cream"
-      ],
-      "price": 23000,
-      "pawoonId": "50643ed0-23f3-11f0-b989-9370c55f4b41",
-      "category": "other"
-    },
-    {
-      "id": "sosis-barbeque-kentang",
-      "name": "Sosis Barbeque Kentang",
-      "aliases": [
-        "sosis barbeque kentang"
-      ],
-      "price": 23000,
-      "pawoonId": "130d2af0-23ec-11f0-890e-87d665b3794d",
-      "category": "other"
-    },
-    {
-      "id": "topping-minuman",
-      "name": "Topping Minuman",
-      "aliases": [
-        "topping minuman"
-      ],
-      "price": 4000,
-      "pawoonId": "04d07f10-23f5-11f0-bf6e-e3f5fc81bc4f",
-      "category": "other"
-    },
-    {
-      "id": "udang-keju-lumer",
-      "name": "Udang Keju Lumer",
-      "aliases": [
-        "udang keju lumer"
-      ],
-      "price": 23000,
-      "pawoonId": "ecd6e100-23f3-11f0-9af6-3dcd4d327806",
-      "category": "other"
+        "nasi ayam rica-rica"
+      ]
     },
     {
       "id": "wagyu-steak",
+      "pawoonId": "149401c0-23c8-11f0-9c0e-df474fe5a14f",
       "name": "Wagyu Steak",
+      "category": "Western Foods",
+      "price": 45000,
+      "sku": "FOD-03",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Wagyu Steak - Barbeque - Nasi",
+          "price": 45000,
+          "sku": "FOD-03-1"
+        },
+        {
+          "name": "Wagyu Steak - Barbeque - Kentang",
+          "price": 45000,
+          "sku": "FOD-03-2"
+        },
+        {
+          "name": "Wagyu Steak - Lada Hitam - Nasi",
+          "price": 45000,
+          "sku": "FOD-03-3"
+        },
+        {
+          "name": "Wagyu Steak - Lada Hitam - Kentang",
+          "price": 45000,
+          "sku": "FOD-03-4"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Slice",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
       "aliases": [
         "wagyu steak"
-      ],
-      "price": 45000,
-      "pawoonId": "149401c0-23c8-11f0-9c0e-df474fe5a14f",
-      "category": "other"
+      ]
     },
     {
-      "id": "cappuccino-hot-creme-brulee",
-      "name": "Cappuccino Hot Creme Brulee",
-      "aliases": [
-        "cappuccino hot creme brulee",
-        "cappuccino",
-        "capuccino"
+      "id": "chicken-steak",
+      "pawoonId": "775fb860-23c7-11f0-8b22-4126e2629086",
+      "name": "Chicken Steak",
+      "category": "Western Foods",
+      "price": 35000,
+      "sku": "FOD-02",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Chicken Steak - Kentang - Barbeque",
+          "price": 35000,
+          "sku": "FOD-02-1"
+        },
+        {
+          "name": "Chicken Steak - Kentang - Lada Hitam",
+          "price": 35000,
+          "sku": "FOD-02-2"
+        },
+        {
+          "name": "Chicken Steak - Nasi - Barbeque",
+          "price": 35000,
+          "sku": "FOD-02-3"
+        },
+        {
+          "name": "Chicken Steak - Nasi - Lada Hitam",
+          "price": 35000,
+          "sku": "FOD-02-4"
+        }
       ],
-      "price": 25000,
-      "pawoonId": "13dfaec0-2371-11f0-a52d-cb4028b4a909",
-      "category": "signature"
+      "aliases": [
+        "chicken steak"
+      ]
     },
     {
-      "id": "caramel-macchiatto",
-      "name": "Caramel Macchiatto",
-      "aliases": [
-        "caramel macchiatto"
+      "id": "chicken-cordon-bleu",
+      "pawoonId": "2e16ec80-23c7-11f0-9b3f-d533e81810dc",
+      "name": "Chicken Cordon Bleu",
+      "category": "Western Foods",
+      "price": 30000,
+      "sku": "FOD-01",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Chicken Cordon Bleu - Kentang",
+          "price": 30000,
+          "sku": "FOD-01-1"
+        },
+        {
+          "name": "Chicken Cordon Bleu - Nasi",
+          "price": 30000,
+          "sku": "FOD-01-2"
+        }
       ],
-      "price": 25000,
-      "pawoonId": "f900c740-2371-11f0-a81b-878ac14b9b7d",
-      "category": "signature"
-    },
-    {
-      "id": "kopi-susu-madu-jahe-panas",
-      "name": "Kopi Susu Madu Jahe Panas",
       "aliases": [
-        "kopi susu madu jahe panas"
-      ],
-      "price": 23000,
-      "pawoonId": "34fa1d90-2371-11f0-aad0-0de7febaa14b",
-      "category": "signature"
-    },
-    {
-      "id": "lemonade-iced-coffee",
-      "name": "Lemonade Iced Coffee",
-      "aliases": [
-        "lemonade iced coffee"
-      ],
-      "price": 20000,
-      "pawoonId": "588f7160-2371-11f0-b9de-cbc5d2b2f79f",
-      "category": "signature"
-    },
-    {
-      "id": "lotus-biscoff-iced-coffee",
-      "name": "Lotus Biscoff Iced Coffee",
-      "aliases": [
-        "lotus biscoff iced coffee"
-      ],
-      "price": 25000,
-      "pawoonId": "87ffb4c0-2371-11f0-b893-97a4bd954f3a",
-      "category": "signature"
-    },
-    {
-      "id": "nutella-iced-coffee",
-      "name": "Nutella Iced Coffee",
-      "aliases": [
-        "nutella iced coffee"
-      ],
-      "price": 25000,
-      "pawoonId": "b1d11b60-2371-11f0-9358-c75ce27deda9",
-      "category": "signature"
-    },
-    {
-      "id": "pandan-latte-iced-coffee",
-      "name": "Pandan Latte Iced Coffee",
-      "aliases": [
-        "pandan latte iced coffee"
-      ],
-      "price": 25000,
-      "pawoonId": "cce55c40-2371-11f0-968e-897d9d6cbffe",
-      "category": "signature"
-    },
-    {
-      "id": "tropical-coffee-mocktail",
-      "name": "Tropical Coffee Mocktail",
-      "aliases": [
-        "tropical coffee mocktail"
-      ],
-      "price": 20000,
-      "pawoonId": "130f2a50-2372-11f0-9ac7-1955dd86af57",
-      "category": "signature"
-    },
-    {
-      "id": "chamomile-lime-iced-tea",
-      "name": "Chamomile Lime Iced Tea",
-      "aliases": [
-        "chamomile lime iced tea"
-      ],
-      "price": 20000,
-      "pawoonId": "6187caa0-c1d1-11f0-a57b-8daace07c997",
-      "category": "tea"
-    },
-    {
-      "id": "honey-milk-tea",
-      "name": "Honey Milk Tea",
-      "aliases": [
-        "honey milk tea"
-      ],
-      "price": 18000,
-      "pawoonId": "77dd6210-23c6-11f0-b47b-e327c8987bab",
-      "category": "tea"
-    },
-    {
-      "id": "lemon-tea",
-      "name": "Lemon Tea",
-      "aliases": [
-        "lemon tea"
-      ],
-      "price": 15000,
-      "pawoonId": "3638a6a0-23c4-11f0-aa08-b58f195bc02e",
-      "category": "tea"
-    },
-    {
-      "id": "lychee-iced-tea",
-      "name": "Lychee Iced Tea",
-      "aliases": [
-        "lychee iced tea"
-      ],
-      "price": 17000,
-      "pawoonId": "500ad230-23c6-11f0-a53d-1d1cc0809908",
-      "category": "tea"
+        "chicken cordon bleu"
+      ]
     },
     {
       "id": "matcha-latte",
+      "pawoonId": "bec58640-23c6-11f0-b5f3-317e152cc4da",
       "name": "Matcha Latte",
+      "category": "Tea",
+      "price": 18000,
+      "sku": "NCF-28",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Matcha Latte - Hot",
+          "price": 18000,
+          "sku": "NCF-28-1"
+        },
+        {
+          "name": "Matcha Latte - Ice",
+          "price": 18000,
+          "sku": "NCF-28-2"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
       "aliases": [
         "matcha latte",
         "matcha",
         "green tea latte"
-      ],
+      ]
+    },
+    {
+      "id": "honey-milk-tea",
+      "pawoonId": "77dd6210-23c6-11f0-b47b-e327c8987bab",
+      "name": "Honey Milk Tea",
+      "category": "Tea",
       "price": 18000,
-      "pawoonId": "bec58640-23c6-11f0-b5f3-317e152cc4da",
-      "category": "tea"
+      "sku": "NCF-27",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Honey Milk Tea - Hot",
+          "price": 18000,
+          "sku": "NCF-27-1"
+        },
+        {
+          "name": "Honey Milk Tea - Ice",
+          "price": 18000,
+          "sku": "NCF-27-2"
+        }
+      ],
+      "aliases": [
+        "honey milk tea"
+      ]
+    },
+    {
+      "id": "lychee-iced-tea",
+      "pawoonId": "500ad230-23c6-11f0-a53d-1d1cc0809908",
+      "name": "Lychee Iced Tea",
+      "category": "Tea",
+      "price": 17000,
+      "sku": "NCF-26",
+      "image": null,
+      "description": null,
+      "available": true,
+      "aliases": [
+        "lychee iced tea"
+      ]
+    },
+    {
+      "id": "lemon-tea",
+      "pawoonId": "3638a6a0-23c4-11f0-aa08-b58f195bc02e",
+      "name": "Lemon Tea",
+      "category": "Tea",
+      "price": 15000,
+      "sku": "NCF-25",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Lemon Tea - Hot",
+          "price": 15000,
+          "sku": "NCF-25-1"
+        },
+        {
+          "name": "Lemon Tea - Ice",
+          "price": 15000,
+          "sku": "NCF-25-2"
+        }
+      ],
+      "aliases": [
+        "lemon tea"
+      ]
+    },
+    {
+      "id": "special-tea",
+      "pawoonId": "09152a30-23c4-11f0-8b1e-a9fc303204bb",
+      "name": "Special Tea",
+      "category": "Tea",
+      "price": 15000,
+      "sku": "NCF-24",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Special Tea - Hot - No Sugar",
+          "price": 15000,
+          "sku": "NCF-24-1"
+        },
+        {
+          "name": "Special Tea - Hot - Less Sugar",
+          "price": 15000,
+          "sku": "NCF-24-2"
+        },
+        {
+          "name": "Special Tea - Hot - Normal",
+          "price": 15000,
+          "sku": "NCF-24-3"
+        },
+        {
+          "name": "Special Tea - Hot - Extra Sugar",
+          "price": 15000,
+          "sku": "NCF-24-4"
+        },
+        {
+          "name": "Special Tea - Ice - No Sugar",
+          "price": 15000,
+          "sku": "NCF-24-5"
+        },
+        {
+          "name": "Special Tea - Ice - Less Sugar",
+          "price": 15000,
+          "sku": "NCF-24-6"
+        },
+        {
+          "name": "Special Tea - Ice - Normal",
+          "price": 15000,
+          "sku": "NCF-24-7"
+        },
+        {
+          "name": "Special Tea - Ice - Extra Sugar",
+          "price": 15000,
+          "sku": "NCF-24-8"
+        }
+      ],
+      "aliases": [
+        "special tea"
+      ]
     },
     {
       "id": "reguler-tea",
-      "name": "Reguler Tea",
-      "aliases": [
-        "reguler tea",
-        "teh",
-        "teh manis",
-        "es teh"
-      ],
-      "price": 8000,
       "pawoonId": "c7069de0-23c3-11f0-bf6e-f7ca0df0e1f6",
-      "category": "tea"
-    },
-    {
-      "id": "teh",
       "name": "Reguler Tea",
+      "category": "Tea",
+      "price": 8000,
+      "sku": "NCF-23",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Reguler Tea - Hot - No Sugar",
+          "price": 8000,
+          "sku": "NCF-23-1"
+        },
+        {
+          "name": "Reguler Tea - Hot - Less Sugar",
+          "price": 8000,
+          "sku": "NCF-23-2"
+        },
+        {
+          "name": "Reguler Tea - Hot - Normal",
+          "price": 8000,
+          "sku": "NCF-23-3"
+        },
+        {
+          "name": "Reguler Tea - Hot - Extra Sugar",
+          "price": 8000,
+          "sku": "NCF-23-4"
+        },
+        {
+          "name": "Reguler Tea - Ice - No Sugar",
+          "price": 8000,
+          "sku": "NCF-23-5"
+        },
+        {
+          "name": "Reguler Tea - Ice - Less Sugar",
+          "price": 8000,
+          "sku": "NCF-23-6"
+        },
+        {
+          "name": "Reguler Tea - Ice - Normal",
+          "price": 8000,
+          "sku": "NCF-23-7"
+        },
+        {
+          "name": "Reguler Tea - Ice - Extra Sugar",
+          "price": 8000,
+          "sku": "NCF-23-8"
+        }
+      ],
       "aliases": [
         "es teh manis",
         "es teh",
@@ -1175,22 +1455,1538 @@
         "teh panas",
         "tea",
         "teh manis"
-      ],
-      "price": 8000,
-      "pawoonId": "c7069de0-23c3-11f0-bf6e-f7ca0df0e1f6",
-      "category": "tea"
+      ]
     },
     {
-      "id": "special-tea",
-      "name": "Special Tea",
-      "aliases": [
-        "special tea"
+      "id": "hazelnut-choco-blend",
+      "pawoonId": "8c8390d0-23c3-11f0-8246-9d3e7eb529c5",
+      "name": "Hazelnut Choco Blend",
+      "category": "Chocolate",
+      "price": 23000,
+      "sku": "NCF-22",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746080710.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
       ],
+      "aliases": [
+        "hazelnut choco blend"
+      ]
+    },
+    {
+      "id": "double-choco-chips",
+      "pawoonId": "68af9390-23c3-11f0-becb-ebcaf223a810",
+      "name": "Double Choco Chips",
+      "category": "Chocolate",
+      "price": 23000,
+      "sku": "NCF-21",
+      "image": null,
+      "description": null,
+      "available": true,
+      "aliases": [
+        "double choco chips"
+      ]
+    },
+    {
+      "id": "choco-pandan-latte",
+      "pawoonId": "4c9ac530-23c3-11f0-b001-15100a669de2",
+      "name": "Choco Pandan Latte",
+      "category": "Chocolate",
+      "price": 23000,
+      "sku": "NCF-20",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746080732.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "choco pandan latte"
+      ]
+    },
+    {
+      "id": "ice-choco-mint",
+      "pawoonId": "025b6760-23c3-11f0-b199-29cf2b9a1460",
+      "name": "Ice Choco Mint",
+      "category": "Chocolate",
+      "price": 23000,
+      "sku": "NCF-19",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746080747.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "ice choco mint"
+      ]
+    },
+    {
+      "id": "single-origin-chocolate",
+      "pawoonId": "81208160-23be-11f0-a0b7-a92ae6218ca3",
+      "name": "Single Origin Chocolate",
+      "category": "Chocolate",
+      "price": 25000,
+      "sku": "NCF-18",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746080882.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Single Origin Chocolate - Hot",
+          "price": 28000,
+          "sku": "NCF-18-1"
+        },
+        {
+          "name": "Single Origin Chocolate - Ice",
+          "price": 28000,
+          "sku": "NCF-18-2"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "single origin chocolate"
+      ]
+    },
+    {
+      "id": "chocolate-cinnamon",
+      "pawoonId": "3d539a60-23be-11f0-845d-0beab639828e",
+      "name": "Chocolate Cinnamon",
+      "category": "Chocolate",
+      "price": 20000,
+      "sku": "NCF-17",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746080788.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Chocolate Cinnamon - Hot",
+          "price": 20000,
+          "sku": "NCF-17-1"
+        },
+        {
+          "name": "Chocolate Cinnamon - Ice",
+          "price": 20000,
+          "sku": "NCF-17-2"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "chocolate cinnamon"
+      ]
+    },
+    {
+      "id": "red-velvet-latte",
+      "pawoonId": "3ee9f310-239e-11f0-81b8-dfa8f32e0b9d",
+      "name": "Red Velvet Latte",
+      "category": "Chocolate",
+      "price": 18000,
+      "sku": "NCF-16",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757315371.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Red Velvet Latte - Hot",
+          "price": 18000,
+          "sku": "NCF-16-1"
+        },
+        {
+          "name": "Red Velvet Latte - Ice",
+          "price": 18000,
+          "sku": "NCF-16-2"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "red velvet latte"
+      ]
+    },
+    {
+      "id": "chocolate",
+      "pawoonId": "175ee0b0-239e-11f0-9a30-95624376ca0f",
+      "name": "Chocolate",
+      "category": "Chocolate",
+      "price": 18000,
+      "sku": "NCF-15",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746080806.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Chocolate - Hot",
+          "price": 18000,
+          "sku": "NCF-15-1"
+        },
+        {
+          "name": "Chocolate - Ice",
+          "price": 18000,
+          "sku": "NCF-15-2"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "chocolate",
+        "coklat",
+        "cokelat",
+        "hot chocolate",
+        "es coklat",
+        "es cokelat"
+      ]
+    },
+    {
+      "id": "vanilla-milkshake",
+      "pawoonId": "e708db20-239d-11f0-913a-1fc74f2a392b",
+      "name": "Vanilla Milkshake",
+      "category": "Milkshake",
+      "price": 20000,
+      "sku": "NCF-14",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746159210.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "vanilla milkshake"
+      ]
+    },
+    {
+      "id": "strawberry-milkshake",
+      "pawoonId": "d1088510-239d-11f0-ad8f-1b5b4dde6866",
+      "name": "Strawberry Milkshake",
+      "category": "Milkshake",
+      "price": 20000,
+      "sku": "NCF-13",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757315605.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "strawberry milkshake"
+      ]
+    },
+    {
+      "id": "red-velvet-milkshake",
+      "pawoonId": "bd208270-239d-11f0-9c06-9bc9cc8e3ce2",
+      "name": "Red Velvet Milkshake",
+      "category": "Milkshake",
+      "price": 20000,
+      "sku": "NCF-12",
+      "image": null,
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "red velvet milkshake"
+      ]
+    },
+    {
+      "id": "oreo-milkshake",
+      "pawoonId": "a042e4d0-239d-11f0-93eb-45c7182a6e5f",
+      "name": "Oreo Milkshake",
+      "category": "Milkshake",
+      "price": 23000,
+      "sku": "NCF-11",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757316124.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "oreo milkshake"
+      ]
+    },
+    {
+      "id": "matcha-mint-milkshake",
+      "pawoonId": "8648e670-239d-11f0-9ffd-dd3f1cdc8cf6",
+      "name": "Matcha Mint Milkshake",
+      "category": "Milkshake",
+      "price": 25000,
+      "sku": "NCF-10",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757315916.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "matcha mint milkshake",
+        "matcha"
+      ]
+    },
+    {
+      "id": "kurma-milkshake",
+      "pawoonId": "6ab6e6a0-239d-11f0-b273-6377f937afc5",
+      "name": "Kurma Milkshake",
+      "category": "Milkshake",
+      "price": 23000,
+      "sku": "NCF-09",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757316217.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "kurma milkshake"
+      ]
+    },
+    {
+      "id": "cookies-cream",
+      "pawoonId": "41059900-239d-11f0-aabf-bbcc9f66d310",
+      "name": "Cookies & Cream",
+      "category": "Milkshake",
+      "price": 23000,
+      "sku": "NCF-08",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757316182.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "cookies & cream"
+      ]
+    },
+    {
+      "id": "chocolate-milkshake",
+      "pawoonId": "0934ee40-239d-11f0-8c4a-e31f5ca60dbd",
+      "name": "Chocolate Milkshake",
+      "category": "Milkshake",
+      "price": 20000,
+      "sku": "NCF-07",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1757316158.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "chocolate milkshake"
+      ]
+    },
+    {
+      "id": "strawberry-smoothie",
+      "pawoonId": "51b2ce60-239c-11f0-a554-b78b21adf3d1",
+      "name": "Strawberry Smoothie",
+      "category": "Fresh & Healthy",
+      "price": 20000,
+      "sku": "NCF-06",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746112934.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "strawberry smoothie"
+      ]
+    },
+    {
+      "id": "strawberry-milky-latte",
+      "pawoonId": "37960230-239c-11f0-84e8-4524b0905560",
+      "name": "Strawberry Milky Latte",
+      "category": "Fresh & Healthy",
+      "price": 20000,
+      "sku": "NCF-05",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746113261.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "strawberry milky latte"
+      ]
+    },
+    {
+      "id": "green-leaf-juice",
+      "pawoonId": "fc26ce70-239b-11f0-bf25-63133d9cb1d1",
+      "name": "Green Leaf Juice",
+      "category": "Fresh & Healthy",
+      "price": 17000,
+      "sku": "NCF-04",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746117587.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "green leaf juice"
+      ]
+    },
+    {
+      "id": "chocolate-smoothie",
+      "pawoonId": "d645f540-239b-11f0-8cd7-6dd2a77d93d4",
+      "name": "Chocolate Smoothie",
+      "category": "Fresh & Healthy",
+      "price": 20000,
+      "sku": "NCF-03",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746117802.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "chocolate smoothie"
+      ]
+    },
+    {
+      "id": "blue-lagoon-mocktail",
+      "pawoonId": "b15e93c0-239b-11f0-9448-55a4217d47b2",
+      "name": "Blue Lagoon Mocktail",
+      "category": "Fresh & Healthy",
+      "price": 20000,
+      "sku": "NCF-02",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746117979.jpeg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "blue lagoon mocktail"
+      ]
+    },
+    {
+      "id": "best-green-smoothie",
+      "pawoonId": "d56c3830-2396-11f0-8416-3176cc58c23c",
+      "name": "Best Green Smoothie",
+      "category": "Fresh & Healthy",
+      "price": 20000,
+      "sku": "NCF-01",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746117638.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "best green smoothie"
+      ]
+    },
+    {
+      "id": "kopi-susu-botol-pop-corn",
+      "pawoonId": "7ff92760-2396-11f0-8bbf-c9a338427a66",
+      "name": "Kopi Susu Botol Pop Corn",
+      "category": "Kopi Susu Botol",
+      "price": 25000,
+      "sku": "CFE-34",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119639.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Kopi Susu Botol Pop Corn - 250 ml",
+          "price": 25000,
+          "sku": "CFE-34-1"
+        },
+        {
+          "name": "Kopi Susu Botol Pop Corn - 500 ml",
+          "price": 65000,
+          "sku": "CFE-34-2"
+        },
+        {
+          "name": "Kopi Susu Botol Pop Corn - 1 liter",
+          "price": 130000,
+          "sku": "CFE-34-3"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Extra Creamy",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "kopi susu botol pop corn"
+      ]
+    },
+    {
+      "id": "kopi-susu-botol-mint",
+      "pawoonId": "ea1fad80-2395-11f0-9e69-5bb7fde9d59f",
+      "name": "Kopi Susu Botol Mint",
+      "category": "Kopi Susu Botol",
+      "price": 25000,
+      "sku": "CFE-33",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119608.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Kopi Susu Botol Mint - 250 ml",
+          "price": 25000,
+          "sku": "CFE-33-1"
+        },
+        {
+          "name": "Kopi Susu Botol Mint - 500 ml",
+          "price": 65000,
+          "sku": "CFE-33-2"
+        },
+        {
+          "name": "Kopi Susu Botol Mint - 1 liter",
+          "price": 130000,
+          "sku": "CFE-33-3"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Extra Creamy",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "kopi susu botol mint"
+      ]
+    },
+    {
+      "id": "kopi-susu-botol-cheese",
+      "pawoonId": "bb9d6080-2395-11f0-bab3-cdeb7e88caf1",
+      "name": "Kopi Susu Botol Cheese",
+      "category": "Kopi Susu Botol",
+      "price": 25000,
+      "sku": "CFE-32",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119439.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Kopi Susu Botol Cheese - 250 ml",
+          "price": 25000,
+          "sku": "CFE-32-1"
+        },
+        {
+          "name": "Kopi Susu Botol Cheese - 500 ml",
+          "price": 65000,
+          "sku": "CFE-32-2"
+        },
+        {
+          "name": "Kopi Susu Botol Cheese - 1 liter",
+          "price": 130000,
+          "sku": "CFE-32-3"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Extra Creamy",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "kopi susu botol cheese"
+      ]
+    },
+    {
+      "id": "kopi-susu-botol-cinnamon",
+      "pawoonId": "8e5d0310-2395-11f0-921f-19de9851f444",
+      "name": "Kopi Susu Botol Cinnamon",
+      "category": "Kopi Susu Botol",
+      "price": 25000,
+      "sku": "CFE-31",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119466.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Kopi Susu Botol Cinnamon - 250 ml",
+          "price": 25000,
+          "sku": "CFE-31-1"
+        },
+        {
+          "name": "Kopi Susu Botol Cinnamon - 500 ml",
+          "price": 65000,
+          "sku": "CFE-31-2"
+        },
+        {
+          "name": "Kopi Susu Botol Cinnamon - 1 liter",
+          "price": 130000,
+          "sku": "CFE-31-3"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Extra Creamy",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "kopi susu botol cinnamon"
+      ]
+    },
+    {
+      "id": "kopi-susu-botol-karamel",
+      "pawoonId": "50726650-2395-11f0-8d6e-db8a24cb3cea",
+      "name": "Kopi Susu Botol Karamel",
+      "category": "Kopi Susu Botol",
+      "price": 25000,
+      "sku": "CFE-30",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119486.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Kopi Susu Botol Karamel - 250 ml",
+          "price": 25000,
+          "sku": "CFE-30-1"
+        },
+        {
+          "name": "Kopi Susu Botol Karamel - 500 ml",
+          "price": 65000,
+          "sku": "CFE-30-2"
+        },
+        {
+          "name": "Kopi Susu Botol Karamel - 1 liter",
+          "price": 130000,
+          "sku": "CFE-30-3"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Extra Creamy",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "kopi susu botol karamel"
+      ]
+    },
+    {
+      "id": "kopi-susu-botol-original",
+      "pawoonId": "86346e10-2394-11f0-874f-05ba6d445419",
+      "name": "Kopi Susu Botol Original",
+      "category": "Kopi Susu Botol",
+      "price": 20000,
+      "sku": "CFE-29",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746119624.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Kopi Susu Botol Original - 250 ml",
+          "price": 20000,
+          "sku": "CFE-29-1"
+        },
+        {
+          "name": "Kopi Susu Botol Original - 500 ml",
+          "price": 55000,
+          "sku": "CFE-29-2"
+        },
+        {
+          "name": "Kopi Susu Botol Original - 1 liter",
+          "price": 110000,
+          "sku": "CFE-29-3"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Extra Creamy",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "kopi susu botol original"
+      ]
+    },
+    {
+      "id": "vanilla-frappuccino",
+      "pawoonId": "21ba5350-2374-11f0-9659-3312c314587e",
+      "name": "Vanilla Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 25000,
+      "sku": "CFE-28",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111529.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "vanilla frappuccino"
+      ]
+    },
+    {
+      "id": "oreo-frappuccino",
+      "pawoonId": "0755e0a0-2374-11f0-96b3-59f352513996",
+      "name": "Oreo Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 27000,
+      "sku": "CFE-27",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111603.jpeg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "oreo frappuccino"
+      ]
+    },
+    {
+      "id": "mocha-frappuccino",
+      "pawoonId": "e7eb0b30-2373-11f0-9f92-e969dee968bc",
+      "name": "Mocha Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 25000,
+      "sku": "CFE-26",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111704.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "mocha frappuccino"
+      ]
+    },
+    {
+      "id": "hazelnut-frappuccino",
+      "pawoonId": "c39b1110-2373-11f0-ad7f-a3d1ddd06ce0",
+      "name": "Hazelnut Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 25000,
+      "sku": "CFE-25",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111723.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "hazelnut frappuccino"
+      ]
+    },
+    {
+      "id": "choco-cookies-frappuccino",
+      "pawoonId": "8b944ec0-2373-11f0-bd85-b362a7936ed3",
+      "name": "Choco Cookies Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 27000,
+      "sku": "CFE-24",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111738.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "choco cookies frappuccino"
+      ]
+    },
+    {
+      "id": "caramel-frappuccino",
+      "pawoonId": "6e04efe0-2373-11f0-90d1-7d5dc334a1a1",
+      "name": "Caramel Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 25000,
+      "sku": "CFE-23",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111753.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "caramel frappuccino"
+      ]
+    },
+    {
+      "id": "tropical-coffee-mocktail",
+      "pawoonId": "130f2a50-2372-11f0-9ac7-1955dd86af57",
+      "name": "Tropical Coffee Mocktail",
+      "category": "Signature Coffee",
+      "price": 20000,
+      "sku": "CFE-22",
+      "image": null,
+      "description": null,
+      "available": true,
+      "aliases": [
+        "tropical coffee mocktail"
+      ]
+    },
+    {
+      "id": "caramel-macchiatto",
+      "pawoonId": "f900c740-2371-11f0-a81b-878ac14b9b7d",
+      "name": "Caramel Macchiatto",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "sku": "CFE-21",
+      "image": null,
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Caramel Macchiatto - Hot",
+          "price": 25000,
+          "sku": "CFE-21-1"
+        },
+        {
+          "name": "Caramel Macchiatto - Ice",
+          "price": 25000,
+          "sku": "CFE-21-2"
+        }
+      ],
+      "aliases": [
+        "caramel macchiatto"
+      ]
+    },
+    {
+      "id": "pandan-latte-iced-coffee",
+      "pawoonId": "cce55c40-2371-11f0-968e-897d9d6cbffe",
+      "name": "Pandan Latte Iced Coffee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "sku": "CFE-20",
+      "image": null,
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "pandan latte iced coffee"
+      ]
+    },
+    {
+      "id": "nutella-iced-coffee",
+      "pawoonId": "b1d11b60-2371-11f0-9358-c75ce27deda9",
+      "name": "Nutella Iced Coffee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "sku": "CFE-19",
+      "image": null,
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "nutella iced coffee"
+      ]
+    },
+    {
+      "id": "lotus-biscoff-iced-coffee",
+      "pawoonId": "87ffb4c0-2371-11f0-b893-97a4bd954f3a",
+      "name": "Lotus Biscoff Iced Coffee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "sku": "CFE-18",
+      "image": null,
+      "description": null,
+      "available": true,
+      "aliases": [
+        "lotus biscoff iced coffee"
+      ]
+    },
+    {
+      "id": "lemonade-iced-coffee",
+      "pawoonId": "588f7160-2371-11f0-b9de-cbc5d2b2f79f",
+      "name": "Lemonade Iced Coffee",
+      "category": "Signature Coffee",
+      "price": 20000,
+      "sku": "CFE-17",
+      "image": null,
+      "description": null,
+      "available": true,
+      "aliases": [
+        "lemonade iced coffee"
+      ]
+    },
+    {
+      "id": "kopi-susu-madu-jahe-panas",
+      "pawoonId": "34fa1d90-2371-11f0-aad0-0de7febaa14b",
+      "name": "Kopi Susu Madu Jahe Panas",
+      "category": "Signature Coffee",
+      "price": 23000,
+      "sku": "CFE-16",
+      "image": null,
+      "description": null,
+      "available": true,
+      "aliases": [
+        "kopi susu madu jahe panas"
+      ]
+    },
+    {
+      "id": "cappuccino-hot-creme-brulee",
+      "pawoonId": "13dfaec0-2371-11f0-a52d-cb4028b4a909",
+      "name": "Cappuccino Hot Creme Brulee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "sku": "CFE-15",
+      "image": null,
+      "description": null,
+      "available": true,
+      "aliases": [
+        "cappuccino hot creme brulee",
+        "cappuccino",
+        "capuccino"
+      ]
+    },
+    {
+      "id": "es-kopi-susu-dalgona",
+      "pawoonId": "e0b58440-2370-11f0-bf3d-b15ac8cd0fb8",
+      "name": "Es Kopi Susu Dalgona",
+      "category": "Es Kopi Susu Gula Aren",
+      "price": 23000,
+      "sku": "CFE-14",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111907.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Es Kopi Susu Dalgona - Less Sugar",
+          "price": 23000,
+          "sku": "CFE-14-1"
+        },
+        {
+          "name": "Es Kopi Susu Dalgona - Normal",
+          "price": 23000,
+          "sku": "CFE-14-2"
+        },
+        {
+          "name": "Es Kopi Susu Dalgona - Extra Sugar",
+          "price": 23000,
+          "sku": "CFE-14-3"
+        }
+      ],
+      "aliases": [
+        "es kopi susu dalgona",
+        "kopi susu dalgona"
+      ]
+    },
+    {
+      "id": "es-kopi-susu-cream-cheese",
+      "pawoonId": "a75c0bb0-2370-11f0-9946-ffbb304d7fd6",
+      "name": "Es Kopi Susu Cream Cheese",
+      "category": "Es Kopi Susu Gula Aren",
+      "price": 23000,
+      "sku": "CFE-13",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111924.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Es Kopi Susu Cream Cheese - Less Sugar",
+          "price": 23000,
+          "sku": "CFE-13-1"
+        },
+        {
+          "name": "Es Kopi Susu Cream Cheese - Normal",
+          "price": 23000,
+          "sku": "CFE-13-2"
+        },
+        {
+          "name": "Es Kopi Susu Cream Cheese - Extra Sugar",
+          "price": 23000,
+          "sku": "CFE-13-3"
+        }
+      ],
+      "aliases": [
+        "es kopi susu cream cheese",
+        "kopi susu cream cheese"
+      ]
+    },
+    {
+      "id": "es-kopi-susu-float",
+      "pawoonId": "80a3b310-2370-11f0-b472-518a68c0f591",
+      "name": "Es Kopi Susu Float",
+      "category": "Es Kopi Susu Gula Aren",
+      "price": 23000,
+      "sku": "CFE-12",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111946.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Es Kopi Susu Float - Less Sugar",
+          "price": 23000,
+          "sku": "CFE-12-1"
+        },
+        {
+          "name": "Es Kopi Susu Float - Normal",
+          "price": 23000,
+          "sku": "CFE-12-2"
+        },
+        {
+          "name": "Es Kopi Susu Float - Extra Sugar",
+          "price": 23000,
+          "sku": "CFE-12-3"
+        }
+      ],
+      "aliases": [
+        "es kopi susu float",
+        "kopi susu float"
+      ]
+    },
+    {
+      "id": "mochaccino",
+      "pawoonId": "c2220820-236e-11f0-b9ae-5157d6b655f9",
+      "name": "Mochaccino",
+      "category": "Milk Based Coffee",
+      "price": 23000,
+      "sku": "CFE-10",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746158986.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Mochaccino - Hot",
+          "price": 25000,
+          "sku": "CFE-10-1"
+        },
+        {
+          "name": "Mochaccino - Ice",
+          "price": 25000,
+          "sku": "CFE-10-2"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Topping Minuman",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "mochaccino"
+      ]
+    },
+    {
+      "id": "caffe-bon-bon",
+      "pawoonId": "93232ff0-236e-11f0-8e51-91c0b027cede",
+      "name": "Caffe Bon Bon",
+      "category": "Milk Based Coffee",
+      "price": 18000,
+      "sku": "CFE-09",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120311.jpg",
+      "description": null,
+      "available": true,
+      "aliases": [
+        "caffe bon bon"
+      ]
+    },
+    {
+      "id": "caffe-latte",
+      "pawoonId": "e9eded40-236a-11f0-8d5b-41805575f860",
+      "name": "Caffe Latte",
+      "category": "Milk Based Coffee",
+      "price": 23000,
+      "sku": "CFE-06",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746120577.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Caffe Latte - Hot - No Syrup",
+          "price": 23000,
+          "sku": "CFE-06-1"
+        },
+        {
+          "name": "Caffe Latte - Hot - Vanilla",
+          "price": 26000,
+          "sku": "CFE-06-2"
+        },
+        {
+          "name": "Caffe Latte - Hot - Caramel",
+          "price": 26000,
+          "sku": "CFE-06-3"
+        },
+        {
+          "name": "Caffe Latte - Hot - Hazelnut",
+          "price": 26000,
+          "sku": "CFE-06-4"
+        },
+        {
+          "name": "Caffe Latte - Hot - Pop Corn",
+          "price": 26000,
+          "sku": "CFE-06-5"
+        },
+        {
+          "name": "Caffe Latte - Ice - No Syrup",
+          "price": 23000,
+          "sku": "CFE-06-6"
+        },
+        {
+          "name": "Caffe Latte - Ice - Vanilla",
+          "price": 26000,
+          "sku": "CFE-06-7"
+        },
+        {
+          "name": "Caffe Latte - Ice - Caramel",
+          "price": 26000,
+          "sku": "CFE-06-8"
+        },
+        {
+          "name": "Caffe Latte - Ice - Hazelnut",
+          "price": 26000,
+          "sku": "CFE-06-9"
+        },
+        {
+          "name": "Caffe Latte - Ice - Pop Corn",
+          "price": 26000,
+          "sku": "CFE-06-10"
+        }
+      ],
+      "aliases": [
+        "latte",
+        "cafe latte",
+        "caffe latte",
+        "kopi latte"
+      ]
+    },
+    {
+      "id": "vietnam-drip",
+      "pawoonId": "dd41a410-2369-11f0-8ac4-c300c16ceb70",
+      "name": "Vietnam Drip",
+      "category": "Espresso & Manual Brew",
+      "price": 18000,
+      "sku": "CFE-05",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746111982.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Vietnam Drip - Hot",
+          "price": 18000,
+          "sku": "CFE-05-1"
+        },
+        {
+          "name": "Vietnam Drip - Ice",
+          "price": 20000,
+          "sku": "CFE-05-2"
+        }
+      ],
+      "aliases": [
+        "vietnam drip"
+      ]
+    },
+    {
+      "id": "caffe-macchiato",
+      "pawoonId": "559a5990-232d-11f0-8835-214c2f2ef8bd",
+      "name": "Caffe Macchiato",
+      "category": "Milk Based Coffee",
+      "price": 23000,
+      "sku": "CFE-08",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746157506.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Caffe Macchiato - Hot - No Sugar",
+          "price": 23000,
+          "sku": "CFE-08-1"
+        },
+        {
+          "name": "Caffe Macchiato - Hot - Less Sugar",
+          "price": 23000,
+          "sku": "CFE-08-2"
+        },
+        {
+          "name": "Caffe Macchiato - Hot - Normal",
+          "price": 23000,
+          "sku": "CFE-08-3"
+        },
+        {
+          "name": "Caffe Macchiato - Hot - Extra Sugar",
+          "price": 23000,
+          "sku": "CFE-08-4"
+        },
+        {
+          "name": "Caffe Macchiato - Ice - No Sugar",
+          "price": 23000,
+          "sku": "CFE-08-5"
+        },
+        {
+          "name": "Caffe Macchiato - Ice - Less Sugar",
+          "price": 23000,
+          "sku": "CFE-08-6"
+        },
+        {
+          "name": "Caffe Macchiato - Ice - Normal",
+          "price": 23000,
+          "sku": "CFE-08-7"
+        },
+        {
+          "name": "Caffe Macchiato - Ice - Extra Sugar",
+          "price": 23000,
+          "sku": "CFE-08-8"
+        }
+      ],
+      "aliases": [
+        "caffe macchiato"
+      ]
+    },
+    {
+      "id": "cappuccino",
+      "pawoonId": "30c08ca0-232d-11f0-bc86-2b1e4076772d",
+      "name": "Cappuccino",
+      "category": "Milk Based Coffee",
+      "price": 23000,
+      "sku": "CFE-07",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746158869.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "Cappuccino - Hot - No Sugar",
+          "price": 23000,
+          "sku": "CFE-07-1"
+        },
+        {
+          "name": "Cappuccino - Hot - Less Sugar",
+          "price": 23000,
+          "sku": "CFE-07-2"
+        },
+        {
+          "name": "Cappuccino - Hot - Normal",
+          "price": 23000,
+          "sku": "CFE-07-3"
+        },
+        {
+          "name": "Cappuccino - Hot - Extra Sugar",
+          "price": 23000,
+          "sku": "CFE-07-4"
+        },
+        {
+          "name": "Cappuccino - Ice - No Sugar",
+          "price": 23000,
+          "sku": "CFE-07-5"
+        },
+        {
+          "name": "Cappuccino - Ice - Less Sugar",
+          "price": 23000,
+          "sku": "CFE-07-6"
+        },
+        {
+          "name": "Cappuccino - Ice - Normal",
+          "price": 23000,
+          "sku": "CFE-07-7"
+        },
+        {
+          "name": "Cappuccino - Ice - Extra Sugar",
+          "price": 23000,
+          "sku": "CFE-07-8"
+        }
+      ],
+      "aliases": [
+        "cappuccino",
+        "capuccino",
+        "cappucino",
+        "capucino"
+      ]
+    },
+    {
+      "id": "v60-single-origin",
+      "pawoonId": "374a14b0-22c3-11f0-ae60-b9c113229e69",
+      "name": "V60 Single Origin",
+      "category": "Espresso & Manual Brew",
+      "price": 23000,
+      "sku": "CFE-04",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746112480.jpg",
+      "description": null,
+      "available": true,
+      "variants": [
+        {
+          "name": "V60 Single Origin - Hot",
+          "price": 23000,
+          "sku": "CFE-04-1"
+        },
+        {
+          "name": "V60 Single Origin - Ice (Javanese)",
+          "price": 23000,
+          "sku": "CFE-04-2"
+        }
+      ],
+      "aliases": [
+        "v60 single origin"
+      ]
+    },
+    {
+      "id": "espresso",
+      "pawoonId": "5defd4c0-22c2-11f0-9722-b37fa3aa82a9",
+      "name": "Espresso",
+      "category": "Espresso & Manual Brew",
       "price": 15000,
-      "pawoonId": "09152a30-23c4-11f0-8b1e-a9fc303204bb",
-      "category": "tea"
+      "sku": "CFE-03",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746112821.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Extra Shot Espresso",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "espresso"
+      ]
+    },
+    {
+      "id": "affogato",
+      "pawoonId": "20324010-22c2-11f0-abf7-3bc5232f32b8",
+      "name": "Affogato",
+      "category": "Espresso & Manual Brew",
+      "price": 20000,
+      "sku": "CFE-01",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746112004.jpg",
+      "description": null,
+      "available": true,
+      "modifiers": [
+        {
+          "name": "Extra Shot Espresso",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "affogato"
+      ]
+    },
+    {
+      "id": "americano",
+      "pawoonId": "25425460-227c-11f0-b74c-f1bac691bc7c",
+      "name": "Americano",
+      "category": "Espresso & Manual Brew",
+      "price": 17000,
+      "sku": "CFE-02",
+      "image": "https://s3-ap-southeast-1.amazonaws.com/new.newpawoon/product_images/IMG_252564_1746112019.jpg",
+      "description": "Kopi hitam yang berasal dari espresso dan tambahan air mineral",
+      "available": true,
+      "variants": [
+        {
+          "name": "Americano - Hot - No Sugar",
+          "price": 17000,
+          "sku": "CFE-02-1"
+        },
+        {
+          "name": "Americano - Hot - Less Sugar",
+          "price": 17000,
+          "sku": "CFE-02-2"
+        },
+        {
+          "name": "Americano - Hot - Normal",
+          "price": 17000,
+          "sku": "CFE-02-3"
+        },
+        {
+          "name": "Americano - Hot - Extra Sugar",
+          "price": 17000,
+          "sku": "CFE-02-4"
+        },
+        {
+          "name": "Americano - Ice - No Sugar",
+          "price": 17000,
+          "sku": "CFE-02-5"
+        },
+        {
+          "name": "Americano - Ice - Less Sugar",
+          "price": 17000,
+          "sku": "CFE-02-6"
+        },
+        {
+          "name": "Americano - Ice - Normal",
+          "price": 17000,
+          "sku": "CFE-02-7"
+        },
+        {
+          "name": "Americano - Ice - Extra Sugar",
+          "price": 17000,
+          "sku": "CFE-02-8"
+        }
+      ],
+      "modifiers": [
+        {
+          "name": "Grade Bean",
+          "required": false,
+          "maxSelect": null,
+          "options": []
+        }
+      ],
+      "aliases": [
+        "americano",
+        "amer",
+        "kopi amer"
+      ]
     }
   ],
-  "lastSyncedAt": "2026-04-19T23:00:18.199Z",
-  "syncSource": "pawoon"
+  "lastSyncedAt": "2026-04-20T06:21:11.175Z",
+  "syncSource": "pawoon-v2",
+  "categories": [
+    {
+      "id": "bf2a8c80-227b-11f0-9d88-c9e89868a3fb",
+      "name": "Espresso & Manual Brew",
+      "itemCount": 5
+    },
+    {
+      "id": "55ef51f0-22b5-11f0-970d-854a22dc6d7c",
+      "name": "Es Kopi Susu Gula Aren",
+      "itemCount": 4
+    },
+    {
+      "id": "71b39e90-22b5-11f0-aa01-4d32c08285dc",
+      "name": "Kopi Susu Botol",
+      "itemCount": 6
+    },
+    {
+      "id": "f1b03460-231c-11f0-8d2d-95f7debceadd",
+      "name": "Milk Based Coffee",
+      "itemCount": 5
+    },
+    {
+      "id": "0360daa0-2371-11f0-bd97-9f2dc7b6ab5f",
+      "name": "Signature Coffee",
+      "itemCount": 8
+    },
+    {
+      "id": "55d80260-2373-11f0-8c6a-579acc173d3e",
+      "name": "Es Kopi Blend",
+      "itemCount": 6
+    },
+    {
+      "id": "bef1e990-2396-11f0-a756-05ffe487927b",
+      "name": "Fresh & Healthy",
+      "itemCount": 6
+    },
+    {
+      "id": "0183bce0-239d-11f0-afe3-290c9db56300",
+      "name": "Milkshake",
+      "itemCount": 8
+    },
+    {
+      "id": "01421bd0-239e-11f0-9163-31b4ab9c6547",
+      "name": "Chocolate",
+      "itemCount": 8
+    },
+    {
+      "id": "9fabb400-23c3-11f0-9486-a3e3bceaa5ff",
+      "name": "Tea",
+      "itemCount": 7
+    },
+    {
+      "id": "e67bae60-23c6-11f0-8534-11153528f41c",
+      "name": "Western Foods",
+      "itemCount": 4
+    },
+    {
+      "id": "3f5d19d0-23cc-11f0-9aa0-8f30dbac453c",
+      "name": "Indonesian Foods",
+      "itemCount": 8
+    },
+    {
+      "id": "7c34eb80-23dd-11f0-b515-03850605e0e6",
+      "name": "Nasi Goreng",
+      "itemCount": 5
+    },
+    {
+      "id": "e64eb920-23e1-11f0-9420-c3ea158194fd",
+      "name": "Rice Bowls & Noodles",
+      "itemCount": 8
+    },
+    {
+      "id": "c0958e80-23ea-11f0-b621-99f209683c70",
+      "name": "Makanan Ringan",
+      "itemCount": 9
+    },
+    {
+      "id": "922885c0-23f2-11f0-9932-17b7edfcfa24",
+      "name": "Dessert",
+      "itemCount": 3
+    },
+    {
+      "id": "67522f50-23f4-11f0-9c5d-09935df75d15",
+      "name": "Lain-lain",
+      "itemCount": 6
+    }
+  ],
+  "totalItems": 106,
+  "totalCategories": 17
 }
