@@ -70,7 +70,7 @@ function formatIdr(amount) {
 function buildQrisCaption({ customerName = null, amount = null } = {}) {
   const salutation = customerName ? `Siap kak ${customerName},` : 'Siap kak,';
   const totalText = amount != null ? ` Total pembayarannya ${formatIdr(amount)}.` : '';
-  return `${salutation} ini QRIS-nya ya.${totalText} Nanti setelah masuk, sistem kami verifikasi otomatis 🙂`;
+  return `${salutation} ini QRIS-nya ya.${totalText} Nanti setelah masuk, otomatis terverifikasi 🙂`;
 }
 
 async function runWacli(args) {
@@ -159,7 +159,7 @@ export async function sendQrisSuccessWhatsApp({ to, customerName = null, order =
   }
 
   const salutation = customerName ? `Siap kak ${customerName},` : 'Siap kak,';
-  const message = `${salutation} pembayaran QRIS-nya sudah terverifikasi ya ✅\n\nPesanan kakak segera kami proses. Ditunggu ya! ☕`;
+  const message = `${salutation} pembayaran QRIS-nya sudah terverifikasi ya ✅\n\nPesanan kamu segera diproses. Ditunggu ya! ☕`;
 
   try {
     const result = await runWacli(['send', 'text', '--to', recipient, '--message', message]);
