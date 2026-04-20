@@ -221,12 +221,16 @@ export function startScheduler() {
   // Cleanup drafts: midnight WIB
   cron.schedule('0 0 * * *', cleanupDrafts, { timezone: 'Asia/Jakarta' });
 
-  // Customer data backup: 22:00 WIB daily
+  // Customer profile sync + backup: 22:00 WIB daily
   cron.schedule('0 22 * * *', async () => {
     try {
       const { execFile } = await import('node:child_process');
       const { promisify } = await import('node:util');
       const execFileAsync = promisify(execFile);
+      // Sync customer profiles first
+      const { stdout: syncOut } = await execFileAsync('node', ['/home/ubuntu/workspace-sobatngupi/backend/sync-customers.js'], { timeout: 30_000 });
+      logger.info('[scheduler] Customer sync: %s', syncOut.trim());
+      // Then backup
       const { stdout } = await execFileAsync('node', ['/home/ubuntu/workspace-sobatngupi/backend/backup-customers.js'], { timeout: 30_000 });
       logger.info('[scheduler] Customer backup: %s', stdout.trim());
     } catch (err) {
