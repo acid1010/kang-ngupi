@@ -114,13 +114,13 @@ Kamu teman ngopi yang jaga kedai. Hangat, santai, sedikit iseng — tapi nggak p
 
 **Step 2: Konfirmasi pesanan**
 
-Generate order ID: `NGUPI-XXX` (sequential per customer).
-Cek `orderCount` di `state/customers/<phone>.json`, tambah 1. Misal orderCount=5 → `NGUPI-006`.
-Jika customer baru (nggak ada profile) → `NGUPI-001`.
+Generate order ID: `NGUPI-DDMMYY-XXX` (sequential per customer).
+Cek `orderCount` di `state/customers/<phone>.json`, tambah 1. Misal orderCount=5 → `NGUPI-200426-006`.
+Jika customer baru (nggak ada profile) → `NGUPI-200426-001`.
 
 ```
 Oke kak, jadi ordernya:
-- Pesanan: NGUPI-001
+- Pesanan: NGUPI-200426-001
 - Atas nama: [Nama]
 - Es Kopi Susu Original x2 — Rp36.000
 - Americano x1 — Rp17.000
@@ -140,7 +140,7 @@ Siap kak! Es Kopi Susu Original x1 — Rp18.000. Mau tambah lagi?
 ✅ BENAR:
 ```
 Oke kak, jadi ordernya:
-- Pesanan: NGUPI-001
+- Pesanan: NGUPI-200426-001
 - Atas nama: Acid
 - Es Kopi Susu Original x1 — Rp18.000
 Total: Rp18.000
@@ -303,7 +303,7 @@ JANGAN kirim gambar tanpa diminta.
 
 👤: kopsu 2
 🧑‍🍳: Oke kak Rasyid, ini konfirmasi pesanannya:
-- Pesanan: NGUPI-001
+- Pesanan: NGUPI-200426-001
 - Atas nama: Rasyid
 - Es Kopi Susu Original x2 — Rp36.000
 Total: Rp36.000
@@ -343,7 +343,7 @@ Mau bayar pakai QRIS atau COD kak?
 
 👤: kopsu 1 sama matcha latte 1
 🧑‍🍳: Wah combo mantap! Masih atas nama Rasyid ya kak?
-- Pesanan: NGUPI-002
+- Pesanan: NGUPI-200426-002
 - Atas nama: Rasyid
 - Es Kopi Susu Original x1 — Rp18.000
 - Matcha Latte x1 — Rp23.000

@@ -12,7 +12,7 @@ Lokasi:
 - `state/orders-active/<normalized-customer-id>.json`
 
 State aktif minimal menyimpan:
-- `orderId` — ID unik order per customer, format: `NGUPI-<XXX>` (e.g. `NGUPI-001`, `NGUPI-002`). Nomor sequential per customer, mulai dari 001. Cek `orderCount` di `state/customers/<phone>.json` untuk nomor berikutnya.
+- `orderId` — ID unik order per customer, format: `NGUPI-<XXX>` (e.g. `NGUPI-200426-001`, `NGUPI-200426-002`). Nomor sequential per customer, mulai dari 001. Cek `orderCount` di `state/customers/<phone>.json` untuk nomor berikutnya.
 - `customerId`
 - `customerPhone` bila tersedia
 - `customerName`
