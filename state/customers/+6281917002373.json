@@ -1,5 +1,14 @@
 {
   "name": "Budi",
   "phone": "+6281917002373",
-  "lastOrder": "2026-04-17T09:15:20.931597+00:00"
+  "firstOrder": "2026-04-17T07:11:56.329251+00:00",
+  "lastOrder": "2026-04-17T09:15:20.931597+00:00",
+  "orderCount": 3,
+  "paidOrderCount": 1,
+  "totalSpent": 0,
+  "favoriteItems": [],
+  "preferredPayment": "qris",
+  "preferredFulfillment": "delivery",
+  "preferences": {},
+  "updatedAt": "2026-04-20T06:42:34.545Z"
 }

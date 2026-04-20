@@ -1,5 +1,14 @@
 {
   "name": "Rahmat",
   "phone": "+6285155022960",
-  "lastOrder": "2026-04-18T09:06:06.993346+00:00"
+  "firstOrder": "2026-04-16T16:55:24.349466+00:00",
+  "lastOrder": "2026-04-18T09:06:06.993346+00:00",
+  "orderCount": 13,
+  "paidOrderCount": 2,
+  "totalSpent": 0,
+  "favoriteItems": [],
+  "preferredPayment": "qris",
+  "preferredFulfillment": "delivery",
+  "preferences": {},
+  "updatedAt": "2026-04-20T06:42:34.544Z"
 }
