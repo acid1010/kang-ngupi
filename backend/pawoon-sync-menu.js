@@ -219,7 +219,7 @@ async function syncMenu() {
     totalCategories: categoryList.length
   };
 
-  writeFileSync(MENU_SCHEMA_PATH, JSON.stringify(schema, null, 2));
+  writeFileSync(MENU_SCHEMA_PATH, JSON.stringify(schema));
 
   console.log(`\nSync complete: ${added} added, ${updated} price/category updated, ${unchanged} unchanged`);
   console.log(`Total menu items: ${newMenus.length} (${categoryList.length} categories)`);
