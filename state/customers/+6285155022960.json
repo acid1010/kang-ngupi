@@ -1,0 +1,13 @@
+{
+  "name": "Acid",
+  "phone": "+6285155022960",
+  "firstOrder": null,
+  "lastOrder": null,
+  "orderCount": 0,
+  "paidOrderCount": 0,
+  "totalSpent": 0,
+  "favoriteItems": [],
+  "preferredPayment": "qris",
+  "preferredFulfillment": "delivery",
+  "preferences": {}
+}
