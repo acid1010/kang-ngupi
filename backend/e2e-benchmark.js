@@ -79,9 +79,9 @@ function sendMessage(text) {
       // Location message — send as text with coords (OpenClaw parses this)
       const [lat, lng] = text.replace('loc:', '').split(',');
       const locText = `https://maps.google.com/?q=${lat},${lng}`;
-      execFileSync(WACLI, ['send', 'text', '--to', JID, '--text', locText], { timeout: 15000 });
+      execFileSync(WACLI, ['send', 'text', '--to', JID, '--message', locText], { timeout: 15000 });
     } else {
-      execFileSync(WACLI, ['send', 'text', '--to', JID, '--text', text], { timeout: 15000 });
+      execFileSync(WACLI, ['send', 'text', '--to', JID, '--message', text], { timeout: 15000 });
     }
     return true;
   } catch (e) {
