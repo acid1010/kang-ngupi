@@ -195,6 +195,9 @@ Path: `state/orders-active/<phone>.json`
 ⚠️ JANGAN baca ORDER_SYNC.md, TOOLS.md, atau file lain sebelumnya.
 ⚠️ JANGAN tulis outbox file — backend handle sendiri.
 ⚠️ JANGAN generate JSON panjang — cukup fields di atas.
+⚠️ JANGAN baca ORDER_SYNC.md, TOOLS.md, atau file lain sebelumnya.
+⚠️ JANGAN tulis outbox file — backend handle sendiri.
+⚠️ JANGAN generate JSON panjang — cukup fields di atas.
 
 QR belum sampai >2 menit → exec ulang. Hanya jalankan **sekali**.
 
@@ -261,7 +264,7 @@ Delivery pakai Go Ngupi ya kak, ongkir mulai dari Rp8.000an aja 🛵
 - Total: Rp48.000
 Mau bayar pakai QRIS atau COD kak?
 👤: qris
-🧑‍🍳: Siap kak, QR pembayaran sedang disiapkan ya 🙏
+[write state + exec sync → backend kirim QR otomatis, agent DIAM]
 ```
 
 ## Edge Cases
