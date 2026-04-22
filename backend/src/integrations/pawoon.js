@@ -24,6 +24,7 @@ const PAWOON_OUTLET_ID = process.env.PAWOON_OUTLET_ID || 'c531acc0-3205-11ea-a23
 // Sales type IDs from Pawoon
 const PAWOON_SALES_TYPE_DELIVERY = process.env.PAWOON_SALES_TYPE_DELIVERY || null;
 const PAWOON_SALES_TYPE_PICKUP = process.env.PAWOON_SALES_TYPE_PICKUP || null;
+const PAWOON_SALES_TYPE_DINE_IN = process.env.PAWOON_SALES_TYPE_DINE_IN || null;
 
 let cachedToken = null;
 let tokenExpiresAt = 0;
@@ -155,7 +156,14 @@ export async function pushOrderToPawoon(order, items, payment) {
     // Add sales type based on fulfillment method
     const salesTypeId = order.fulfillment_method === 'delivery' 
       ? PAWOON_SALES_TYPE_DELIVERY 
+      : order.fulfillment_method === 'dine_in'
+      ? PAWOON_SALES_TYPE_DINE_IN
       : PAWOON_SALES_TYPE_PICKUP;
+
+    // Add table info for dine-in orders
+    if (order.fulfillment_method === 'dine_in' && order.table_number) {
+      orderPayload.data.notes = `Meja ${order.table_number} - WhatsApp Dine-In Order`;
+    }
     if (salesTypeId) {
       orderPayload.data.company_sales_type_id = salesTypeId;
     }
