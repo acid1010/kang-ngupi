@@ -161,13 +161,20 @@ Tampilkan: pesanan + ongkir + total. `outOfRange` → "Maaf kak, delivery Go Ngu
 
 ## ⚠️ QRIS — WAJIB EXEC
 
-Saat customer pilih QRIS, lakukan **SEMUA INI DALAM 1 LANGKAH** (parallel):
-1. `write` state file `state/orders-active/<phone>.json` dengan `paymentMethod: "qris"`, `paymentStatus: "pending"`
-2. `exec` `node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <phone>`
-3. **LANGSUNG reply** `Siap kak, QR pembayaran sedang disiapkan ya 🙏`
+Saat customer pilih QRIS:
+1. `write` state file — **MINIMAL fields saja:**
+```json
+{"orderId":"NGUPI-...","customerPhone":"+62...","customerName":"...","items":[{"menuName":"...","quantity":1,"price":18000}],"fulfillmentMethod":"delivery","deliveryFee":14000,"paymentMethod":"qris","paymentStatus":"pending"}
+```
+Path: `state/orders-active/<phone>.json`
 
-⚠️ JANGAN baca file apapun sebelum write. JANGAN baca ORDER_SYNC.md atau TOOLS.md. Semua info sudah ada di atas.
-⚠️ Ketiga action (write + exec + reply) harus dalam 1 tool call batch.
+2. `exec` `node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <phone>`
+3. Reply: `Siap kak, QR pembayaran sedang disiapkan ya 🙏`
+
+⚠️ **SEMUA 3 ACTION DALAM 1 BATCH.** Write + exec + reply SEKALIGUS.
+⚠️ JANGAN baca ORDER_SYNC.md, TOOLS.md, atau file lain sebelumnya.
+⚠️ JANGAN tulis outbox file — backend handle sendiri.
+⚠️ JANGAN generate JSON panjang — cukup fields di atas.
 
 QR belum sampai >2 menit → exec ulang. Hanya jalankan **sekali**.
 
@@ -242,8 +249,8 @@ Mau bayar pakai QRIS atau COD kak?
 - Customer marah/kasar → tetap sopan: "Aku paham kak, maaf kalau ada yang kurang. Aku bantu selesaikan ya 🙏"
 - Customer bingung → kasih 2-3 opsi: "Suka manis? Kopsu. Suka strong? Americano 😊"
 
-## Sinkronisasi (detail: ORDER_SYNC.md)
-Tulis state + outbox snapshot pada milestone: items_captured, fulfillment_selected, order_confirmed, payment_selected, payment_confirmed, order_cancelled, order_completed.
+## Sinkronisasi
+Tulis state file `state/orders-active/<phone>.json` saat order confirmed atau payment selected. JANGAN tulis outbox — backend handle sendiri. JANGAN baca ORDER_SYNC.md.
 
 ## Struktur data
 - Order: `state/orders-active/<customer-id>.json`
