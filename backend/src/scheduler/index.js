@@ -211,7 +211,51 @@ async function cleanupDrafts() {
 
 // ─── Schedule ──────────────────────────────────────────────
 
+// ─── State File Watcher (auto-sync QRIS) ────────────────────
+
+import { watch as fsWatch } from 'node:fs';
+
+const _syncInFlight = new Set();
+
+function initStateWatcher() {
+  fsWatch(ACTIVE_DIR, (eventType, filename) => {
+    if (!filename?.endsWith('.json') || _syncInFlight.has(filename)) return;
+    
+    const phone = filename.replace('.json', '');
+    
+    // Small delay to ensure file is fully written
+    setTimeout(async () => {
+      try {
+        const { readFile: rf } = await import('node:fs/promises');
+        const raw = await rf(join(ACTIVE_DIR, filename), 'utf8');
+        const data = JSON.parse(raw);
+        
+        if (data.paymentMethod === 'qris' && data.paymentStatus === 'pending' && !data._synced) {
+          _syncInFlight.add(filename);
+          logger.info('[state-watcher] QRIS detected for %s, auto-syncing...', phone);
+          
+          try {
+            await execFileAsync('node', ['/home/ubuntu/workspace-sobatngupi/backend/sync-state.js', 'sync', phone], { timeout: 30000 });
+            logger.info('[state-watcher] Sync complete for %s', phone);
+          } catch (err) {
+            logger.warn('[state-watcher] Sync failed for %s: %s', phone, err.message);
+          } finally {
+            setTimeout(() => _syncInFlight.delete(filename), 10000);
+          }
+        }
+      } catch (e) {
+        // File might be partially written, ignore
+      }
+    }, 200);
+  });
+  
+  logger.info('[state-watcher] Watching %s for QRIS auto-sync', ACTIVE_DIR);
+}
+
 export function startScheduler() {
+  // Auto-sync QRIS when agent writes state file
+  try { initStateWatcher(); } catch (err) { logger.warn('[state-watcher] Failed to start: %s', err.message); }
+
   // QRIS remind/cancel: every 10 min during business hours (09-22 WIB)
   cron.schedule('*/10 9-22 * * *', processQrisOrders, { timezone: 'Asia/Jakarta' });
 
