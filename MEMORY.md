@@ -34,6 +34,12 @@
 - Kedai coords: -6.5519552, 107.4451273
 - Max 8km. Zona 1 (0-2km): Rp8K, Zona 2 (2-5km): +Rp2K/km, Zona 3 (5-8km): +Rp3K/km
 
+## Dine-In Feature
+- QR per meja → wa.me deep link → "Meja X" auto-send
+- 10 QR codes generated: backend/public/table-qr/meja-{1-10}.png
+- Pawoon sales types: Dine In (2eb02aa0...) — needs activation by Acid
+- Pending: Acid setup tables di Pawoon dashboard
+
 ## Model
 - Production WA: openai-codex/gpt-5.4
 - Admin Telegram: cpacid/cb-claude-opus-4-6
