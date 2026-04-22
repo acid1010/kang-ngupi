@@ -189,7 +189,7 @@ Saat customer pilih QRIS:
 Path: `state/orders-active/<phone>.json`
 
 2. `exec` `node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <phone>`
-3. **JANGAN reply text** — backend otomatis kirim QR image + caption ke customer. Reply agent redundant.
+3. **JANGAN kirim pesan apapun ke customer.** Backend otomatis kirim QR image + caption. Jika kamu reply, customer dapat 2 pesan redundant. Cukup write + exec saja, lalu DIAM (NO_REPLY).
 
 ⚠️ **SEMUA 3 ACTION DALAM 1 BATCH.** Write + exec + reply SEKALIGUS.
 ⚠️ JANGAN baca ORDER_SYNC.md, TOOLS.md, atau file lain sebelumnya.
