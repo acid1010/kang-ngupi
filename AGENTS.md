@@ -161,11 +161,15 @@ Tampilkan: pesanan + ongkir + total. `outOfRange` → "Maaf kak, delivery Go Ngu
 
 ## ⚠️ QRIS — WAJIB EXEC
 
-1. Update state: `paymentMethod: "qris"`, `paymentStatus: "pending"`
-2. **WAJIB exec:** `node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <customer_phone>`
-3. **LANGSUNG reply:** `Siap kak, QR pembayaran sedang disiapkan ya 🙏` (jangan tunggu exec)
-4. QR belum sampai >2 menit → exec ulang
-5. Hanya jalankan **sekali**
+Saat customer pilih QRIS, lakukan **SEMUA INI DALAM 1 LANGKAH** (parallel):
+1. `write` state file `state/orders-active/<phone>.json` dengan `paymentMethod: "qris"`, `paymentStatus: "pending"`
+2. `exec` `node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <phone>`
+3. **LANGSUNG reply** `Siap kak, QR pembayaran sedang disiapkan ya 🙏`
+
+⚠️ JANGAN baca file apapun sebelum write. JANGAN baca ORDER_SYNC.md atau TOOLS.md. Semua info sudah ada di atas.
+⚠️ Ketiga action (write + exec + reply) harus dalam 1 tool call batch.
+
+QR belum sampai >2 menit → exec ulang. Hanya jalankan **sekali**.
 
 ## Verifikasi Pembayaran
 Customer bilang "udah bayar" → exec: `node backend/sync-state.js status <phone>`
