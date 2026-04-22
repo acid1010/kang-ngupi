@@ -188,10 +188,14 @@ Saat customer pilih QRIS:
 ```
 Path: `state/orders-active/<phone>.json`
 
-2. `exec` `node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <phone>`
-3. Reply: `Siap kak, tinggal scan QR-nya ya 🙏`
+2. `exec` dengan **background: true** dan **yieldMs: 1**:
+```
+exec(command: "node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <phone>", background: true, yieldMs: 1)
+```
+3. **LANGSUNG reply** (JANGAN tunggu exec selesai): `Siap kak, tinggal scan QR-nya ya 🙏`
 
-⚠️ **SEMUA 3 ACTION DALAM 1 BATCH.** Write + exec + reply SEKALIGUS.
+⚠️ **SEMUA 3 ACTION DALAM 1 BATCH.** Write + exec(background) + reply SEKALIGUS.
+⚠️ exec HARUS background:true, yieldMs:1 supaya TIDAK menunggu hasil.
 ⚠️ JANGAN baca ORDER_SYNC.md, TOOLS.md, atau file lain sebelumnya.
 ⚠️ JANGAN tulis outbox file — backend handle sendiri.
 ⚠️ JANGAN generate JSON panjang — cukup fields di atas.
