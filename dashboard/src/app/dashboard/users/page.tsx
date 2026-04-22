@@ -6,7 +6,13 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { getUsers, createUser, User } from "@/lib/api";
 import { UserPlus, Users, Loader2, Shield, Truck as TruckIcon } from "lucide-react";
@@ -128,10 +134,15 @@ export default function UsersPage() {
                   <label className="text-xs font-medium text-white/60">Role</label>
                   <Select
                     value={formRole}
-                    onChange={(e) => setFormRole(e.target.value)}
+                    onValueChange={(v) => setFormRole(v ?? "kurir")}
                   >
-                    <option value="kurir">Kurir</option>
-                    <option value="admin">Admin</option>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Pilih role" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-card border-border">
+                      <SelectItem value="kurir">Kurir</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
+                    </SelectContent>
                   </Select>
                 </div>
               </div>
