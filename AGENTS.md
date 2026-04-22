@@ -188,14 +188,10 @@ Saat customer pilih QRIS:
 ```
 Path: `state/orders-active/<phone>.json`
 
-2. `exec` — WAJIB pakai parameter `background: true` dan `yieldMs: 1`:
-   - command: `node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <phone>`
-   - background: `true`
-   - yieldMs: `1`
+2. `exec` `node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <phone>`
 3. Reply: `Siap kak, tinggal scan QR-nya ya 🙏`
 
 ⚠️ **SEMUA 3 ACTION DALAM 1 BATCH.** Write + exec + reply SEKALIGUS.
-⚠️ exec **WAJIB** `background: true, yieldMs: 1` — JANGAN tunggu hasil exec.
 ⚠️ JANGAN baca ORDER_SYNC.md, TOOLS.md, atau file lain sebelumnya.
 ⚠️ JANGAN tulis outbox file — backend handle sendiri.
 ⚠️ JANGAN generate JSON panjang — cukup fields di atas.
