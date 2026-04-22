@@ -3,6 +3,10 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   getOrders,
   getOrderStats,
@@ -18,7 +22,7 @@ import {
   getPaymentStatusLabel,
   getPaymentStatusColor,
   formatWhatsAppLink,
-} from "@/lib/utils";
+} from "@/lib/helpers";
 import {
   Package,
   Truck,
@@ -26,9 +30,9 @@ import {
   Clock,
   Phone,
   MapPin,
-  Coffee,
   RefreshCw,
   ShoppingBag,
+  TrendingUp,
 } from "lucide-react";
 import { toast } from "sonner";
 import { OrderDetailModal } from "@/components/order-detail-modal";
@@ -48,20 +52,67 @@ const statusMap: Record<string, string> = {
   done: "completed",
 };
 
+function StatSkeleton() {
+  return (
+    <Card className="border-border/50">
+      <CardContent className="p-4">
+        <div className="flex items-center gap-3">
+          <Skeleton className="w-10 h-10 rounded-xl bg-secondary" />
+          <div className="space-y-2">
+            <Skeleton className="h-6 w-10 bg-secondary" />
+            <Skeleton className="h-3 w-20 bg-secondary" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function OrderSkeleton() {
+  return (
+    <Card className="border-border/50">
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 space-y-3">
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-5 w-28 bg-secondary" />
+              <Skeleton className="h-4 w-12 bg-secondary" />
+            </div>
+            <Skeleton className="h-3.5 w-40 bg-secondary" />
+            <Skeleton className="h-4 w-56 bg-secondary" />
+            <div className="flex gap-2">
+              <Skeleton className="h-5 w-20 rounded-full bg-secondary" />
+              <Skeleton className="h-5 w-16 rounded-full bg-secondary" />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-20 bg-secondary ml-auto" />
+            <Skeleton className="h-3 w-12 bg-secondary ml-auto" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function DashboardPage() {
   const [stats, setStats] = useState<OrderStats | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
   const [activeFilter, setActiveFilter] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const ordersRef = useRef<Order[]>([]);
 
   const fetchStats = useCallback(async () => {
     try {
+      setStatsLoading(true);
       const res = await getOrderStats();
       setStats(res.data);
     } catch {
       // silent
+    } finally {
+      setStatsLoading(false);
     }
   }, []);
 
@@ -111,7 +162,6 @@ export default function DashboardPage() {
           ordersRef.current = updated;
           return updated;
         });
-        // Also update selected order if it's the one being viewed
         setSelectedOrder((prev) =>
           prev && prev.id === updatedOrder.id ? updatedOrder : prev
         );
@@ -124,191 +174,212 @@ export default function DashboardPage() {
   const statCards = [
     {
       label: "Total Hari Ini",
-      value: stats?.totalToday ?? "-",
+      value: stats?.totalToday ?? 0,
       icon: ShoppingBag,
-      color: "text-[#3CC8C8]",
-      bg: "bg-[#3CC8C8]/10",
+      color: "text-[var(--ngupi)]",
+      bg: "bg-[var(--ngupi)]/10",
+      ring: "ring-[var(--ngupi)]/20",
     },
     {
-      label: "Menunggu Dikirim",
-      value: stats?.pendingDelivery ?? "-",
+      label: "Menunggu",
+      value: stats?.pendingDelivery ?? 0,
       icon: Clock,
-      color: "text-blue-400",
-      bg: "bg-blue-500/10",
+      color: "text-amber-400",
+      bg: "bg-amber-500/10",
+      ring: "ring-amber-500/20",
     },
     {
-      label: "Sedang Diantar",
-      value: stats?.onTheWay ?? "-",
+      label: "Diantar",
+      value: stats?.onTheWay ?? 0,
       icon: Truck,
       color: "text-purple-400",
       bg: "bg-purple-500/10",
+      ring: "ring-purple-500/20",
     },
     {
       label: "Selesai",
-      value: stats?.completedToday ?? "-",
+      value: stats?.completedToday ?? 0,
       icon: CheckCircle2,
       color: "text-green-400",
       bg: "bg-green-500/10",
+      ring: "ring-green-500/20",
     },
   ];
 
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white">Dashboard</h1>
-          <p className="text-sm text-white/50 mt-0.5">Ringkasan pesanan hari ini</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground flex items-center gap-2">
+            Dashboard
+            <TrendingUp className="w-5 h-5 text-[var(--ngupi)] hidden sm:inline" />
+          </h1>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            Ringkasan pesanan hari ini
+          </p>
         </div>
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => {
             fetchStats();
             fetchOrders(activeFilter);
           }}
-          className="p-2 rounded-lg text-white/60 hover:text-[#3CC8C8] hover:bg-[#153030] transition-colors"
           title="Refresh"
+          className="text-muted-foreground hover:text-[var(--ngupi)]"
         >
-          <RefreshCw className="w-5 h-5" />
-        </button>
+          <RefreshCw className="w-4.5 h-4.5" />
+        </Button>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
-        {statCards.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={stat.label} className="border-[#1e4040]/50">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className={`p-2.5 rounded-xl ${stat.bg}`}>
-                    <Icon className={`w-5 h-5 ${stat.color}`} />
-                  </div>
-                  <div>
-                    <p className="text-xl sm:text-2xl font-bold text-white">{stat.value}</p>
-                    <p className="text-xs text-white/50 mt-0.5">{stat.label}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+      {/* Stats grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {statsLoading
+          ? Array.from({ length: 4 }).map((_, i) => <StatSkeleton key={i} />)
+          : statCards.map((stat) => {
+              const Icon = stat.icon;
+              return (
+                <Card key={stat.label} className="border-border/50 hover:border-border transition-colors">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2.5 rounded-xl ${stat.bg} ring-1 ${stat.ring}`}>
+                        <Icon className={`w-[18px] h-[18px] ${stat.color}`} />
+                      </div>
+                      <div>
+                        <p className="text-2xl font-bold text-foreground tabular-nums">
+                          {stat.value}
+                        </p>
+                        <p className="text-[11px] text-muted-foreground mt-0.5 leading-none">
+                          {stat.label}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
       </div>
 
-      {/* Filter tabs */}
-      <div className="flex gap-1 overflow-x-auto pb-1 -mx-1 px-1">
+      {/* Filter tabs + order list */}
+      <Tabs defaultValue="all" value={activeFilter} onValueChange={(v) => setActiveFilter(v as string)}>
+        <div className="overflow-x-auto -mx-1 px-1 pb-1">
+          <TabsList variant="line" className="w-full sm:w-auto">
+            {filterTabs.map((tab) => (
+              <TabsTrigger key={tab.key} value={tab.key} className="text-sm px-4">
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </div>
+
         {filterTabs.map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveFilter(tab.key)}
-            className={`px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all ${
-              activeFilter === tab.key
-                ? "bg-[#1F8A8A]/20 text-[#3CC8C8] shadow-sm"
-                : "text-white/60 hover:text-white/90 hover:bg-[#153030]/50"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Orders list */}
-      <div className="space-y-3">
-        {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <Coffee className="w-6 h-6 text-[#2BB5B5] animate-spin" />
-          </div>
-        ) : orders.length === 0 ? (
-          <div className="text-center py-12">
-            <Package className="w-12 h-12 text-white/30 mx-auto mb-3" />
-            <p className="text-white/50">Belum ada pesanan</p>
-          </div>
-        ) : (
-          orders.map((order) => (
-            <Card
-              key={order.id}
-              className="border-[#1e4040]/50 hover:border-[#2a5555]/50 transition-all cursor-pointer active:scale-[0.99]"
-              onClick={() => setSelectedOrder(order)}
-            >
-              <CardContent className="p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <h3 className="font-semibold text-white truncate">
-                        {order.customer_name_snapshot}
-                      </h3>
-                      <span className="text-xs text-white/40 shrink-0">
-                        #{order.client_order_id?.slice(-4) || order.id}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 text-xs text-white/50 mb-2">
-                      <a
-                        href={formatWhatsAppLink(order.customer_phone_snapshot)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="flex items-center gap-1 hover:text-green-400 transition-colors"
-                      >
-                        <Phone className="w-3 h-3" />
-                        {order.customer_phone_snapshot}
-                      </a>
-                      {order.fulfillment_method === "delivery" && (
-                        <span className="flex items-center gap-1 ml-2">
-                          <MapPin className="w-3 h-3" />
-                          Delivery
-                        </span>
-                      )}
-                      {order.fulfillment_method === "pickup" && (
-                        <span className="flex items-center gap-1 ml-2">
-                          <ShoppingBag className="w-3 h-3" />
-                          Pickup
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="text-sm text-white/60 mb-2">
-                      {(order.items || []).map((item, i) => (
-                        <span key={i}>
-                          {i > 0 && ", "}
-                          {item.menu_name} x{item.qty}
-                          {item.temperature && (
-                            <span className="text-white/40"> ({item.temperature})</span>
-                          )}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <Badge className={getStatusColor(order.order_status)}>
-                        {getStatusLabel(order.order_status)}
-                      </Badge>
-                      <Badge className={getPaymentStatusColor(order.payment_status)}>
-                        {getPaymentStatusLabel(order.payment_status)}
-                      </Badge>
-                      <Badge variant="outline" className="text-white/50 border-[#2a5555]">
-                        {(order.payment_method || "-").toUpperCase()}
-                      </Badge>
-                    </div>
+          <TabsContent key={tab.key} value={tab.key}>
+            <div className="space-y-3 mt-3">
+              {loading ? (
+                Array.from({ length: 4 }).map((_, i) => <OrderSkeleton key={i} />)
+              ) : orders.length === 0 ? (
+                <div className="text-center py-16">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-secondary mb-4">
+                    <Package className="w-7 h-7 text-muted-foreground" />
                   </div>
-
-                  <div className="text-right shrink-0">
-                    <p className="font-semibold text-[#3CC8C8] text-sm">
-                      {order.payment?.total_payment
-                        ? formatRupiah(order.payment.total_payment)
-                        : order.payment?.amount
-                        ? formatRupiah(order.payment.amount)
-                        : "-"}
-                    </p>
-                    <p className="text-xs text-white/40 mt-1">
-                      {formatTime(order.created_at)}
-                    </p>
-                  </div>
+                  <p className="text-muted-foreground font-medium">Belum ada pesanan</p>
+                  <p className="text-xs text-muted-foreground/60 mt-1">
+                    Pesanan baru akan muncul secara realtime
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
-          ))
-        )}
-      </div>
+              ) : (
+                orders.map((order) => (
+                  <Card
+                    key={order.id}
+                    className="border-border/50 hover:border-[var(--ngupi-border-light)] transition-all cursor-pointer active:scale-[0.995]"
+                    onClick={() => setSelectedOrder(order)}
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          {/* Name + ID */}
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <h3 className="font-semibold text-foreground truncate">
+                              {order.customer_name_snapshot}
+                            </h3>
+                            <span className="text-[11px] text-muted-foreground/60 font-mono shrink-0">
+                              #{order.client_order_id?.slice(-4) || order.id}
+                            </span>
+                          </div>
+
+                          {/* Phone + fulfillment */}
+                          <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2.5">
+                            <a
+                              href={formatWhatsAppLink(order.customer_phone_snapshot)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="flex items-center gap-1 hover:text-green-400 transition-colors"
+                            >
+                              <Phone className="w-3 h-3" />
+                              {order.customer_phone_snapshot}
+                            </a>
+                            <span className="text-border">·</span>
+                            <span className="flex items-center gap-1">
+                              {order.fulfillment_method === "delivery" ? (
+                                <MapPin className="w-3 h-3" />
+                              ) : (
+                                <ShoppingBag className="w-3 h-3" />
+                              )}
+                              {order.fulfillment_method === "delivery" ? "Delivery" : "Pickup"}
+                            </span>
+                          </div>
+
+                          {/* Items */}
+                          <p className="text-sm text-muted-foreground mb-3 line-clamp-1">
+                            {(order.items || []).map((item, i) => (
+                              <span key={i}>
+                                {i > 0 && ", "}
+                                {item.menu_name} x{item.qty}
+                                {item.temperature && (
+                                  <span className="text-muted-foreground/50"> ({item.temperature})</span>
+                                )}
+                              </span>
+                            ))}
+                          </p>
+
+                          {/* Badges */}
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <Badge className={getStatusColor(order.order_status)}>
+                              {getStatusLabel(order.order_status)}
+                            </Badge>
+                            <Badge className={getPaymentStatusColor(order.payment_status)}>
+                              {getPaymentStatusLabel(order.payment_status)}
+                            </Badge>
+                            <Badge variant="outline" className="text-muted-foreground border-border text-[11px]">
+                              {(order.payment_method || "-").toUpperCase()}
+                            </Badge>
+                          </div>
+                        </div>
+
+                        {/* Price + time */}
+                        <div className="text-right shrink-0">
+                          <p className="font-semibold text-[var(--ngupi)] text-sm tabular-nums">
+                            {order.payment?.total_payment
+                              ? formatRupiah(order.payment.total_payment)
+                              : order.payment?.amount
+                              ? formatRupiah(order.payment.amount)
+                              : "-"}
+                          </p>
+                          <p className="text-[11px] text-muted-foreground/60 mt-1 tabular-nums">
+                            {formatTime(order.created_at)}
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          </TabsContent>
+        ))}
+      </Tabs>
 
       {/* Order detail modal */}
       {selectedOrder && (
@@ -321,7 +392,6 @@ export default function DashboardPage() {
             );
             setSelectedOrder(updatedOrder);
             fetchStats();
-            // Re-fetch orders to ensure list is in sync
             fetchOrders(activeFilter);
           }}
         />

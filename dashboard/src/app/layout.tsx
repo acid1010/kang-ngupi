@@ -2,6 +2,10 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "sonner";
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: "Go Ngupi - Dashboard",
@@ -35,8 +39,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id">
-      <body className="min-h-screen bg-[#0d1b1b] text-white antialiased">
+    <html lang="id" className={cn("font-sans", geist.variable)}>
+      <body className="min-h-screen bg-background text-foreground antialiased">
         <AuthProvider>
           {children}
           <Toaster
@@ -45,9 +49,9 @@ export default function RootLayout({
             richColors
             toastOptions={{
               style: {
-                background: "#1c1917",
-                border: "1px solid #44403c",
-                color: "#e7e5e4",
+                background: "var(--ngupi-surface)",
+                border: "1px solid var(--ngupi-border)",
+                color: "#f0f0f0",
               },
             }}
           />

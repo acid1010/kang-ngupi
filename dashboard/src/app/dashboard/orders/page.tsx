@@ -4,7 +4,14 @@ import { useEffect, useState, useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Select } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import {
   getOrders,
   connectOrderStream,
@@ -13,19 +20,17 @@ import {
 } from "@/lib/api";
 import {
   formatRupiah,
-  formatTime,
   formatDateTime,
   getStatusLabel,
   getStatusColor,
   getPaymentStatusLabel,
   getPaymentStatusColor,
   formatWhatsAppLink,
-} from "@/lib/utils";
+} from "@/lib/helpers";
 import {
   Package,
   Phone,
   MapPin,
-  Coffee,
   ChevronLeft,
   ChevronRight,
   ShoppingBag,
@@ -34,15 +39,42 @@ import {
 import { toast } from "sonner";
 import { OrderDetailModal } from "@/components/order-detail-modal";
 
+function OrderSkeleton() {
+  return (
+    <Card className="border-border/50">
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1 space-y-3">
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-5 w-28 bg-secondary" />
+              <Skeleton className="h-4 w-12 bg-secondary" />
+            </div>
+            <Skeleton className="h-3.5 w-40 bg-secondary" />
+            <Skeleton className="h-4 w-56 bg-secondary" />
+            <div className="flex gap-2">
+              <Skeleton className="h-5 w-20 rounded-full bg-secondary" />
+              <Skeleton className="h-5 w-16 rounded-full bg-secondary" />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-20 bg-secondary ml-auto" />
+            <Skeleton className="h-3 w-12 bg-secondary ml-auto" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [meta, setMeta] = useState<OrdersMeta | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [page, setPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState("");
-  const [paymentFilter, setPaymentFilter] = useState("");
-  const [fulfillmentFilter, setFulfillmentFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("__all__");
+  const [paymentFilter, setPaymentFilter] = useState("__all__");
+  const [fulfillmentFilter, setFulfillmentFilter] = useState("__all__");
   const [showFilters, setShowFilters] = useState(false);
 
   const fetchOrders = useCallback(async () => {
@@ -51,9 +83,9 @@ export default function OrdersPage() {
       const res = await getOrders({
         page,
         per_page: 25,
-        status: statusFilter,
-        payment_status: paymentFilter,
-        fulfillment: fulfillmentFilter,
+        status: statusFilter === "__all__" ? "" : statusFilter,
+        payment_status: paymentFilter === "__all__" ? "" : paymentFilter,
+        fulfillment: fulfillmentFilter === "__all__" ? "" : fulfillmentFilter,
         sort: "created_at",
         order: "desc",
       });
@@ -75,7 +107,7 @@ export default function OrdersPage() {
     const cleanup = connectOrderStream(
       (newOrder) => {
         toast.success(`Pesanan baru dari ${newOrder.customer_name_snapshot}!`);
-        if (page === 1 && !statusFilter && !paymentFilter && !fulfillmentFilter) {
+        if (page === 1 && statusFilter === "__all__" && paymentFilter === "__all__" && fulfillmentFilter === "__all__") {
           setOrders((prev) => [newOrder, ...prev.slice(0, 24)]);
         }
       },
@@ -96,8 +128,8 @@ export default function OrdersPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Pesanan</h1>
-          <p className="text-sm text-white/50 mt-0.5">
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground">Pesanan</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">
             {meta ? `${meta.total} pesanan total` : "Memuat..."}
           </p>
         </div>
@@ -115,82 +147,99 @@ export default function OrdersPage() {
       {/* Filters */}
       <div
         className={`grid grid-cols-1 sm:grid-cols-3 gap-3 ${
-          showFilters ? "block" : "hidden lg:grid"
+          showFilters ? "grid" : "hidden lg:grid"
         }`}
       >
         <Select
           value={statusFilter}
-          onChange={(e) => {
-            setStatusFilter(e.target.value);
+          onValueChange={(v) => {
+            setStatusFilter(v ?? "__all__");
             setPage(1);
           }}
         >
-          <option value="">Semua Status</option>
-          <option value="awaiting_payment">Menunggu Bayar</option>
-          <option value="ready_to_submit">Siap Diproses</option>
-          <option value="preparing">Sedang Dibuat</option>
-          <option value="ready_for_pickup">Siap Diambil</option>
-          <option value="picked_up">Sudah Diambil</option>
-          <option value="on_the_way">Sedang Diantar</option>
-          <option value="delivered">Terkirim</option>
-          <option value="completed">Selesai</option>
-          <option value="cancelled">Dibatalkan</option>
+          <SelectTrigger className="w-full bg-secondary/50 border-border">
+            <SelectValue placeholder="Semua Status" />
+          </SelectTrigger>
+          <SelectContent className="bg-card border-border">
+            <SelectItem value="__all__">Semua Status</SelectItem>
+            <SelectItem value="awaiting_payment">Menunggu Bayar</SelectItem>
+            <SelectItem value="ready_to_submit">Siap Diproses</SelectItem>
+            <SelectItem value="preparing">Sedang Dibuat</SelectItem>
+            <SelectItem value="ready_for_pickup">Siap Diambil</SelectItem>
+            <SelectItem value="picked_up">Sudah Diambil</SelectItem>
+            <SelectItem value="on_the_way">Sedang Diantar</SelectItem>
+            <SelectItem value="delivered">Terkirim</SelectItem>
+            <SelectItem value="completed">Selesai</SelectItem>
+            <SelectItem value="cancelled">Dibatalkan</SelectItem>
+          </SelectContent>
         </Select>
+
         <Select
           value={paymentFilter}
-          onChange={(e) => {
-            setPaymentFilter(e.target.value);
+          onValueChange={(v) => {
+            setPaymentFilter(v ?? "__all__");
             setPage(1);
           }}
         >
-          <option value="">Semua Pembayaran</option>
-          <option value="pending">Belum Bayar</option>
-          <option value="confirmed">Lunas</option>
+          <SelectTrigger className="w-full bg-secondary/50 border-border">
+            <SelectValue placeholder="Semua Pembayaran" />
+          </SelectTrigger>
+          <SelectContent className="bg-card border-border">
+            <SelectItem value="__all__">Semua Pembayaran</SelectItem>
+            <SelectItem value="pending">Belum Bayar</SelectItem>
+            <SelectItem value="confirmed">Lunas</SelectItem>
+          </SelectContent>
         </Select>
+
         <Select
           value={fulfillmentFilter}
-          onChange={(e) => {
-            setFulfillmentFilter(e.target.value);
+          onValueChange={(v) => {
+            setFulfillmentFilter(v ?? "__all__");
             setPage(1);
           }}
         >
-          <option value="">Semua Metode</option>
-          <option value="delivery">Delivery</option>
-          <option value="pickup">Pickup</option>
+          <SelectTrigger className="w-full bg-secondary/50 border-border">
+            <SelectValue placeholder="Semua Metode" />
+          </SelectTrigger>
+          <SelectContent className="bg-card border-border">
+            <SelectItem value="__all__">Semua Metode</SelectItem>
+            <SelectItem value="delivery">Delivery</SelectItem>
+            <SelectItem value="pickup">Pickup</SelectItem>
+          </SelectContent>
         </Select>
       </div>
 
       {/* Orders */}
       <div className="space-y-3">
         {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <Coffee className="w-6 h-6 text-[#2BB5B5] animate-spin" />
-          </div>
+          Array.from({ length: 5 }).map((_, i) => <OrderSkeleton key={i} />)
         ) : orders.length === 0 ? (
-          <div className="text-center py-12">
-            <Package className="w-12 h-12 text-white/30 mx-auto mb-3" />
-            <p className="text-white/50">Tidak ada pesanan ditemukan</p>
+          <div className="text-center py-16">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-secondary mb-4">
+              <Package className="w-7 h-7 text-muted-foreground" />
+            </div>
+            <p className="text-muted-foreground font-medium">Tidak ada pesanan ditemukan</p>
           </div>
         ) : (
           orders.map((order) => (
             <Card
               key={order.id}
-              className="border-[#1e4040]/50 hover:border-[#2a5555]/50 transition-all cursor-pointer active:scale-[0.99]"
+              className="border-border/50 hover:border-[var(--ngupi-border-light)] transition-all cursor-pointer active:scale-[0.995]"
               onClick={() => setSelectedOrder(order)}
             >
               <CardContent className="p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold text-white truncate">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <h3 className="font-semibold text-foreground truncate">
                         {order.customer_name_snapshot}
                       </h3>
-                      <span className="text-xs text-white/40 shrink-0">
+                      <span className="text-[11px] text-muted-foreground/60 font-mono shrink-0">
                         #{order.client_order_id?.slice(-4) || order.id}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-xs text-white/50 mb-2">
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2.5">
                       <a
                         href={formatWhatsAppLink(order.customer_phone_snapshot)}
                         target="_blank"
@@ -201,7 +250,8 @@ export default function OrdersPage() {
                         <Phone className="w-3 h-3" />
                         {order.customer_phone_snapshot}
                       </a>
-                      <span className="flex items-center gap-1 ml-2">
+                      <span className="text-border">·</span>
+                      <span className="flex items-center gap-1">
                         {order.fulfillment_method === "delivery" ? (
                           <MapPin className="w-3 h-3" />
                         ) : (
@@ -211,13 +261,13 @@ export default function OrdersPage() {
                       </span>
                     </div>
 
-                    <p className="text-sm text-white/60 mb-2 line-clamp-1">
-                      {order.items
+                    <p className="text-sm text-muted-foreground mb-3 line-clamp-1">
+                      {(order.items || [])
                         .map((item) => `${item.menu_name} x${item.qty}`)
                         .join(", ")}
                     </p>
 
-                    <div className="flex items-center gap-2 flex-wrap">
+                    <div className="flex items-center gap-1.5 flex-wrap">
                       <Badge className={getStatusColor(order.order_status)}>
                         {getStatusLabel(order.order_status)}
                       </Badge>
@@ -228,14 +278,14 @@ export default function OrdersPage() {
                   </div>
 
                   <div className="text-right shrink-0">
-                    <p className="font-semibold text-[#3CC8C8] text-sm">
+                    <p className="font-semibold text-[var(--ngupi)] text-sm tabular-nums">
                       {order.payment?.total_payment
                         ? formatRupiah(order.payment.total_payment)
                         : order.payment?.amount
                         ? formatRupiah(order.payment.amount)
                         : "-"}
                     </p>
-                    <p className="text-xs text-white/40 mt-1">
+                    <p className="text-[11px] text-muted-foreground/60 mt-1">
                       {formatDateTime(order.created_at)}
                     </p>
                   </div>
@@ -249,7 +299,7 @@ export default function OrdersPage() {
       {/* Pagination */}
       {meta && meta.pages > 1 && (
         <div className="flex items-center justify-between pt-2">
-          <p className="text-sm text-white/50">
+          <p className="text-sm text-muted-foreground">
             Halaman {meta.page} dari {meta.pages}
           </p>
           <div className="flex gap-2">

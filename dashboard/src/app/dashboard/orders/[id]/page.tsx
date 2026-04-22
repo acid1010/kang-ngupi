@@ -15,7 +15,7 @@ import {
   getStatusColor,
   getPaymentStatusLabel,
   getPaymentStatusColor,
-} from "@/lib/utils";
+} from "@/lib/helpers";
 import {
   ArrowLeft,
   Phone,

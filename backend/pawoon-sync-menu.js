@@ -219,6 +219,15 @@ async function syncMenu() {
     totalCategories: categoryList.length
   };
 
+  // Strip fields agent doesn't need to keep file under 50KB read limit
+  for (const item of schema.menus) {
+    delete item.sku;
+    delete item.image;
+    delete item.description;
+    if (!item.variants?.length) delete item.variants;
+    if (!item.modifiers?.length) delete item.modifiers;
+    if (!item.aliases?.length) delete item.aliases;
+  }
   writeFileSync(MENU_SCHEMA_PATH, JSON.stringify(schema));
 
   console.log(`\nSync complete: ${added} added, ${updated} price/category updated, ${unchanged} unchanged`);

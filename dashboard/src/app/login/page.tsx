@@ -6,8 +6,15 @@ import { login } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Eye, EyeOff, Loader2, Coffee } from "lucide-react";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -33,8 +40,8 @@ export default function LoginPage() {
       const res = await login(username, password);
       loginSuccess(res.token, res.user);
       router.push("/dashboard");
-    } catch (err) {
-      setError(err instanceof Error ? "Username atau password salah" : "Terjadi kesalahan");
+    } catch {
+      setError("Username atau password salah");
     } finally {
       setIsLoading(false);
     }
@@ -43,32 +50,49 @@ export default function LoginPage() {
   if (loading) return null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#0d1b1b] via-[#112626] to-[#0d2020]/30">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#1F8A8A]/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#164a4a]/10 rounded-full blur-3xl" />
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-32 -right-32 w-72 h-72 bg-[var(--ngupi)]/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 -left-32 w-72 h-72 bg-[var(--ngupi-darker)]/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--ngupi)]/[0.02] rounded-full blur-3xl" />
       </div>
 
-      <Card className="w-full max-w-sm relative border-[#1e4040]/50 bg-[#112626]/90 backdrop-blur-xl">
-        <CardHeader className="text-center pb-2">
-          <div className="mx-auto mb-4 w-24 h-24 rounded-2xl overflow-hidden shadow-lg shadow-[#164a4a]/30">
-            <img src="/app/logo.jpg" alt="Ngupi Ngupi" className="w-full h-full object-cover" />
+      <Card className="w-full max-w-sm relative border-border/60 bg-card/95 backdrop-blur-xl shadow-2xl shadow-black/20">
+        <CardHeader className="text-center pb-2 pt-8">
+          {/* Logo */}
+          <div className="mx-auto mb-5 w-20 h-20 rounded-2xl overflow-hidden shadow-lg shadow-black/30 ring-1 ring-border">
+            <img
+              src="/app/logo.jpg"
+              alt="Ngupi Ngupi"
+              className="w-full h-full object-cover"
+            />
           </div>
-          <CardTitle className="text-xl font-bold text-[#3CC8C8]">
+
+          <CardTitle className="text-xl font-bold text-[var(--ngupi)]">
             Go Ngupi
           </CardTitle>
-          <p className="text-white/40 text-xs mt-1">Dashboard Kedai Kopi Ngupi Ngupi</p>
+          <CardDescription className="text-muted-foreground text-xs mt-1">
+            Dashboard Kedai Kopi Ngupi Ngupi
+          </CardDescription>
         </CardHeader>
-        <CardContent>
+
+        <Separator className="bg-border/50 mx-6" />
+
+        <CardContent className="pt-5 pb-7 px-6">
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Error message */}
             {error && (
-              <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+              <div className="p-3 rounded-lg bg-red-500/8 border border-red-500/15 text-red-400 text-sm text-center">
                 {error}
               </div>
             )}
+
+            {/* Username */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-white/80">Username</label>
+              <label className="text-sm font-medium text-foreground/80">
+                Username
+              </label>
               <Input
                 type="text"
                 placeholder="Masukkan username"
@@ -77,10 +101,15 @@ export default function LoginPage() {
                 required
                 autoComplete="username"
                 autoFocus
+                className="h-11 bg-secondary/50 border-border/60 placeholder:text-muted-foreground/40 focus:border-[var(--ngupi)]/50 focus:ring-[var(--ngupi)]/20"
               />
             </div>
+
+            {/* Password */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-white/80">Password</label>
+              <label className="text-sm font-medium text-foreground/80">
+                Password
+              </label>
               <div className="relative">
                 <Input
                   type={showPassword ? "text" : "password"}
@@ -89,25 +118,39 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
-                  className="pr-10"
+                  className="h-11 pr-10 bg-secondary/50 border-border/60 placeholder:text-muted-foreground/40 focus:border-[var(--ngupi)]/50 focus:ring-[var(--ngupi)]/20"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white/80 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground/80 transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </button>
               </div>
             </div>
-            <Button type="submit" className="w-full h-12 text-base" disabled={isLoading}>
+
+            {/* Submit */}
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full h-11 text-sm font-semibold bg-[var(--ngupi-darker)] hover:bg-[var(--ngupi-dark)] text-white border-0"
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Masuk...
                 </>
               ) : (
-                "Masuk"
+                <>
+                  <Coffee className="w-4 h-4 mr-2" />
+                  Masuk
+                </>
               )}
             </Button>
           </form>
