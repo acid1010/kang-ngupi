@@ -27,7 +27,7 @@ if (!existsSync(OUTPUT_DIR)) {
 console.log(`Generating QR codes for ${numTables} tables...\n`);
 
 for (let i = 1; i <= numTables; i++) {
-  const message = `Meja ${i}`;
+  const message = `Halo, saya duduk di Meja ${i} ☕`;
   const waLink = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
   const filename = `meja-${i}.png`;
   const filepath = join(OUTPUT_DIR, filename);
