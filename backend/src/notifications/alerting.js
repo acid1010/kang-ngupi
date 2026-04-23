@@ -36,7 +36,11 @@ export async function alertAdmin(errorType, message, details = '') {
   const jid = toJid(ADMIN_PHONE);
   if (!jid) return;
 
-  const text = `⚠️ *ALERT — Kang Ngupi*\n\nType: ${errorType}\n${message}${details ? '\n\nDetail: ' + String(details).slice(0, 200) : ''}\n\nTime: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`;
+  // Strip HTML/technical noise from details
+  let cleanDetails = String(details || '').replace(/<[^>]*>/g, '').replace(/<!-.*?->/g, '').trim().slice(0, 150);
+  if (cleanDetails.includes('DOCTYPE') || cleanDetails.includes('<html')) cleanDetails = 'Server error (Pakasir down)';
+
+  const text = `⚠️ *ALERT — Kang Ngupi*\n\nType: ${errorType}\n${message}${cleanDetails ? '\n\nDetail: ' + cleanDetails : ''}\n\nTime: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`;
 
   try {
     await execFileAsync(WACLI_BIN, ['send', 'text', '--to', jid, '--message', text], { timeout: 15_000 });
