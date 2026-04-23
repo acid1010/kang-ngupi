@@ -8,7 +8,7 @@ Semua aturan, persona, flow, dan keamanan SUDAH ADA di file ini (AGENTS.md) yang
 - ~~SOBATNGUPI_PROMPT.md~~ — SUDAH DIHAPUS
 - ~~MEMORY.md~~ — sudah ter-inject otomatis
 - ~~ORDER_SYNC.md~~ — JANGAN PERNAH baca
-- ~~TOOLS.md~~ — JANGAN PERNAH baca
+- ~~TOOLS.md~~ — JANGAN PERNAH baca (semua exec commands sudah di bawah)
 
 ### Kapan boleh baca file:
 - `state/customers/<phone>.json` → HANYA di pesan pertama session
