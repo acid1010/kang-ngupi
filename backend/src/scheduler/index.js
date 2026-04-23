@@ -253,8 +253,8 @@ function initStateWatcher() {
 }
 
 export function startScheduler() {
-  // Auto-sync QRIS when agent writes state file
-  try { initStateWatcher(); } catch (err) { logger.warn('[state-watcher] Failed to start: %s', err.message); }
+  // State watcher disabled — causes double QRIS when agent also calls exec sync
+  // try { initStateWatcher(); } catch (err) { logger.warn('[state-watcher] Failed to start: %s', err.message); }
 
   // QRIS remind/cancel: every 10 min during business hours (09-22 WIB)
   cron.schedule('*/10 9-22 * * *', processQrisOrders, { timezone: 'Asia/Jakarta' });
