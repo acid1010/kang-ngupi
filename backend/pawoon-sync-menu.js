@@ -224,6 +224,8 @@ async function syncMenu() {
     delete item.sku;
     delete item.image;
     delete item.description;
+    delete item.pawoonId;
+    delete item.sellable;
     if (!item.variants?.length) delete item.variants;
     if (!item.modifiers?.length) delete item.modifiers;
     if (!item.aliases?.length) delete item.aliases;

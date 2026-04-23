@@ -190,7 +190,6 @@ Path: `state/orders-active/<phone>.json`
 ⚠️ JANGAN baca ORDER_SYNC.md, TOOLS.md, atau file lain sebelumnya.
 ⚠️ JANGAN tulis outbox file — backend handle sendiri.
 ⚠️ JANGAN generate JSON panjang — cukup fields di atas.
-⚠️ JANGAN baca ORDER_SYNC.md, TOOLS.md, atau file lain sebelumnya.
 ⚠️ JANGAN tulis outbox file — backend handle sendiri.
 ⚠️ JANGAN generate JSON panjang — cukup fields di atas.
 
