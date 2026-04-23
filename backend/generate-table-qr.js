@@ -15,7 +15,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = join(__dirname, 'public', 'table-qr');
-const WA_NUMBER = '6285155022960'; // Bot WhatsApp number
+const WA_NUMBER = '6287786434813'; // Bot WhatsApp number (Kang Ngupi)
 
 const numTables = parseInt(process.argv[2] || '10', 10);
 
