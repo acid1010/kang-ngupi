@@ -1,6 +1,14 @@
 {
   "name": "Wisnu",
   "phone": "+6287764851010",
-  "lastOrder": "2026-04-23T06:11:03.247Z",
-  "preferences": {}
+  "firstOrder": "2026-04-22T17:10:19.91798+00:00",
+  "lastOrder": "2026-04-22T17:10:19.91798+00:00",
+  "orderCount": 1,
+  "paidOrderCount": 0,
+  "totalSpent": 0,
+  "favoriteItems": [],
+  "preferredPayment": "qris",
+  "preferredFulfillment": "self_pickup",
+  "preferences": {},
+  "updatedAt": "2026-04-23T15:00:01.058Z"
 }
