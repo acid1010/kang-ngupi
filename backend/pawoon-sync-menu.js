@@ -226,8 +226,24 @@ async function syncMenu() {
     delete item.description;
     delete item.pawoonId;
     delete item.sellable;
-    if (!item.variants?.length) delete item.variants;
-    if (!item.modifiers?.length) delete item.modifiers;
+    // Compact variants: same-price → variantOptions string, diff-price → keep array without sku
+    if (item.variants?.length) {
+      for (const v of item.variants) delete v.sku;
+      const basePrice = item.price;
+      if (item.variants.every(v => v.price === basePrice)) {
+        item.variantOptions = item.variants.map(v => v.name.replace(item.name + ' - ', '').replace(item.name + ' ', '')).join(',');
+        delete item.variants;
+      }
+    } else {
+      delete item.variants;
+    }
+    // Remove empty modifiers
+    if (item.modifiers?.length) {
+      item.modifiers = item.modifiers.filter(m => m.options?.length);
+      if (!item.modifiers.length) delete item.modifiers;
+    } else {
+      delete item.modifiers;
+    }
     if (!item.aliases?.length) delete item.aliases;
   }
   writeFileSync(MENU_SCHEMA_PATH, JSON.stringify(schema));
