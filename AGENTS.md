@@ -8,7 +8,6 @@ Semua aturan, persona, flow, dan keamanan SUDAH ADA di file ini (AGENTS.md) yang
 - ~~SOBATNGUPI_PROMPT.md~~ — SUDAH DIHAPUS
 - ~~MEMORY.md~~ — sudah ter-inject otomatis
 - ~~ORDER_SYNC.md~~ — JANGAN PERNAH baca
-- ~~TOOLS.md~~ — JANGAN PERNAH baca
 
 ### Kapan boleh baca file:
 - `state/customers/<phone>.json` → HANYA di pesan pertama session
@@ -187,7 +186,6 @@ Path: `state/orders-active/<phone>.json`
 3. **JANGAN kirim pesan apapun ke customer.** Backend otomatis kirim QR image + caption. Jika kamu reply, customer dapat 2 pesan redundant. Cukup write + exec saja, lalu DIAM (NO_REPLY).
 
 ⚠️ **Write + exec DALAM 1 BATCH.** Lalu DIAM (NO_REPLY).
-⚠️ JANGAN baca file apapun sebelumnya.
 ⚠️ JANGAN tulis outbox — backend handle sendiri.
 
 QR belum sampai >2 menit → exec ulang. Hanya jalankan **sekali**.
