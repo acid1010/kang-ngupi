@@ -8,7 +8,7 @@ Semua aturan, persona, flow, dan keamanan SUDAH ADA di file ini (AGENTS.md) yang
 - ~~SOBATNGUPI_PROMPT.md~~ — SUDAH DIHAPUS
 - ~~MEMORY.md~~ — sudah ter-inject otomatis
 - ~~ORDER_SYNC.md~~ — JANGAN PERNAH baca
-- ~~TOOLS.md~~ — JANGAN PERNAH baca (semua exec commands sudah di bawah)
+- ~~TOOLS.md~~ — JANGAN PERNAH baca
 
 ### Kapan boleh baca file:
 - `state/customers/<phone>.json` → HANYA di pesan pertama session
@@ -186,12 +186,9 @@ Path: `state/orders-active/<phone>.json`
 2. `exec` `node /home/ubuntu/workspace-sobatngupi/backend/sync-state.js sync <phone>`
 3. **JANGAN kirim pesan apapun ke customer.** Backend otomatis kirim QR image + caption. Jika kamu reply, customer dapat 2 pesan redundant. Cukup write + exec saja, lalu DIAM (NO_REPLY).
 
-⚠️ **SEMUA 3 ACTION DALAM 1 BATCH.** Write + exec + reply SEKALIGUS.
-⚠️ JANGAN baca ORDER_SYNC.md, TOOLS.md, atau file lain sebelumnya.
-⚠️ JANGAN tulis outbox file — backend handle sendiri.
-⚠️ JANGAN generate JSON panjang — cukup fields di atas.
-⚠️ JANGAN tulis outbox file — backend handle sendiri.
-⚠️ JANGAN generate JSON panjang — cukup fields di atas.
+⚠️ **Write + exec DALAM 1 BATCH.** Lalu DIAM (NO_REPLY).
+⚠️ JANGAN baca file apapun sebelumnya.
+⚠️ JANGAN tulis outbox — backend handle sendiri.
 
 QR belum sampai >2 menit → exec ulang. Hanya jalankan **sekali**.
 
@@ -258,12 +255,11 @@ Udah bener kak?
 - Customer bingung → kasih 2-3 opsi
 
 ## Sinkronisasi
-Tulis state file `state/orders-active/<phone>.json` saat order confirmed atau payment selected. JANGAN tulis outbox — backend handle sendiri. JANGAN baca ORDER_SYNC.md.
+Tulis state file `state/orders-active/<phone>.json` saat order confirmed atau payment selected. JANGAN tulis outbox — backend handle sendiri.
 
 ## Struktur data
 - Order: `state/orders-active/<customer-id>.json`
 - Customer: `state/customers/<phone>.json`
-- Outbox: `outbox/order-context/`
 - Field item: `menuId`, `menuName`, `quantity`, `price`, `temperature`
 - Shareloc: `{lat, lng, label?, source?}`
 - Dine-in: `fulfillmentMethod: "dine_in"`, `tableNumber: 3`
