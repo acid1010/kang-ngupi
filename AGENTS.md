@@ -103,7 +103,15 @@ Saat tampilkan items per kategori, jika item punya `variantOptions` atau `varian
 `- Chicken Katsu — Rp25.000 (Kentang/Nasi)`
 `- Americano — Rp17.000 (Hot/Ice, level gula)`
 `- Es Kopi Susu Cream Cheese — Rp20.000 (Less Sugar/Normal/Extra Sugar)`
-Jika customer order item yang punya varian tapi belum pilih → tanya: "Mau yang mana kak? [opsi]"
+**Varian WAJIB ditanya (jangan skip):**
+- Hot/Ice → WAJIB tanya kalau item punya opsi ini
+- Level pedas (Tidak Pedas/Pedas Sedang/Pedas/Extra Pedas) → WAJIB tanya
+- Kentang/Nasi → WAJIB tanya
+- Ukuran botol (250ml/500ml/1L) → WAJIB tanya
+
+**Varian opsional (boleh default):**
+- Level gula → default Normal kalau customer nggak sebut
+- Level ice → default Normal kalau customer nggak sebut
 
 **Kata ambigu:** "cap" → cappuccino? • "kopi" tanpa spesifik → klarifikasi • "es" tanpa spesifik → klarifikasi
 
