@@ -2,12 +2,8 @@
  * Customer Status Notifications — send WA updates when order status changes
  */
 
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import logger from '../lib/logger.js';
-
-const execFileAsync = promisify(execFile);
-const WACLI_BIN = process.env.WACLI_BIN || 'wacli';
+import { runWacliSafe } from './whatsapp.js';
 
 function toJid(phone) {
   let p = String(phone).trim().replace(/[\s\-()]/g, '');
@@ -24,7 +20,7 @@ const STATUS_MESSAGES = {
     `🛵 Pesanan kak ${order.customer_name_snapshot || 'Customer'} sedang diantar kurir Go Ngupi! Ditunggu ya kak~`,
   
   ready_for_pickup: (order) =>
-    `✅ Pesanan kak ${order.customer_name_snapshot || 'Customer'} sudah siap! Silakan diambil di kedai ya kak 🙂\n📍 Jl. K.K. Singawinata No.9, Purwakarta`,
+    `✅ Pesanan kak ${order.customer_name_snapshot || 'Customer'} sudah siap! Silakan diambil di kedai ya kak 🙂\n📍 di Jalan Singawinata No.9 ya kak, Purwakarta\nhttps://maps.app.goo.gl/sbaH9qXGujUuPwT78`,
   
   completed: (order) => {
     if (order.fulfillment_method === 'pickup') {
@@ -50,14 +46,10 @@ export async function notifyCustomerStatus(order, newStatus) {
   const message = messageFn(order);
 
   try {
-    const { stdout } = await execFileAsync(WACLI_BIN, [
-      'send', 'text',
-      '--to', jid,
-      '--message', message
-    ], { timeout: 15_000 });
+    const result = await runWacliSafe(['send', 'text', '--to', jid, '--message', message]);
 
     logger.info('[status-notif] Sent %s notification to %s', newStatus, phone);
-    return { ok: true, status: newStatus, phone, stdout: stdout?.trim() };
+    return { ok: true, status: newStatus, phone, stdout: result.stdout };
   } catch (err) {
     logger.warn('[status-notif] Failed to send %s notification to %s: %s', newStatus, phone, err.message);
     return { ok: false, error: err.message };

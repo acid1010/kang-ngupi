@@ -2,16 +2,12 @@
  * Courier Notification — send WhatsApp notification to courier when order is paid
  */
 
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import { normalizePhone } from '../builders/orderPayload.js';
 import logger from '../lib/logger.js';
-
-const execFileAsync = promisify(execFile);
+import { runWacliSafe } from './whatsapp.js';
 
 // Courier phone numbers (can be multiple)
 const COURIER_PHONES = (process.env.COURIER_PHONES || '').split(',').map(p => p.trim()).filter(Boolean);
-const WACLI_BIN = process.env.WACLI_BIN || 'wacli';
 
 function toJid(phone) {
   const normalized = normalizePhone(phone);
@@ -67,11 +63,8 @@ Segera proses ya! 🙏`;
 
 async function sendWaCli(jid, message) {
   try {
-    const { stdout } = await execFileAsync(WACLI_BIN, ['send', 'text', '--to', jid, '--message', message], {
-      timeout: 30_000,
-      maxBuffer: 1024 * 1024
-    });
-    return { ok: true, stdout: stdout?.trim() };
+    const result = await runWacliSafe(['send', 'text', '--to', jid, '--message', message]);
+    return { ok: true, stdout: result.stdout };
   } catch (error) {
     return { ok: false, error: error.message };
   }

@@ -3,12 +3,8 @@
  * Throttled: max 1 alert per error type per 10 minutes
  */
 
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import logger from '../lib/logger.js';
-
-const execFileAsync = promisify(execFile);
-const WACLI_BIN = process.env.WACLI_BIN || 'wacli';
+import { runWacliSafe } from './whatsapp.js';
 const ADMIN_PHONE = process.env.ADMIN_ALERT_PHONE || process.env.COURIER_PHONES?.split(',')[0] || '';
 const THROTTLE_MS = 10 * 60 * 1000; // 10 minutes
 
@@ -43,7 +39,7 @@ export async function alertAdmin(errorType, message, details = '') {
   const text = `⚠️ *ALERT — Kang Ngupi*\n\nType: ${errorType}\n${message}${cleanDetails ? '\n\nDetail: ' + cleanDetails : ''}\n\nTime: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`;
 
   try {
-    await execFileAsync(WACLI_BIN, ['send', 'text', '--to', jid, '--message', text], { timeout: 15_000 });
+    await runWacliSafe(['send', 'text', '--to', jid, '--message', text]);
     logger.info('[alert] Admin notified: %s', errorType);
   } catch (err) {
     logger.warn('[alert] Failed to notify admin: %s', err.message);

@@ -155,26 +155,9 @@ async function cmdSync(phone) {
   // Support both nested (orderContext wrapper) and flat state formats
   const ctx = state.orderContext || state;
 
-  // Persist/update customer profile for returning customer greeting + personalization
-  const customerName = ctx.customerName || state.customerName;
-  if (customerName && normalized) {
-    try {
-      const custDir = path.join(WORKSPACE_ROOT, 'state', 'customers');
-      await fs.mkdir(custDir, { recursive: true });
-      const custFile = path.join(custDir, makeStateFileName(normalized));
-      // Load existing to preserve preferences
-      let existing = {};
-      try { existing = JSON.parse(await fs.readFile(custFile, 'utf8')); } catch (_) {}
-      const updated = {
-        ...existing,
-        name: customerName,
-        phone: normalized,
-        lastOrder: new Date().toISOString(),
-        preferences: existing.preferences || {}
-      };
-      await fs.writeFile(custFile, JSON.stringify(updated, null, 2));
-    } catch (_) {}
-  }
+  // Do not auto-write customer profiles during sync.
+  // Customer profile persistence should happen only from deliberate customer/profile flows,
+  // not from payment sync or admin/test traffic, otherwise first greeting can become polluted.
 
   // Determine if this is a QRIS payment trigger
   const isQris = ctx.paymentMethod === 'qris' &&
@@ -223,16 +206,22 @@ async function cmdSync(phone) {
 
   // Step 2: If QRIS payment, ensure QRIS is created
   if (isQris) {
-    const clientOrderId = bridgeResult.data?.state?.orderContext?.clientOrderId;
+    const qrisProvider = process.env.QRIS_PROVIDER || 'pakasir';
+    const clientOrderId = bridgeResult.data?.state?.orderContext?.clientOrderId || ctx.clientOrderId || state.orderId;
 
-    // Check if evaluator already auto-created QRIS
+    // If Doku provider, go directly to Doku flow (skip evaluator/Pakasir entirely)
+    if (qrisProvider === 'doku') {
+      const itemsTotal = (ctx.items || []).reduce((sum, i) => sum + (Number(i.price || 0) * (i.quantity || 1)), 0);
+      const deliveryFee = Number(ctx.deliveryFee || ctx.ongkir || 0);
+      const totalAmount = itemsTotal + deliveryFee;
+      return await cmdSyncQrisDoku(normalized, { ...ctx, clientOrderId }, totalAmount);
+    }
+
+    // Check if evaluator already auto-created QRIS (Pakasir path)
     const events = bridgeResult.data?.events || [];
     const qrisEvent = events.find(e => e.type === 'qris_payment_created');
 
     if (qrisEvent) {
-      // Evaluator already created QRIS and attempted WhatsApp send.
-      // Do NOT retry here — evaluator's send is the single source of truth.
-      // Retrying causes double QR sends to customer.
       const whatsappSent = qrisEvent.whatsappSent || false;
       const paymentId = qrisEvent.paymentId || null;
 
@@ -305,6 +294,12 @@ async function cmdSyncQrisDirect(phone, ctx) {
   const deliveryFee = Number(ctx.deliveryFee || ctx.ongkir || 0);
   const totalAmount = itemsTotal + deliveryFee;
 
+  const qrisProvider = process.env.QRIS_PROVIDER || 'pakasir';
+
+  if (qrisProvider === 'doku') {
+    return await cmdSyncQrisDoku(phone, ctx, totalAmount);
+  }
+
   // Fallback: use /payments/qris/direct which handles the full flow in one call
   const directPayload = {
     customer_phone: phone,
@@ -340,6 +335,75 @@ async function cmdSyncQrisDirect(phone, ctx) {
   });
 }
 
+async function cmdSyncQrisDoku(phone, ctx, totalAmount) {
+  const orderId = ctx.clientOrderId || ctx.orderId || `ORD-${Date.now()}`;
+  const amount = totalAmount > 0 ? totalAmount : null;
+
+  if (!amount) {
+    die('Cannot generate QRIS: total amount is 0 or missing');
+  }
+
+  // Step 1: Generate QRIS via Doku
+  const dokuResult = await fetchJson(`${BACKEND_BASE_URL}/payments/doku/qris`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({ orderId, amount, validityMinutes: 30 })
+  });
+
+  if (!dokuResult.ok) {
+    die(`Doku QRIS generation failed: ${dokuResult.error || JSON.stringify(dokuResult)}`);
+  }
+
+  const qrContent = dokuResult.qrContent;
+  const referenceNo = dokuResult.referenceNo;
+
+  if (!qrContent) {
+    die('Doku returned empty qrContent');
+  }
+
+  // Step 2: Track payment for auto-verification polling
+  const pendingDir = path.join(WORKSPACE_ROOT, 'state', 'doku-pending');
+  try {
+    await fs.mkdir(pendingDir, { recursive: true });
+    await fs.writeFile(path.join(pendingDir, `${orderId}.json`), JSON.stringify({
+      orderId,
+      referenceNo,
+      phone,
+      customerName: ctx.customerName || null,
+      amount,
+      fulfillmentMethod: ctx.fulfillmentMethod || ctx.fulfillment || null,
+      createdAt: new Date().toISOString(),
+      attempts: 0
+    }, null, 2));
+  } catch (e) {
+    // Non-fatal — poller just won't track this one
+  }
+
+  // Step 3: Send QR image to customer via WhatsApp (wacli)
+  const { sendQrisImageWhatsApp } = await import('./src/notifications/whatsapp.js');
+  const waResult = await sendQrisImageWhatsApp({
+    to: phone,
+    customerName: ctx.customerName || null,
+    amount,
+    qrString: qrContent,
+    force: true
+  });
+
+  output({
+    ok: true,
+    action: 'sync',
+    phone,
+    provider: 'doku',
+    bridgeSynced: true,
+    qrisCreated: true,
+    whatsappSent: waResult.ok || false,
+    whatsappError: waResult.ok ? null : (waResult.error || waResult.reason || null),
+    clientOrderId: orderId,
+    referenceNo,
+    amount
+  });
+}
+
 async function cmdStatus(phone) {
   const normalized = normalizePhone(phone);
   if (!normalized) die(`Invalid phone: ${phone}`);
@@ -352,6 +416,37 @@ async function cmdStatus(phone) {
 
   // Support both nested and flat state formats
   const ctx = state.orderContext || state;
+  const qrisProvider = process.env.QRIS_PROVIDER || 'pakasir';
+
+  // If Doku provider and we have a referenceNo, query Doku directly
+  if (qrisProvider === 'doku' && (ctx.referenceNo || state.referenceNo)) {
+    const refNo = ctx.referenceNo || state.referenceNo;
+    const partnerRef = ctx.clientOrderId || state.orderId || null;
+
+    const dokuStatus = await fetchJson(`${BACKEND_BASE_URL}/payments/doku/query`, {
+      method: 'POST',
+      headers: buildHeaders(),
+      body: JSON.stringify({ originalReferenceNo: refNo, partnerReferenceNo: partnerRef })
+    });
+
+    if (dokuStatus.ok) {
+      const paid = dokuStatus.paid === true;
+      output({
+        ok: true,
+        action: 'status',
+        phone: normalized,
+        paymentMethod: 'qris',
+        paymentStatus: paid ? 'confirmed' : 'pending',
+        orderStatus: paid ? 'paid' : 'awaiting_payment',
+        clientOrderId: partnerRef,
+        customerName: ctx.customerName || state.customerName || null,
+        provider: 'doku',
+        paidTime: dokuStatus.paidTime || null,
+        source: 'doku_query'
+      });
+      return;
+    }
+  }
 
   // Query bridge for live state
   const bridgeResult = await fetchJson(

@@ -16,6 +16,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import logger from '../lib/logger.js';
 import { getSupabase } from '../supabase.js';
+import { runWacliSafe } from '../notifications/whatsapp.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -38,7 +39,7 @@ async function sendWa(phone, message) {
   const jid = toJid(phone);
   if (!jid) return;
   try {
-    await execFileAsync(WACLI_BIN, ['send', 'text', '--to', jid, '--message', message], { timeout: 15_000 });
+    await runWacliSafe(['send', 'text', '--to', jid, '--message', message]);
   } catch (_) {}
 }
 

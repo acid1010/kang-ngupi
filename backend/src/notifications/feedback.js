@@ -3,14 +3,10 @@
  * Customer replies with 1-5 rating via WhatsApp
  */
 
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import { normalizePhone } from '../builders/orderPayload.js';
 import { getSupabase } from '../supabase.js';
 import logger from '../lib/logger.js';
-
-const execFileAsync = promisify(execFile);
-const WACLI_BIN = process.env.WACLI_BIN || 'wacli';
+import { runWacliSafe } from './whatsapp.js';
 
 function toJid(phone) {
   const normalized = normalizePhone(phone);
@@ -26,11 +22,8 @@ function buildFeedbackMessage(order) {
 
 async function sendWaCli(jid, message) {
   try {
-    const { stdout } = await execFileAsync(WACLI_BIN, ['send', 'text', '--to', jid, '--message', message], {
-      timeout: 30_000,
-      maxBuffer: 1024 * 1024
-    });
-    return { ok: true, stdout: stdout?.trim() };
+    const result = await runWacliSafe(['send', 'text', '--to', jid, '--message', message]);
+    return { ok: true, stdout: result.stdout };
   } catch (error) {
     return { ok: false, error: error.message };
   }

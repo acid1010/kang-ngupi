@@ -7,18 +7,59 @@ function pad(value) {
   return String(value).padStart(2, '0');
 }
 
-function localDateTimeSlug(date = new Date()) {
-  const yyyy = date.getFullYear();
-  const mm = pad(date.getMonth() + 1);
-  const dd = pad(date.getDate());
-  const hh = pad(date.getHours());
-  const mi = pad(date.getMinutes());
-  const ss = pad(date.getSeconds());
-  return `${yyyy}-${mm}-${dd}T${hh}-${mi}-${ss}`;
+function getJakartaDate(date = new Date()) {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Jakarta',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  }).formatToParts(date);
+
+  const map = Object.fromEntries(parts.filter((part) => part.type !== 'literal').map((part) => [part.type, part.value]));
+  return {
+    year: map.year,
+    month: map.month,
+    day: map.day,
+    hour: map.hour,
+    minute: map.minute,
+    second: map.second
+  };
 }
 
-export function generateClientOrderId(prefix = 'draft') {
-  return `${prefix}_${localDateTimeSlug()}`;
+function normalizeOrderIdPrefix(prefix = 'draft') {
+  const normalized = String(prefix || 'draft').trim().toLowerCase();
+  if (['delivery', 'dl'].includes(normalized)) return 'DL';
+  if (['pickup', 'pick_up', 'self_pickup', 'pu'].includes(normalized)) return 'PU';
+  if (['dine_in', 'dine-in', 'dinein', 'di'].includes(normalized)) return 'DI';
+  return String(prefix || 'draft').trim().toUpperCase();
+}
+
+// Daily sequence counter — resets each day (Jakarta time)
+const _seqState = { date: null, counters: {} };
+
+function getNextSequence(prefix) {
+  const now = getJakartaDate();
+  const today = `${now.year}-${now.month}-${now.day}`;
+  if (_seqState.date !== today) {
+    _seqState.date = today;
+    _seqState.counters = {};
+  }
+  const key = normalizeOrderIdPrefix(prefix);
+  _seqState.counters[key] = (_seqState.counters[key] || 0) + 1;
+  return String(_seqState.counters[key]).padStart(3, '0');
+}
+
+export function generateClientOrderId(prefix = 'draft', sequence = null) {
+  const now = getJakartaDate();
+  const safePrefix = normalizeOrderIdPrefix(prefix);
+  const safeSequence = sequence != null
+    ? String(sequence).padStart(3, '0')
+    : getNextSequence(prefix);
+  return `${safePrefix}-${now.hour}${now.minute}-${safeSequence}`;
 }
 
 export function normalizePhone(phone) {
@@ -99,7 +140,8 @@ function mapFulfillment(context = {}) {
         }
       : null,
     delivery_provider:
-      normalizeDeliveryProvider(fulfillment.deliveryProvider ?? fulfillment.delivery_provider ?? context.deliveryProvider ?? null)
+      normalizeDeliveryProvider(fulfillment.deliveryProvider ?? fulfillment.delivery_provider ?? context.deliveryProvider ?? null),
+    table_number: fulfillment.tableNumber ?? fulfillment.table_number ?? context.tableNumber ?? null
   };
 }
 
@@ -128,7 +170,7 @@ function mapPayment(context = {}, fallbackStatus = 'pending') {
 
 function basePayload(eventType, context = {}) {
   const existingId = context.clientOrderId ?? context.client_order_id ?? null;
-  const prefix = eventType === 'final_order' ? 'final' : 'draft';
+  const prefix = context.fulfillmentMethod ?? context.fulfillment?.method ?? (eventType === 'final_order' ? 'final' : 'draft');
   const clientOrderId = existingId || generateClientOrderId(prefix);
 
   return {

@@ -1,14 +1,16 @@
 /**
- * Ongkir Calculator — Go Ngupi delivery fee based on distance zones
+ * Ongkir Calculator — Go Ngupi delivery fee based on distance
  * 
- * Zona 1 (0-2 KM): Rp8.000 - Rp10.000 (flat Rp8.000)
- * Zona 2 (2-5 KM): Rp10.000 + Rp2.000/KM (extra km beyond 2)
- * Zona 3 (>5 KM):  Rp16.000 + Rp3.000/KM (extra km beyond 5)
+ * 0-2 KM: flat Rp10.000
+ * >2 KM:  Rp10.000 + per extra km:
+ *   - sisa < 0.5 km → +Rp1.000
+ *   - sisa >= 0.5 km → +Rp2.000 (bulatkan ke 1 km penuh)
+ * Max delivery: 8 km
  */
 
 // Kedai Ngupi-Ngupi coordinates
-const KEDAI_LAT = parseFloat(process.env.KEDAI_LAT || '-6.5519552');
-const KEDAI_LNG = parseFloat(process.env.KEDAI_LNG || '107.4451273');
+const KEDAI_LAT = parseFloat(process.env.KEDAI_LAT || '-6.551972');
+const KEDAI_LNG = parseFloat(process.env.KEDAI_LNG || '107.445111');
 
 /**
  * Calculate distance between two points using Haversine formula
@@ -37,26 +39,25 @@ export function calculateDeliveryFee(distanceKm) {
     return {
       zone: 1,
       distanceKm: km,
-      fee: 8000,
-      label: `Zona 1 (${km} km) — Rp8.000`
+      fee: 10000,
+      label: `${km} km — Rp10.000`
     };
-  } else if (km <= 5) {
-    const extraKm = Math.ceil(km - 2);
-    const fee = 10000 + (extraKm * 2000);
+  } else {
+    const extra = km - 2;
+    const fullKm = Math.floor(extra);
+    const remainder = extra - fullKm;
+    // full km = +2000 each, remainder < 0.5 = +1000, remainder >= 0.5 = +2000
+    let fee = 10000 + (fullKm * 2000);
+    if (remainder > 0 && remainder < 0.5) {
+      fee += 1000;
+    } else if (remainder >= 0.5) {
+      fee += 2000;
+    }
     return {
       zone: 2,
       distanceKm: km,
       fee,
-      label: `Zona 2 (${km} km) — Rp${fee.toLocaleString('id-ID')}`
-    };
-  } else {
-    const extraKm = Math.ceil(km - 5);
-    const fee = 16000 + (extraKm * 3000);
-    return {
-      zone: 3,
-      distanceKm: km,
-      fee,
-      label: `Zona 3 (${km} km) — Rp${fee.toLocaleString('id-ID')}`
+      label: `${km} km — Rp${fee.toLocaleString('id-ID')}`
     };
   }
 }

@@ -42,3 +42,6 @@ memory/.dreams/
 # Customer backups (sensitive data)
 backend/backups/
 outbox/order-context/*.json
+soccer-parlay-system/venv/
+state/doku-pending/
+backend/doku-private.key
