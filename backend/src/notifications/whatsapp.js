@@ -73,17 +73,64 @@ function buildQrisCaption({ customerName = null, amount = null } = {}) {
   return `${salutation} ini QRIS-nya ya.${totalText} Nanti setelah masuk, otomatis terverifikasi 🙂`;
 }
 
-async function runWacli(args) {
-  const { stdout, stderr } = await execFileAsync(getWacliBin(), args, {
-    timeout: 30_000,
-    maxBuffer: 1024 * 1024
-  });
-
-  return {
-    stdout: stdout?.trim() || null,
-    stderr: stderr?.trim() || null
-  };
+function getEstimatedTimeText(fulfillmentMethod) {
+  switch (fulfillmentMethod) {
+    case 'dine_in':
+      return '~10-15 menit';
+    case 'self_pickup':
+      return '~15-20 menit';
+    case 'delivery':
+      return '~25-40 menit';
+    default:
+      return '~15-20 menit';
+  }
 }
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function isWacliStoreLockError(error) {
+  const text = String(error?.message || error || '').toLowerCase();
+  return text.includes('store is locked') || text.includes('resource temporarily unavailable');
+}
+
+async function runWacli(args, { retries = 4, retryDelayMs = 1500 } = {}) {
+  let lastError;
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const { stdout, stderr } = await execFileAsync(getWacliBin(), args, {
+        timeout: 30_000,
+        maxBuffer: 1024 * 1024
+      });
+
+      return {
+        stdout: stdout?.trim() || null,
+        stderr: stderr?.trim() || null,
+        attempts: attempt + 1
+      };
+    } catch (error) {
+      lastError = error;
+
+      if (!isWacliStoreLockError(error) || attempt === retries) {
+        throw error;
+      }
+
+      const waitMs = retryDelayMs * (attempt + 1);
+      console.warn(`[whatsapp] wacli locked, retrying in ${waitMs}ms (attempt ${attempt + 1}/${retries + 1})`);
+      await sleep(waitMs);
+    }
+  }
+
+  throw lastError;
+}
+
+/**
+ * Shared lock-aware wacli runner — importable by other notification modules.
+ * Usage: import { runWacliSafe } from './whatsapp.js';
+ */
+export { runWacli as runWacliSafe };
 
 export async function sendQrisImageWhatsApp({ to, customerName = null, amount = null, qrString = null, force = false } = {}) {
   if (!isQrisSendEnabled()) {
@@ -159,7 +206,8 @@ export async function sendQrisSuccessWhatsApp({ to, customerName = null, order =
   }
 
   const salutation = customerName ? `Siap kak ${customerName},` : 'Siap kak,';
-  const message = `${salutation} pembayaran QRIS-nya sudah terverifikasi ya ✅\n\nPesanan kamu segera diproses. Ditunggu ya! ☕`;
+  const estimatedTime = getEstimatedTimeText(order?.fulfillment_method);
+  const message = `${salutation} pembayaran QRIS-nya sudah terverifikasi ya ✅\n\nPesanan kamu lagi diproses. Estimasinya ${estimatedTime} ya kak. Ditunggu bentar ☕`;
 
   try {
     const result = await runWacli(['send', 'text', '--to', recipient, '--message', message]);

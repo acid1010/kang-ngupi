@@ -1,0 +1,32 @@
+{
+  "run_at": "2026-04-29T02:19:41.350233",
+  "matches": 5960,
+  "total_bets": 1746,
+  "wins": 844,
+  "losses": 902,
+  "win_rate": 0.4834,
+  "total_staked": 11717.35,
+  "total_returned": 10766.61,
+  "pnl": -950.74,
+  "roi_pct": -8.11,
+  "final_bankroll": 49.26,
+  "max_drawdown_pct": 95.8,
+  "sharpe": -2.794,
+  "brier_score": 0.2239,
+  "ece": 0.0812,
+  "calibration_pairs_count": 20384,
+  "league_stats": {
+    "Bundesliga": {
+      "bets": 932,
+      "wins": 451,
+      "staked": 9930.58,
+      "returned": 9102.026971666668
+    },
+    "EPL": {
+      "bets": 814,
+      "wins": 393,
+      "staked": 1786.7699999999995,
+      "returned": 1664.5868449999998
+    }
+  }
+}

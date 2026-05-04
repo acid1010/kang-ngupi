@@ -22,6 +22,7 @@ import {
   sendQrisImageBestEffort,
   replaySuccessNotificationByClientOrderId
 } from './payments/service.js';
+import { generateQris, queryQris, verifyWebhookSignature as verifyDokuWebhook, getDokuConfig } from './payments/doku.js';
 import { createOrUpdateOrder, getOrderById, getOrderByClientOrderId, listOrders } from './repositories/orders.js';
 import { buildQueueFileName, ensureQueueDirs, writeQueueFile } from './queue/fs.js';
 import { processAllQueues, retryFailedQueues } from './queue/processor.js';
@@ -557,6 +558,131 @@ app.get('/payments/:id/qr.json', async (req, res) => {
   }
 });
 
+// ── Doku QRIS endpoints ──
+app.post('/payments/doku/qris', requireApiKey, async (req, res) => {
+  try {
+    const { orderId, amount, validityMinutes } = req.body;
+    if (!orderId || !amount) {
+      return res.status(400).json({ ok: false, error: 'orderId and amount required' });
+    }
+    const result = await generateQris({ orderId, amount: parseInt(amount), validityMinutes });
+    res.json(result);
+  } catch (error) {
+    logger.error({ error: error.message }, '[doku] Generate QRIS error');
+    res.status(500).json({ ok: false, error: sanitizeError(error) });
+  }
+});
+
+app.post('/payments/doku/query', requireApiKey, async (req, res) => {
+  try {
+    const { originalReferenceNo, partnerReferenceNo } = req.body;
+    if (!originalReferenceNo && !partnerReferenceNo) {
+      return res.status(400).json({ ok: false, error: 'originalReferenceNo or partnerReferenceNo required' });
+    }
+    const result = await queryQris({ originalReferenceNo, partnerReferenceNo });
+    res.json(result);
+  } catch (error) {
+    logger.error({ error: error.message }, '[doku] Query QRIS error');
+    res.status(500).json({ ok: false, error: sanitizeError(error) });
+  }
+});
+
+app.get('/payments/doku/config', requireApiKey, (_req, res) => {
+  res.json({ ok: true, data: getDokuConfig() });
+});
+
+app.post('/webhooks/doku', async (req, res) => {
+  try {
+    const signature = req.headers['x-signature'];
+    const timestamp = req.headers['x-timestamp'];
+    const clientId = req.headers['x-client-key'] || req.headers['x-partner-id'];
+    const rawBody = JSON.stringify(req.body);
+
+    logger.info({ clientId, hasSignature: !!signature }, '[doku] Webhook received');
+
+    // Verify signature
+    const valid = verifyDokuWebhook({ signature, timestamp, body: rawBody, clientId });
+    if (!valid) {
+      logger.warn('[doku] Webhook signature verification failed');
+      return res.status(401).json({ responseCode: '4014700', responseMessage: 'Unauthorized' });
+    }
+
+    // Process notification
+    const body = req.body;
+    const partnerReferenceNo = body.partnerReferenceNo || body.originalPartnerReferenceNo;
+    const transactionStatus = body.latestTransactionStatus || body.transactionStatus;
+    const paid = transactionStatus === '00';
+    const paidTime = body.paidTime || new Date().toISOString();
+
+    logger.info({ partnerReferenceNo, transactionStatus, paid, paidTime }, '[doku] Webhook payment notification');
+
+    if (paid && partnerReferenceNo) {
+      // Find and process pending payment file
+      const fs = await import('node:fs/promises');
+      const path = await import('node:path');
+      const pendingDir = path.join(process.cwd(), '..', 'state', 'doku-pending');
+      const pendingFile = path.join(pendingDir, `${partnerReferenceNo}.json`);
+
+      try {
+        const raw = await fs.readFile(pendingFile, 'utf-8');
+        const payment = JSON.parse(raw);
+
+        logger.info({ orderId: partnerReferenceNo, phone: payment.phone }, '[doku] Webhook: processing confirmed payment');
+
+        // Update order state file
+        const stateDir = path.join(process.cwd(), '..', 'state', 'orders-active');
+        const stateFile = path.join(stateDir, `${payment.phone.replace(/[^a-zA-Z0-9+._-]/g, '_')}.json`);
+        try {
+          const stateRaw = await fs.readFile(stateFile, 'utf-8');
+          const state = JSON.parse(stateRaw);
+          const ctx = state.orderContext || state;
+          ctx.paymentStatus = 'confirmed';
+          ctx.paidAt = paidTime;
+          await fs.writeFile(stateFile, JSON.stringify(state.orderContext ? state : ctx, null, 2));
+        } catch (_) {}
+
+        // Update DB
+        try {
+          const sb = getSupabase();
+          await sb.from('orders')
+            .update({ payment_status: 'confirmed', paid_at: paidTime })
+            .eq('client_order_id', partnerReferenceNo);
+        } catch (_) {}
+
+        // Send WhatsApp success notification
+        try {
+          const { sendQrisSuccessWhatsApp } = await import('./notifications/whatsapp.js');
+          await sendQrisSuccessWhatsApp({
+            to: payment.phone,
+            customerName: payment.customerName,
+            order: { fulfillment_method: payment.fulfillmentMethod }
+          });
+          logger.info({ phone: payment.phone }, '[doku] Webhook: success notification sent');
+        } catch (e) {
+          logger.warn({ error: e.message }, '[doku] Webhook: WhatsApp notification failed');
+        }
+
+        // Remove from pending (so poller doesn't double-process)
+        await fs.unlink(pendingFile).catch(() => {});
+
+        logger.info({ orderId: partnerReferenceNo }, '[doku] Webhook: payment fully processed');
+      } catch (e) {
+        // Pending file not found — maybe already processed by poller
+        if (e.code === 'ENOENT') {
+          logger.info({ orderId: partnerReferenceNo }, '[doku] Webhook: pending file not found (already processed by poller)');
+        } else {
+          logger.warn({ orderId: partnerReferenceNo, error: e.message }, '[doku] Webhook: error processing pending payment');
+        }
+      }
+    }
+
+    res.json({ responseCode: '2004700', responseMessage: 'Success' });
+  } catch (error) {
+    logger.error({ error: error.message }, '[doku] Webhook processing error');
+    res.status(500).json({ responseCode: '5004700', responseMessage: 'Internal Server Error' });
+  }
+});
+
 app.post('/webhooks/pakasir', requirePakasirWebhookSecret, async (req, res) => {
   try {
     const result = await verifyPakasirPaymentWebhook(req.body ?? {});
@@ -619,7 +745,7 @@ app.post('/payments/replay-success-notification', async (req, res) => {
   }
 });
 
-app.get('/orders', async (_req, res) => {
+app.get('/orders', requireApiKey, async (_req, res) => {
   try {
     const orders = await listOrders();
     res.json({ ok: true, data: orders });
@@ -628,7 +754,7 @@ app.get('/orders', async (_req, res) => {
   }
 });
 
-app.get('/orders/:id', async (req, res) => {
+app.get('/orders/:id', requireApiKey, async (req, res) => {
   try {
     const order = await getOrderById(req.params.id);
     res.json({ ok: true, data: order });

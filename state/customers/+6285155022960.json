@@ -1,13 +1,14 @@
 {
-  "name": "Acid",
+  "name": "Rasyid",
   "phone": "+6285155022960",
-  "firstOrder": null,
-  "lastOrder": "2026-04-22T19:11:36.084Z",
-  "orderCount": 0,
+  "firstOrder": "2026-04-27T03:00:19.677823+00:00",
+  "lastOrder": "2026-04-29T05:27:32.025364+00:00",
+  "orderCount": 10,
   "paidOrderCount": 0,
   "totalSpent": 0,
   "favoriteItems": [],
   "preferredPayment": "qris",
   "preferredFulfillment": "delivery",
-  "preferences": {}
+  "preferences": {},
+  "updatedAt": "2026-05-03T15:00:00.650Z"
 }

@@ -1,0 +1,495 @@
+{
+  "saved_at": "2026-04-29T10:02:46.047021",
+  "value_bets": [
+    {
+      "match_id": "129bf1300cca29a85d0ebc69b0765602",
+      "home_team": "Sevilla",
+      "away_team": "Real Sociedad",
+      "selection": "Over 2.5",
+      "market": "over_2.5",
+      "opening_odds": 2.0,
+      "opening_implied_prob": 0.5,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "e507965add1c08729038c73ebcd21715",
+      "home_team": "Strasbourg",
+      "away_team": "Toulouse",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.48,
+      "opening_implied_prob": 0.4032,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "0a1838c08f42cd52737d352118246fef",
+      "home_team": "Villarreal",
+      "away_team": "Levante",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 1.76,
+      "opening_implied_prob": 0.5682,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "eea93184179647a445d8227614dedcef",
+      "home_team": "VfL Wolfsburg",
+      "away_team": "Bayern Munich",
+      "selection": "away",
+      "market": "away_win",
+      "opening_odds": 1.6,
+      "opening_implied_prob": 0.625,
+      "bookmaker": "Betfair"
+    },
+    {
+      "match_id": "82a45989e8b145f27fbd7932180e1121",
+      "home_team": "Aston Villa",
+      "away_team": "Tottenham Hotspur",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.26,
+      "opening_implied_prob": 0.4425,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "75a7958b65d9f5327e6211fb839b47d0",
+      "home_team": "FC Utrecht",
+      "away_team": "NAC Breda",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 1.79,
+      "opening_implied_prob": 0.5587,
+      "bookmaker": "BetOnline.ag"
+    },
+    {
+      "match_id": "5eff5e865a8a2ca920a09854d927b852",
+      "home_team": "Udinese",
+      "away_team": "Torino",
+      "selection": "Over 2.5",
+      "market": "over_2.5",
+      "opening_odds": 2.27,
+      "opening_implied_prob": 0.4405,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "5eff5e865a8a2ca920a09854d927b852",
+      "home_team": "Udinese",
+      "away_team": "Torino",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.3,
+      "opening_implied_prob": 0.4348,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "16fa5da1e64cdb028c84396beecbb633",
+      "home_team": "Como",
+      "away_team": "Napoli",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.35,
+      "opening_implied_prob": 0.4255,
+      "bookmaker": "Unibet (NL)"
+    },
+    {
+      "match_id": "0602d732b6ac41cc00e19dd37073c401",
+      "home_team": "Brentford",
+      "away_team": "West Ham United",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.06,
+      "opening_implied_prob": 0.4854,
+      "bookmaker": "Betfair"
+    },
+    {
+      "match_id": "cb630280897e2f77c787a961c6df64ff",
+      "home_team": "Borussia Dortmund",
+      "away_team": "Eintracht Frankfurt",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 1.56,
+      "opening_implied_prob": 0.641,
+      "bookmaker": "Unibet (NL)"
+    },
+    {
+      "match_id": "70d5a8a12ec742a537e668cc03232c2c",
+      "home_team": "RB Leipzig",
+      "away_team": "FC St. Pauli",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 1.46,
+      "opening_implied_prob": 0.6849,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "315caab5b12d03dde21e65d3c03d7957",
+      "home_team": "Valencia",
+      "away_team": "Atl\u00e9tico Madrid",
+      "selection": "away",
+      "market": "away_win",
+      "opening_odds": 3.85,
+      "opening_implied_prob": 0.2597,
+      "bookmaker": "Matchbook"
+    },
+    {
+      "match_id": "6273cdde58224d3b30e4d2a0a74b72df",
+      "home_team": "Manchester United",
+      "away_team": "Liverpool",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.44,
+      "opening_implied_prob": 0.4098,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "1dcb2f96c1b117cb5df516c1de8e307b",
+      "home_team": "Real Betis",
+      "away_team": "Oviedo",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 1.66,
+      "opening_implied_prob": 0.6024,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "8ba3f9de97a2ce3a8b4793f055c8cf45",
+      "home_team": "Lyon",
+      "away_team": "Rennes",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.3,
+      "opening_implied_prob": 0.4348,
+      "bookmaker": "Coolbet"
+    },
+    {
+      "match_id": "7cc6b1d552eef8615927b83203b169f7",
+      "home_team": "1. FC K\u00f6ln",
+      "away_team": "1. FC Heidenheim",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 1.77,
+      "opening_implied_prob": 0.565,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "959903e58a616fbaedfe9e8e608e3618",
+      "home_team": "TSG Hoffenheim",
+      "away_team": "Werder Bremen",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 1.61,
+      "opening_implied_prob": 0.6211,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "3870be32c3d6e43c3db821236089af61",
+      "home_team": "Alav\u00e9s",
+      "away_team": "Athletic Bilbao",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.82,
+      "opening_implied_prob": 0.3546,
+      "bookmaker": "Betfair"
+    },
+    {
+      "match_id": "0568f4e3240e33cd97331e3e6b5ae536",
+      "home_team": "Fulham",
+      "away_team": "Bournemouth",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.65,
+      "opening_implied_prob": 0.3774,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "b43000854014b99837e29f5a83ea6f8a",
+      "home_team": "NEC Nijmegen",
+      "away_team": "SC Telstar",
+      "selection": "Over 2.5",
+      "market": "over_2.5",
+      "opening_odds": 1.38,
+      "opening_implied_prob": 0.7246,
+      "bookmaker": "Nordic Bet"
+    },
+    {
+      "match_id": "f47ad49910710e3636f51b0b0898306d",
+      "home_team": "Parma",
+      "away_team": "AS Roma",
+      "selection": "Under 2.5",
+      "market": "under_2.5",
+      "opening_odds": 1.8,
+      "opening_implied_prob": 0.5556,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "c0a148d54d3440d00aaf34d49aee5c13",
+      "home_team": "Real Sociedad",
+      "away_team": "Real Betis",
+      "selection": "Over 2.5",
+      "market": "over_2.5",
+      "opening_odds": 1.78,
+      "opening_implied_prob": 0.5618,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "25d10f44d20b432ffa4c21db9556f574",
+      "home_team": "Bayern Munich",
+      "away_team": "1. FC Heidenheim",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 1.28,
+      "opening_implied_prob": 0.7812,
+      "bookmaker": "Betfair"
+    },
+    {
+      "match_id": "91980b0a091c3eababe99d41cbb15c69",
+      "home_team": "Elche CF",
+      "away_team": "Alav\u00e9s",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.33,
+      "opening_implied_prob": 0.4292,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "72be7f029f6e7bfdc7db6e0200c28bfd",
+      "home_team": "Atl\u00e9tico Madrid",
+      "away_team": "Celta Vigo",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 1.95,
+      "opening_implied_prob": 0.5128,
+      "bookmaker": "Betsson"
+    },
+    {
+      "match_id": "500435c556a1d29c11dd9b479059485d",
+      "home_team": "Barcelona",
+      "away_team": "Real Madrid",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 1.89,
+      "opening_implied_prob": 0.5291,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "bfced38b94d2e8914a9b7da5a4e4f57c",
+      "home_team": "Paris FC",
+      "away_team": "Brest",
+      "selection": "Over 2.5",
+      "market": "over_2.5",
+      "opening_odds": 2.0,
+      "opening_implied_prob": 0.5,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "a0931093de6a061932b13dca2757ca04",
+      "home_team": "Lecce",
+      "away_team": "Juventus",
+      "selection": "Under 2.5",
+      "market": "under_2.5",
+      "opening_odds": 2.09,
+      "opening_implied_prob": 0.4785,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "a356ebe70d301a70471471682900ee13",
+      "home_team": "Sevilla",
+      "away_team": "Espanyol",
+      "selection": "Over 2.5",
+      "market": "over_2.5",
+      "opening_odds": 2.11,
+      "opening_implied_prob": 0.4739,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "2457832a9a6bc5d539672aa3f6537d3b",
+      "home_team": "Sassuolo",
+      "away_team": "AC Milan",
+      "selection": "Under 2.5",
+      "market": "under_2.5",
+      "opening_odds": 2.21,
+      "opening_implied_prob": 0.4525,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "d20966bfff788c76678b8df12b984866",
+      "home_team": "Arsenal",
+      "away_team": "Fulham",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 1.5,
+      "opening_implied_prob": 0.6667,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "e507965add1c08729038c73ebcd21715",
+      "home_team": "Strasbourg",
+      "away_team": "Toulouse",
+      "selection": "Over 2.5",
+      "market": "over_2.5",
+      "opening_odds": 1.88,
+      "opening_implied_prob": 0.5319,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "b83b66eb2cc703413276e418724fd51f",
+      "home_team": "Nottingham Forest",
+      "away_team": "Newcastle United",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.57,
+      "opening_implied_prob": 0.3891,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "21df0be209e530141e2b764f2175bf46",
+      "home_team": "Metz",
+      "away_team": "Lorient",
+      "selection": "Over 2.5",
+      "market": "over_2.5",
+      "opening_odds": 1.81,
+      "opening_implied_prob": 0.5525,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "453c0686f764668aefe41eca2b87a78f",
+      "home_team": "TSG Hoffenheim",
+      "away_team": "VfB Stuttgart",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.41,
+      "opening_implied_prob": 0.4149,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "b43000854014b99837e29f5a83ea6f8a",
+      "home_team": "NEC Nijmegen",
+      "away_team": "SC Telstar",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 1.46,
+      "opening_implied_prob": 0.6849,
+      "bookmaker": "Betfair"
+    },
+    {
+      "match_id": "0a1838c08f42cd52737d352118246fef",
+      "home_team": "Villarreal",
+      "away_team": "Levante",
+      "selection": "Over 2.5",
+      "market": "over_2.5",
+      "opening_odds": 1.65,
+      "opening_implied_prob": 0.6061,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "346a069408bb60029edcba2aa080976f",
+      "home_team": "Auxerre",
+      "away_team": "Angers",
+      "selection": "Under 2.5",
+      "market": "under_2.5",
+      "opening_odds": 1.74,
+      "opening_implied_prob": 0.5747,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "d1280e2e5067d1465f49862c52c1bdbc",
+      "home_team": "Pisa",
+      "away_team": "Lecce",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 3.35,
+      "opening_implied_prob": 0.2985,
+      "bookmaker": "Betfair"
+    },
+    {
+      "match_id": "3f6eec24642e9ab0d4289401fff075d4",
+      "home_team": "Auxerre",
+      "away_team": "Nice",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.49,
+      "opening_implied_prob": 0.4016,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "00a00c3f01121a448134e3f229206010",
+      "home_team": "Union Berlin",
+      "away_team": "1. FC K\u00f6ln",
+      "selection": "Over 2.5",
+      "market": "over_2.5",
+      "opening_odds": 1.96,
+      "opening_implied_prob": 0.5102,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "157189c91b8cdd9f8753a8c4d196c8d1",
+      "home_team": "Rayo Vallecano",
+      "away_team": "Girona",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.37,
+      "opening_implied_prob": 0.4219,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "4356a00ca97d85f0a97d7af6e1779b8b",
+      "home_team": "VfB Stuttgart",
+      "away_team": "Bayer Leverkusen",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 2.15,
+      "opening_implied_prob": 0.4651,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "eaaf4ed0986f4f5414fc727f5c235d48",
+      "home_team": "Leeds United",
+      "away_team": "Burnley",
+      "selection": "Over 2.5",
+      "market": "over_2.5",
+      "opening_odds": 1.75,
+      "opening_implied_prob": 0.5714,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "2bf852c3fac0dd8a9be7ced65931e78b",
+      "home_team": "Paris Saint Germain",
+      "away_team": "Lorient",
+      "selection": "home",
+      "market": "home_win",
+      "opening_odds": 1.33,
+      "opening_implied_prob": 0.7519,
+      "bookmaker": "Matchbook"
+    },
+    {
+      "match_id": "1dc1f73ee86044140d5314edafdf5650",
+      "home_team": "Torino",
+      "away_team": "Sassuolo",
+      "selection": "Over 2.5",
+      "market": "over_2.5",
+      "opening_odds": 2.07,
+      "opening_implied_prob": 0.4831,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "91980b0a091c3eababe99d41cbb15c69",
+      "home_team": "Elche CF",
+      "away_team": "Alav\u00e9s",
+      "selection": "Over 2.5",
+      "market": "over_2.5",
+      "opening_odds": 1.89,
+      "opening_implied_prob": 0.5291,
+      "bookmaker": "1xBet"
+    },
+    {
+      "match_id": "b4c2627ac6d53c77fbcc0e98d96866e6",
+      "home_team": "AC Milan",
+      "away_team": "Atalanta BC",
+      "selection": "Under 2.5",
+      "market": "under_2.5",
+      "opening_odds": 2.09,
+      "opening_implied_prob": 0.4785,
+      "bookmaker": "1xBet"
+    }
+  ]
+}

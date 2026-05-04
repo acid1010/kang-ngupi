@@ -2,21 +2,23 @@
 
 /**
  * Sync customer profiles from DB — rich profiles with order history + preferences
- * 
+ *
  * Creates state/customers/<phone>.json with:
  * - name, phone, firstOrder, lastOrder
- * - orderCount, totalSpent
- * - favoriteItems (top 5 most ordered)
+ * - orderCount, paidOrderCount, totalSpent
+ * - favoriteItems (top 3 most ordered from paid orders)
  * - preferences (language, notes — preserved from existing)
- * 
+ *
  * Run: node backend/sync-customers.js
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createClient } from '@supabase/supabase-js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const PAID_STATUSES = new Set(['confirmed', 'paid', 'settled']);
 
 // Load .env
 try {
@@ -29,15 +31,34 @@ try {
   }
 } catch (_) {}
 
-import { createClient } from '@supabase/supabase-js';
-
 const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 const CUSTOMERS_DIR = join(__dirname, '..', 'state', 'customers');
+
+async function fetchInBatches(table, select, column, values, batchSize = 100) {
+  const rows = [];
+
+  for (let i = 0; i < values.length; i += batchSize) {
+    const batch = values.slice(i, i + batchSize);
+    if (!batch.length) continue;
+
+    const { data, error } = await sb
+      .from(table)
+      .select(select)
+      .in(column, batch);
+
+    if (error) {
+      throw new Error(`${table}: ${error.message}`);
+    }
+
+    if (data) rows.push(...data);
+  }
+
+  return rows;
+}
 
 async function syncCustomers() {
   mkdirSync(CUSTOMERS_DIR, { recursive: true });
 
-  // Fetch all orders with items
   const { data: orders, error } = await sb
     .from('orders')
     .select('id, customer_name_snapshot, customer_phone_snapshot, payment_method, payment_status, fulfillment_method, created_at')
@@ -49,23 +70,51 @@ async function syncCustomers() {
     process.exit(1);
   }
 
-  // Fetch all order items
-  const orderIds = (orders || []).map(o => o.id);
-  let allItems = [];
-  // Batch fetch (Supabase has URL length limits)
-  for (let i = 0; i < orderIds.length; i += 50) {
-    const batch = orderIds.slice(i, i + 50);
-    const { data: items } = await sb
-      .from('order_items')
-      .select('order_id, menu_name, qty, price')
-      .in('order_id', batch);
-    if (items) allItems.push(...items);
+  const orderIds = (orders || []).map(order => order.id).filter(Boolean);
+  const payments = orderIds.length
+    ? await fetchInBatches('order_payments', 'order_id, payment_status, total_payment, paid_at, created_at', 'order_id', orderIds)
+    : [];
+
+  const paymentsByOrderId = new Map();
+  for (const payment of payments) {
+    if (!payment?.order_id) continue;
+    const existing = paymentsByOrderId.get(payment.order_id);
+    if (!existing) {
+      paymentsByOrderId.set(payment.order_id, payment);
+      continue;
+    }
+
+    const existingPaid = PAID_STATUSES.has(existing.payment_status);
+    const currentPaid = PAID_STATUSES.has(payment.payment_status);
+    const existingTime = existing.paid_at || existing.created_at || '';
+    const currentTime = payment.paid_at || payment.created_at || '';
+
+    if ((!existingPaid && currentPaid) || (existingPaid === currentPaid && currentTime > existingTime)) {
+      paymentsByOrderId.set(payment.order_id, payment);
+    }
   }
 
-  // Build customer profiles
+  const paidOrderIds = (orders || [])
+    .filter(order => {
+      const payment = paymentsByOrderId.get(order.id);
+      return PAID_STATUSES.has(payment?.payment_status) || PAID_STATUSES.has(order.payment_status);
+    })
+    .map(order => order.id);
+
+  const paidItems = paidOrderIds.length
+    ? await fetchInBatches('order_items', 'order_id, menu_name, qty', 'order_id', paidOrderIds)
+    : [];
+
+  const itemsByOrderId = new Map();
+  for (const item of paidItems) {
+    if (!item?.order_id) continue;
+    if (!itemsByOrderId.has(item.order_id)) itemsByOrderId.set(item.order_id, []);
+    itemsByOrderId.get(item.order_id).push(item);
+  }
+
   const customerMap = new Map();
 
-  for (const order of (orders || [])) {
+  for (const order of orders || []) {
     const phone = order.customer_phone_snapshot;
     if (!phone) continue;
 
@@ -87,7 +136,6 @@ async function syncCustomers() {
     const profile = customerMap.get(phone);
     profile.orderCount++;
 
-    // Update name (latest order wins)
     if (order.customer_name_snapshot && order.created_at >= profile.lastOrder) {
       profile.name = order.customer_name_snapshot;
       profile.lastOrder = order.created_at;
@@ -96,21 +144,19 @@ async function syncCustomers() {
       profile.firstOrder = order.created_at;
     }
 
-    // Count paid orders
-    if (['confirmed', 'paid', 'settled'].includes(order.payment_status)) {
+    const payment = paymentsByOrderId.get(order.id);
+    const isPaid = PAID_STATUSES.has(payment?.payment_status) || PAID_STATUSES.has(order.payment_status);
+    if (isPaid) {
       profile.paidOrderCount++;
+      profile.totalSpent += Number(payment?.total_payment || 0);
 
-      // Count items
-      const orderItems = allItems.filter(i => i.order_id === order.id);
-      for (const item of orderItems) {
-        const qty = item.qty || 1;
-        const price = Number(item.price || 0) * qty;
-        profile.totalSpent += price;
+      for (const item of itemsByOrderId.get(order.id) || []) {
+        if (!item?.menu_name) continue;
+        const qty = Number(item.qty || 0) || 1;
         profile.itemCounts[item.menu_name] = (profile.itemCounts[item.menu_name] || 0) + qty;
       }
     }
 
-    // Track payment + fulfillment preferences
     if (order.payment_method) {
       profile.paymentMethods[order.payment_method] = (profile.paymentMethods[order.payment_method] || 0) + 1;
     }
@@ -119,13 +165,11 @@ async function syncCustomers() {
     }
   }
 
-  // Write profiles
   let written = 0;
   for (const [phone, data] of customerMap) {
     const filename = phone.replace(/[^a-zA-Z0-9+._-]/g, '_') + '.json';
     const filepath = join(CUSTOMERS_DIR, filename);
 
-    // Load existing profile to preserve manual preferences
     let existing = {};
     try {
       if (existsSync(filepath)) {
@@ -133,13 +177,11 @@ async function syncCustomers() {
       }
     } catch (_) {}
 
-    // Top 5 favorite items
     const favoriteItems = Object.entries(data.itemCounts)
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 5)
+      .slice(0, 3)
       .map(([name, count]) => ({ name, count }));
 
-    // Preferred payment & fulfillment
     const preferredPayment = Object.entries(data.paymentMethods).sort((a, b) => b[1] - a[1])[0]?.[0] || null;
     const preferredFulfillment = Object.entries(data.fulfillmentMethods).sort((a, b) => b[1] - a[1])[0]?.[0] || null;
 
@@ -154,16 +196,7 @@ async function syncCustomers() {
       favoriteItems,
       preferredPayment,
       preferredFulfillment,
-      // Preserve manual preferences (set by agent during conversation)
       preferences: existing.preferences || {},
-      // preferences example:
-      // {
-      //   language: "sunda",
-      //   notes: "suka less ice",
-      //   nickname: "Kang Asep",
-      //   allergies: "kacang",
-      //   customGreeting: "Kumaha damang kang?"
-      // }
       updatedAt: new Date().toISOString()
     };
 

@@ -1,0 +1,109 @@
+
+════════════════════════════════════════════════════════════
+  DAILY PARLAY PICKS — 2026-04-29 02:02
+  Bankroll: $1,000.00 | Model: Poisson v1.0
+════════════════════════════════════════════════════════════
+
+🎯 PARLAY #1 — Expected Value: +222.2%
+  Combined Odds: 8.88 | Confidence: HIGH
+  Recommended Stake: $15.00 (2.0% bankroll)
+  Potential Payout: $133.17
+
+  Leg 1: Sevilla vs Real Sociedad — Over 2.5
+    Model: 74.6% | Implied: 50.0% | Edge: +24.6%
+    Odds: 2.00 (1xBet)
+    League: La Liga
+
+  Leg 2: Strasbourg vs Toulouse — home
+    Model: 64.0% | Implied: 40.3% | Edge: +23.7%
+    Odds: 2.48 (1xBet)
+    League: Ligue 1
+
+  Leg 3: FC Utrecht vs NAC Breda — home
+    Model: 76.0% | Implied: 55.9% | Edge: +20.1%
+    Odds: 1.79 (BetOnline.ag)
+    League: Eredivisie
+
+  ✅ Legs uncorrelated (different leagues)
+  ✅ All legs in sweet spot (1.50-2.50)
+
+────────────────────────────────────────────────────────────
+
+🎯 PARLAY #2 — Expected Value: +201.0%
+  Combined Odds: 9.35 | Confidence: HIGH
+  Recommended Stake: $15.00 (2.0% bankroll)
+  Potential Payout: $140.20
+
+  Leg 1: Villarreal vs Levante — home
+    Model: 79.3% | Implied: 56.8% | Edge: +22.5%
+    Odds: 1.76 (1xBet)
+    League: La Liga
+
+  Leg 2: Aston Villa vs Tottenham Hotspur — home
+    Model: 65.0% | Implied: 44.2% | Edge: +20.7%
+    Odds: 2.26 (1xBet)
+    League: Premier League
+
+  Leg 3: Como vs Napoli — home
+    Model: 62.5% | Implied: 42.5% | Edge: +19.9%
+    Odds: 2.35 (Unibet (NL))
+    League: Serie A
+
+  ✅ Legs uncorrelated (different leagues)
+  ✅ All legs in sweet spot (1.50-2.50)
+
+────────────────────────────────────────────────────────────
+
+🎯 PARLAY #3 — Expected Value: +187.6%
+  Combined Odds: 9.13 | Confidence: HIGH
+  Recommended Stake: $15.00 (2.0% bankroll)
+  Potential Payout: $136.98
+
+  Leg 1: VfL Wolfsburg vs Bayern Munich — away
+    Model: 84.2% | Implied: 62.5% | Edge: +21.7%
+    Odds: 1.60 (Betfair)
+    League: Bundesliga
+
+  Leg 2: Udinese vs Torino — home
+    Model: 63.4% | Implied: 43.1% | Edge: +20.3%
+    Odds: 2.32 (Matchbook)
+    League: Serie A
+
+  Leg 3: Manchester United vs Liverpool — home
+    Model: 59.0% | Implied: 40.6% | Edge: +18.3%
+    Odds: 2.46 (1xBet)
+    League: Premier League
+
+  ✅ Legs uncorrelated (different leagues)
+  ✅ All legs in sweet spot (1.50-2.50)
+
+────────────────────────────────────────────────────────────
+
+  Matches analyzed: 99 | Value bets found: 126 (81 matches)
+  Matches skipped: 18 (18%) — insufficient edge
+
+────────────────────────────────────────────────────────────
+  ALL VALUE BETS (sorted by edge)
+────────────────────────────────────────────────────────────
+  Sevilla vs Real Sociedad — Over 2.5
+    Edge: +24.6% | Odds: 2.00 | Conf: HIGH | 🎯
+  Strasbourg vs Toulouse — home
+    Edge: +23.7% | Odds: 2.48 | Conf: HIGH | 🎯
+  Villarreal vs Levante — home
+    Edge: +22.5% | Odds: 1.76 | Conf: HIGH | 🎯
+  VfL Wolfsburg vs Bayern Munich — away
+    Edge: +21.7% | Odds: 1.60 | Conf: HIGH | 🎯
+  Aston Villa vs Tottenham Hotspur — home
+    Edge: +20.7% | Odds: 2.26 | Conf: HIGH | 🎯
+  Udinese vs Torino — home
+    Edge: +20.3% | Odds: 2.32 | Conf: HIGH | 🎯
+  FC Utrecht vs NAC Breda — home
+    Edge: +20.1% | Odds: 1.79 | Conf: HIGH | 🎯
+  Udinese vs Torino — Over 2.5
+    Edge: +20.1% | Odds: 2.27 | Conf: HIGH | 🎯
+  Como vs Napoli — home
+    Edge: +19.9% | Odds: 2.35 | Conf: HIGH | 🎯
+  Borussia Dortmund vs Eintracht Frankfurt — home
+    Edge: +19.7% | Odds: 1.56 | Conf: HIGH | 🎯
+
+════════════════════════════════════════════════════════════

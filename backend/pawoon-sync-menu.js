@@ -12,6 +12,7 @@
  * - Modifier groups (e.g. toppings, extras)
  * - Prices from Pawoon as source of truth
  * - Preserves local aliases
+ * - Keeps menu descriptions for AI use
  */
 
 import { config } from 'dotenv';
@@ -223,7 +224,10 @@ async function syncMenu() {
   for (const item of schema.menus) {
     delete item.sku;
     delete item.image;
-    delete item.description;
+    if (typeof item.description === 'string') {
+      item.description = item.description.trim() || null;
+    }
+    if (!item.description) delete item.description;
     delete item.pawoonId;
     delete item.sellable;
     // Compact variants: same-price → variantOptions string, diff-price → keep array without sku

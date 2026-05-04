@@ -1,0 +1,107 @@
+# Soccer Parlay System Configuration
+# ====================================
+
+apis:
+  # The Odds API — https://the-odds-api.com
+  # Free tier: 500 requests/month
+  odds_api_key: "8b64c6923f63771e7673ae13c89d2cb8"
+  odds_api_base: "https://api.the-odds-api.com/v4"
+
+  # Football-Data.org — https://www.football-data.org
+  # Free tier: 10 req/min, major European leagues
+  football_data_key: "d6e81d27dc604750bd6884c2ecd1b227"
+  football_data_base: "https://api.football-data.org/v4"
+
+# Leagues to track (football-data.org competition codes)
+leagues:
+  - code: "PL"
+    name: "Premier League"
+    sport_key: "soccer_epl"           # odds-api sport key
+  - code: "BL1"
+    name: "Bundesliga"
+    sport_key: "soccer_germany_bundesliga"
+  - code: "SA"
+    name: "Serie A"
+    sport_key: "soccer_italy_serie_a"
+  - code: "PD"
+    name: "La Liga"
+    sport_key: "soccer_spain_la_liga"
+  - code: "FL1"
+    name: "Ligue 1"
+    sport_key: "soccer_france_ligue_one"
+  - code: "DED"
+    name: "Eredivisie"
+    sport_key: "soccer_netherlands_eredivisie"
+
+# Model parameters
+model:
+  # Home advantage factor (typical: 0.25-0.35)
+  home_advantage: 0.30
+  # Minimum matches for reliable team stats
+  min_matches: 5
+  # Poisson max goals to compute
+  max_goals: 8
+  # Calibration method: "platt" or "isotonic"
+  calibration_method: "platt"
+
+# Betting thresholds — based on research papers
+betting:
+  # Minimum edge (model prob - implied prob) to consider a value bet
+  # Upgraded from 0.05 → 0.12 for ultra-selective strategy (Phase 2)
+  min_edge: 0.12
+  # Preferred odds range per leg (sweet spot)
+  min_odds_per_leg: 1.50
+  max_odds_per_leg: 2.50
+  # Absolute odds limits
+  abs_min_odds: 1.20
+  abs_max_odds: 4.00
+  # Maximum parlay legs
+  max_parlay_legs: 3
+  # Minimum parlay legs
+  min_parlay_legs: 2
+  # Maximum combined parlay odds
+  max_parlay_odds: 10.0
+
+# Kelly criterion & bankroll management
+bankroll:
+  # Starting bankroll
+  initial: 1000.0
+  # Fractional Kelly multiplier (15% = ultra-conservative, Phase 2)
+  kelly_fraction: 0.15
+  # Hard cap: max bet as % of bankroll
+  max_bet_pct: 0.02
+  # Min bet as % of bankroll
+  min_bet_pct: 0.005
+  # Daily exposure limit as % of bankroll
+  daily_exposure_pct: 0.05
+  # Stop-loss: pause if bankroll drops below this % of initial
+  stop_loss_pct: 0.50
+
+# Parlay optimization
+parlay:
+  # Penalty for correlated legs (same league)
+  same_league_penalty: 0.30
+  # Penalty for close kickoff times (within hours)
+  close_time_hours: 3
+  close_time_penalty: 0.15
+  # Bonus for legs in sweet spot odds range
+  sweet_spot_bonus: 0.10
+  # Max parlays to suggest per day
+  max_daily_parlays: 3
+  # Top N value bets to consider for parlay construction
+  top_n_value_bets: 15
+
+# Data caching
+cache:
+  # Cache odds data for N minutes
+  odds_ttl_minutes: 30
+  # Cache match stats for N hours
+  stats_ttl_hours: 6
+  # Data directory
+  data_dir: "data"
+
+# Logging
+logging:
+  level: "INFO"
+  file: "logs/system.log"
+  console: true

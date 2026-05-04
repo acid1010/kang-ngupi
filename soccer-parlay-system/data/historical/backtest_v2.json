@@ -1,0 +1,23 @@
+{
+  "version": "v2",
+  "calibrated": false,
+  "edge_threshold": 0.08,
+  "odds_range": [
+    1.5,
+    2.5
+  ],
+  "matches": 5960,
+  "total_bets": 1193,
+  "wins": 583,
+  "losses": 610,
+  "win_rate": 0.4887,
+  "staked": 7366.15,
+  "returned": 6415.78,
+  "pnl": -950.37,
+  "roi_pct": -12.9,
+  "bankroll": 49.63,
+  "max_dd": 95.4,
+  "sharpe": -4.409,
+  "brier": 0.2237,
+  "ece": 0.0805
+}
