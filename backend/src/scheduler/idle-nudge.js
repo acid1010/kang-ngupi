@@ -19,9 +19,10 @@ import { runWacliSafe } from '../notifications/whatsapp.js';
 
 const NUDGE_STATE_DIR = '/home/ubuntu/workspace-sobatngupi/state/nudge-tracking';
 const SESSIONS_DIR = '/home/ubuntu/.openclaw/agents/main/sessions';
-const NUDGE_AFTER_MS = 15 * 60 * 1000;  // 15 minutes idle
+const NUDGE_AFTER_MS = 15 * 60 * 1000;  // 15 minutes idle → first nudge
+const CANCEL_AFTER_MS = 30 * 60 * 1000; // 30 minutes idle → auto-cancel
 const NUDGE_COOLDOWN_MS = 4 * 60 * 60 * 1000; // Don't re-nudge within 4 hours
-const MAX_NUDGE_PER_DAY = 1; // Max 1 nudge per customer per day
+const MAX_NUDGE_PER_DAY = 2; // Max 2 nudges per customer per day (1 reminder + 1 cancel)
 
 function toJid(phone) {
   let p = String(phone).trim().replace(/[\s\-()]/g, '');
@@ -42,15 +43,14 @@ async function sendWa(phone, message) {
   }
 }
 
-function getNudgeMessage(context) {
-  const messages = [
-    'Hai kak, masih mau lanjut ordernya? Kalau ada yang bisa aku bantu, chat aja ya 😊',
-    'Kak, ordernya masih mau dilanjut? Aku standby nih kalau mau pesan ☕',
-    'Hai kak, tadi sempet mau order ya? Kalau jadi, langsung aja chat lagi 🙂',
-  ];
-  // Pick based on hour to vary
-  const hour = new Date().getHours();
-  return messages[hour % messages.length];
+function getNudgeMessage(nudgeCount) {
+  if (nudgeCount === 0) {
+    // First nudge (15 min) — gentle ask
+    return 'Kak, orderannya jadi dilanjut nggak? Kalau mau lanjut, chat aja ya 😊';
+  } else {
+    // Second nudge (30 min) — cancel notice
+    return 'Hai kak, karena belum ada respon, orderannya aku cancel dulu ya. Kalau mau pesan lagi nanti, tinggal chat aja 🙏';
+  }
 }
 
 async function loadNudgeState(phone) {
@@ -149,18 +149,39 @@ export async function processIdleChats() {
           }
         }
 
-        // Send nudge
-        const message = getNudgeMessage();
-        const sent = await sendWa(phone, message);
+        // Determine nudge stage
+        const currentNudgeCount = nudgeState.date === today ? nudgeState.nudgeCount : 0;
         
-        if (sent) {
-          nudged++;
-          await saveNudgeState(phone, {
-            nudgeCount: (nudgeState.date === today ? nudgeState.nudgeCount : 0) + 1,
-            lastNudgeAt: new Date().toISOString(),
-            date: today
-          });
-          logger.info('[nudge] Sent reminder to %s (idle %dmin)', phone, Math.round(idleMs / 60000));
+        // Stage 1: 15 min idle → ask if continuing
+        // Stage 2: 30 min idle → cancel + notify
+        if (currentNudgeCount === 0 && idleMs < CANCEL_AFTER_MS) {
+          // First nudge: gentle reminder
+          const message = getNudgeMessage(0);
+          const sent = await sendWa(phone, message);
+          if (sent) {
+            nudged++;
+            await saveNudgeState(phone, { nudgeCount: 1, lastNudgeAt: new Date().toISOString(), date: today });
+            logger.info('[nudge] Reminder sent to %s (idle %dmin)', phone, Math.round(idleMs / 60000));
+          }
+        } else if (currentNudgeCount === 1 && idleMs >= CANCEL_AFTER_MS) {
+          // Second nudge: auto-cancel
+          const message = getNudgeMessage(1);
+          const sent = await sendWa(phone, message);
+          if (sent) {
+            nudged++;
+            await saveNudgeState(phone, { nudgeCount: 2, lastNudgeAt: new Date().toISOString(), date: today });
+            logger.info('[nudge] Auto-cancel sent to %s (idle %dmin)', phone, Math.round(idleMs / 60000));
+            
+            // Clean up state file (cancel the order)
+            try {
+              const { rename, mkdir: mkdirAsync } = await import('node:fs/promises');
+              const { join: joinPath } = await import('node:path');
+              const stateFile = joinPath('/home/ubuntu/workspace-sobatngupi/state/orders-active', `${phone}.json`);
+              const expiredDir = '/home/ubuntu/workspace-sobatngupi/state/orders-expired';
+              await mkdirAsync(expiredDir, { recursive: true });
+              await rename(stateFile, joinPath(expiredDir, `${phone}-idle-cancelled.json`)).catch(() => {});
+            } catch (_) {}
+          }
         }
       } catch (err) {
         logger.debug('[nudge] Error processing session: %s', err.message);
