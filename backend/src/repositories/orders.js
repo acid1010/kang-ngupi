@@ -27,6 +27,7 @@ function mapOrderRow(row, items = []) {
     location_label: row.location_label,
     delivery_provider: row.delivery_provider,
     table_number: row.table_number ?? null,
+    delivery_fee: row.delivery_fee ?? 0,
     notes: row.notes,
     created_at: row.created_at,
     updated_at: row.updated_at,
@@ -73,6 +74,7 @@ export async function createOrUpdateOrder(eventType, order) {
     location_lng: order.fulfillment?.shareloc?.lng ?? null,
     location_label: order.fulfillment?.shareloc?.label ?? null,
     delivery_provider: (order.fulfillment?.delivery_provider === 'go_ngupi' ? 'ngupi_express' : order.fulfillment?.delivery_provider) ?? null,
+    delivery_fee: order.fulfillment?.delivery_fee ?? order.delivery_fee ?? 0,
     table_number: order.fulfillment?.table_number ?? null,
     notes: Array.isArray(order.notes) ? order.notes.filter(n => typeof n === 'string' && n.length > 1) : (typeof order.notes === 'string' ? [order.notes] : [])
   };

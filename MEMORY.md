@@ -50,7 +50,7 @@
 
 ## Ongkir Go Ngupi
 - Kedai coords: -6.551972, 107.445111
-- Max 8km. Zona 1 (0-2km): Rp8K, Zona 2 (2-5km): +Rp2K/km, Zona 3 (5-8km): +Rp3K/km
+- Max 8km. Zona 1 (0-2km): Rp10K, Zona 2 (2-5km): +Rp2K/km, Zona 3 (5-8km): +Rp3K/km
 
 ## Dine-In Feature
 - QR per meja → wa.me deep link → "Halo Kang Ngupi, saya di meja X nih!"

@@ -141,6 +141,7 @@ function mapFulfillment(context = {}) {
       : null,
     delivery_provider:
       normalizeDeliveryProvider(fulfillment.deliveryProvider ?? fulfillment.delivery_provider ?? context.deliveryProvider ?? null),
+    delivery_fee: Number(fulfillment.deliveryFee ?? fulfillment.delivery_fee ?? context.deliveryFee ?? context.ongkir ?? 0),
     table_number: fulfillment.tableNumber ?? fulfillment.table_number ?? context.tableNumber ?? null
   };
 }
