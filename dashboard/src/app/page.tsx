@@ -22,7 +22,7 @@ export default function Home() {
     <div className="flex items-center justify-center min-h-screen bg-background">
       <div className="flex flex-col items-center gap-3">
         <div className="w-10 h-10 rounded-xl overflow-hidden animate-pulse">
-          <img src="/app/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
+          <img src="/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
         </div>
         <p className="text-xs text-muted-foreground">Memuat...</p>
       </div>

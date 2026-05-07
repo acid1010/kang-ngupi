@@ -117,27 +117,52 @@ async function pollPendingPayments() {
           if (stateRaw) {
             const state = JSON.parse(stateRaw);
             const ctx = state.orderContext || state;
-            // Import and push to Pawoon
+            // Push to Pawoon POS
             try {
-              const { pushOrderToPawoon } = await import('./src/bridge/evaluator.js');
-              if (typeof pushOrderToPawoon === 'function') {
-                await pushOrderToPawoon(ctx);
-                logger.info({ orderId: payment.orderId }, '[doku-poller] Pushed to Pawoon');
+              const { pushOrderToPawoon } = await import('./src/integrations/pawoon.js');
+              const pawoonOrder = {
+                client_order_id: payment.orderId,
+                customer_name_snapshot: payment.customerName || ctx.customerName,
+                customer_phone_snapshot: payment.phone,
+                fulfillment_method: ctx.fulfillmentMethod || 'dine_in',
+                table_number: ctx.tableNumber || null,
+                payment_method: 'qris',
+                notes: ctx.notes
+              };
+              const pawoonItems = (ctx.items || []).map(i => ({
+                menu_name: i.menuName || i.menu_name,
+                qty: i.quantity || i.qty || 1,
+                price: i.price || 0
+              }));
+              const totalAmount = pawoonItems.reduce((sum, i) => sum + (i.price * i.qty), 0) + (Number(ctx.deliveryFee) || 0);
+              const pawoonPayment = { amount: totalAmount, method: 'cash' };
+              const pawoonResult = await pushOrderToPawoon(pawoonOrder, pawoonItems, pawoonPayment);
+              if (pawoonResult.ok) {
+                logger.info({ orderId: payment.orderId, pawoonId: pawoonResult.pawoonOrderId }, '[doku-poller] Pushed to Pawoon');
+              } else {
+                logger.warn({ orderId: payment.orderId, reason: pawoonResult.reason }, '[doku-poller] Pawoon push skipped/failed');
               }
-            } catch (_) {
-              // pushOrderToPawoon may not exist yet
+            } catch (pawErr) {
+              logger.warn({ orderId: payment.orderId, error: pawErr.message }, '[doku-poller] Pawoon push error');
             }
           }
         } catch (e) {
           logger.warn({ error: e.message }, '[doku-poller] Pawoon push failed');
         }
 
-        // Send WhatsApp success notification
+        // Send WhatsApp success notification (with full order from DB for receipt)
         try {
+          let fullOrder = { fulfillment_method: payment.fulfillmentMethod };
+          try {
+            const { createClient } = await import('@supabase/supabase-js');
+            const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+            const { data: dbOrder } = await sb.from('orders').select('*').eq('client_order_id', payment.orderId).single();
+            if (dbOrder) fullOrder = dbOrder;
+          } catch (_) {}
           await sendQrisSuccessWhatsApp({
             to: payment.phone,
             customerName: payment.customerName,
-            order: { fulfillment_method: payment.fulfillmentMethod }
+            order: fullOrder
           });
           logger.info({ phone: payment.phone }, '[doku-poller] Success notification sent');
         } catch (e) {

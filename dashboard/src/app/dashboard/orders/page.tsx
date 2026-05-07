@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectTrigger,
@@ -26,6 +27,7 @@ import {
   getPaymentStatusLabel,
   getPaymentStatusColor,
   formatWhatsAppLink,
+  getFulfillmentLabel,
 } from "@/lib/helpers";
 import {
   Package,
@@ -35,9 +37,19 @@ import {
   ChevronRight,
   ShoppingBag,
   Filter,
+  Search,
+  UtensilsCrossed,
 } from "lucide-react";
 import { toast } from "sonner";
 import { OrderDetailModal } from "@/components/order-detail-modal";
+
+function playNotificationSound() {
+  try {
+    const audio = new Audio("/sounds/new-order.mp3");
+    audio.volume = 0.5;
+    audio.play().catch(() => {});
+  } catch {}
+}
 
 function OrderSkeleton() {
   return (
@@ -76,6 +88,16 @@ export default function OrdersPage() {
   const [paymentFilter, setPaymentFilter] = useState("__all__");
   const [fulfillmentFilter, setFulfillmentFilter] = useState("__all__");
   const [showFilters, setShowFilters] = useState(false);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+
+    return () => window.clearTimeout(timeout);
+  }, [search]);
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -86,6 +108,7 @@ export default function OrdersPage() {
         status: statusFilter === "__all__" ? "" : statusFilter,
         payment_status: paymentFilter === "__all__" ? "" : paymentFilter,
         fulfillment: fulfillmentFilter === "__all__" ? "" : fulfillmentFilter,
+        search: debouncedSearch || undefined,
         sort: "created_at",
         order: "desc",
       });
@@ -96,18 +119,24 @@ export default function OrdersPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, statusFilter, paymentFilter, fulfillmentFilter]);
+  }, [page, statusFilter, paymentFilter, fulfillmentFilter, debouncedSearch]);
 
   useEffect(() => {
     fetchOrders();
   }, [fetchOrders]);
 
-  // SSE
   useEffect(() => {
     const cleanup = connectOrderStream(
       (newOrder) => {
+        playNotificationSound();
         toast.success(`Pesanan baru dari ${newOrder.customer_name_snapshot}!`);
-        if (page === 1 && statusFilter === "__all__" && paymentFilter === "__all__" && fulfillmentFilter === "__all__") {
+        if (
+          page === 1 &&
+          statusFilter === "__all__" &&
+          paymentFilter === "__all__" &&
+          fulfillmentFilter === "__all__" &&
+          !debouncedSearch
+        ) {
           setOrders((prev) => [newOrder, ...prev.slice(0, 24)]);
         }
       },
@@ -121,11 +150,10 @@ export default function OrdersPage() {
       }
     );
     return cleanup;
-  }, [page, statusFilter, paymentFilter, fulfillmentFilter]);
+  }, [page, statusFilter, paymentFilter, fulfillmentFilter, debouncedSearch]);
 
   return (
     <div className="space-y-4">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-foreground">Pesanan</h1>
@@ -144,7 +172,19 @@ export default function OrdersPage() {
         </Button>
       </div>
 
-      {/* Filters */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        <Input
+          placeholder="Cari nama atau nomor HP..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
+          className="pl-9 bg-secondary/50 border-border"
+        />
+      </div>
+
       <div
         className={`grid grid-cols-1 sm:grid-cols-3 gap-3 ${
           showFilters ? "grid" : "hidden lg:grid"
@@ -205,11 +245,11 @@ export default function OrdersPage() {
             <SelectItem value="__all__">Semua Metode</SelectItem>
             <SelectItem value="delivery">Delivery</SelectItem>
             <SelectItem value="pickup">Pickup</SelectItem>
+            <SelectItem value="dine_in">Dine-in</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      {/* Orders */}
       <div className="space-y-3">
         {loading ? (
           Array.from({ length: 5 }).map((_, i) => <OrderSkeleton key={i} />)
@@ -254,10 +294,14 @@ export default function OrdersPage() {
                       <span className="flex items-center gap-1">
                         {order.fulfillment_method === "delivery" ? (
                           <MapPin className="w-3 h-3" />
+                        ) : order.fulfillment_method === "dine_in" ? (
+                          <UtensilsCrossed className="w-3 h-3" />
                         ) : (
                           <ShoppingBag className="w-3 h-3" />
                         )}
-                        {order.fulfillment_method === "delivery" ? "Delivery" : "Pickup"}
+                        {order.fulfillment_method === "dine_in" && order.table_number
+                          ? `Meja ${order.table_number}`
+                          : getFulfillmentLabel(order.fulfillment_method)}
                       </span>
                     </div>
 
@@ -282,8 +326,8 @@ export default function OrdersPage() {
                       {order.payment?.total_payment
                         ? formatRupiah(order.payment.total_payment)
                         : order.payment?.amount
-                        ? formatRupiah(order.payment.amount)
-                        : "-"}
+                          ? formatRupiah(order.payment.amount)
+                          : "-"}
                     </p>
                     <p className="text-[11px] text-muted-foreground/60 mt-1">
                       {formatDateTime(order.created_at)}
@@ -296,7 +340,6 @@ export default function OrdersPage() {
         )}
       </div>
 
-      {/* Pagination */}
       {meta && meta.pages > 1 && (
         <div className="flex items-center justify-between pt-2">
           <p className="text-sm text-muted-foreground">
@@ -323,7 +366,6 @@ export default function OrdersPage() {
         </div>
       )}
 
-      {/* Order detail modal */}
       {selectedOrder && (
         <OrderDetailModal
           order={selectedOrder}

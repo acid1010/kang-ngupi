@@ -43,6 +43,11 @@ async function postPayload(payload) {
 }
 
 function shouldAutoCreateQris(payload = {}) {
+  // Disabled: QRIS is now handled by Doku via sync-state.js
+  // Pakasir QRIS auto-create caused double QR (Doku + Pakasir)
+  const qrisProvider = process.env.QRIS_PROVIDER || 'doku';
+  if (qrisProvider === 'doku') return false;
+
   if (payload?.event_type !== 'draft_order') return false;
 
   const clientOrderId = payload?.order?.client_order_id ?? null;

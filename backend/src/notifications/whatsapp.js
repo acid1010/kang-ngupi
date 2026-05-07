@@ -243,21 +243,58 @@ export async function sendDigitalReceipt({ to, customerName = null, order = null
   const recipient = toWacliPhone(to);
   if (!recipient || !order) return { ok: false, reason: 'missing-data' };
 
-  // Fetch order items from DB
+  // Fetch order items from DB, fallback to state file
   let items = [];
   let ongkir = 0;
   try {
     const { getSupabase } = await import('../supabase.js');
     const sb = getSupabase();
-    const { data } = await sb.from('order_items').select('menu_name, qty, price, temperature, notes').eq('order_id', order.id);
-    items = data || [];
-
+    if (order.id) {
+      const { data } = await sb.from('order_items').select('menu_name, qty, price, temperature, notes').eq('order_id', order.id);
+      items = data || [];
+    }
     // Check for ongkir in order notes or delivery fee
     if (order.delivery_fee) ongkir = Number(order.delivery_fee);
   } catch (_) {}
 
+  // Fallback: read from state file if DB has no items
+  if (items.length === 0 && to) {
+    try {
+      const { readFile } = await import('node:fs/promises');
+      const { join } = await import('node:path');
+      const phone = to.replace(/[^a-zA-Z0-9+._-]/g, '_');
+      const stateFile = join(process.cwd(), '..', 'state', 'orders-active', `${phone}.json`);
+      const raw = await readFile(stateFile, 'utf-8');
+      const state = JSON.parse(raw);
+      const ctx = state.orderContext || state;
+      if (ctx.items && ctx.items.length > 0) {
+        items = ctx.items.map(i => ({
+          menu_name: i.menuName || i.menu_name || 'Item',
+          qty: i.quantity || i.qty || 1,
+          price: i.price || 0,
+          temperature: i.temperature || null,
+          notes: i.notes || null
+        }));
+        ongkir = Number(ctx.deliveryFee || ctx.ongkir || 0);
+      }
+    } catch (_) {}
+  }
+
   const name = customerName || order.customer_name_snapshot || 'kak';
-  const orderId = order.client_order_id || '-';
+  let orderId = order.client_order_id || '-';
+  // Fallback orderId from state if DB didn't have it
+  if (orderId === '-' && to) {
+    try {
+      const { readFile } = await import('node:fs/promises');
+      const { join } = await import('node:path');
+      const phone = to.replace(/[^a-zA-Z0-9+._-]/g, '_');
+      const stateFile = join(process.cwd(), '..', 'state', 'orders-active', `${phone}.json`);
+      const raw = await readFile(stateFile, 'utf-8');
+      const state = JSON.parse(raw);
+      const ctx = state.orderContext || state;
+      orderId = ctx.clientOrderId || ctx.orderId || '-';
+    } catch (_) {}
+  }
   const now = new Date();
   const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Jakarta' });
   const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' });
@@ -276,7 +313,9 @@ export async function sendDigitalReceipt({ to, customerName = null, order = null
   const total = subtotal + ongkir;
 
   const paymentMethod = (order.payment_method || 'qris').toUpperCase();
-  const fulfillment = order.fulfillment_method === 'delivery' ? 'Delivery (Go Ngupi)' : 'Pickup';
+  const fulfillment = order.fulfillment_method === 'delivery' ? 'Delivery (Go Ngupi)' 
+    : order.fulfillment_method === 'dine_in' ? `Dine-in${order.table_number ? ' — Meja ' + order.table_number : ''}`
+    : 'Pickup';
 
   let receipt = `🧾 *STRUK PESANAN*\n`;
   receipt += `──────────────────────\n`;

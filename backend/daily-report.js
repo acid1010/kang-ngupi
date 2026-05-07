@@ -111,6 +111,37 @@ async function generateReport(dateStr) {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5);
 
+  // Calculate ongkir from state files
+  let totalOngkir = 0;
+  try {
+    const { readdir, readFile: rf } = await import('node:fs/promises');
+    const stateDir = join(__dirname, '..', 'state', 'orders-active');
+    const expiredDir = join(__dirname, '..', 'state', 'orders-expired');
+    
+    for (const dir of [stateDir, expiredDir]) {
+      try {
+        const files = await readdir(dir);
+        for (const file of files.filter(f => f.endsWith('.json'))) {
+          try {
+            const raw = await rf(join(dir, file), 'utf-8');
+            const state = JSON.parse(raw);
+            const ctx = state.orderContext || state;
+            if (ctx.fulfillmentMethod !== 'delivery') continue;
+            const fee = Number(ctx.deliveryFee || ctx.ongkir || 0);
+            if (fee <= 0) continue;
+            const paidAt = ctx.paidAt || state.lastUpdatedAt;
+            if (paidAt && paidAt.startsWith(dateStr)) totalOngkir += fee;
+            else if (paidAt) {
+              const d = new Date(paidAt);
+              const wib = new Date(d.getTime() + 7 * 3600000);
+              if (wib.toISOString().slice(0, 10) === dateStr) totalOngkir += fee;
+            }
+          } catch (_) {}
+        }
+      } catch (_) {}
+    }
+  } catch (_) {}
+
   return {
     empty: false,
     date: dateStr,
@@ -121,7 +152,8 @@ async function generateReport(dateStr) {
     deliveryCount,
     qrisCount,
     codCount,
-    topItems
+    topItems,
+    totalOngkir
   };
 }
 
@@ -146,6 +178,11 @@ function formatReport(report) {
   msg += `💳 *Pembayaran:*\n`;
   msg += `- QRIS: ${report.qrisCount}\n`;
   msg += `- COD: ${report.codCount}\n\n`;
+
+  if (report.totalOngkir > 0) {
+    msg += `🛵 *Ongkir Go Ngupi:*\n`;
+    msg += `- ${report.deliveryCount} delivery | Total: ${fmtRp(report.totalOngkir)}\n\n`;
+  }
 
   if (report.topItems.length > 0) {
     msg += `🏆 *Top Menu:*\n`;

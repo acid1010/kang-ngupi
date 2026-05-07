@@ -22,6 +22,7 @@ import {
   getPaymentStatusLabel,
   getPaymentStatusColor,
   formatWhatsAppLink,
+  getFulfillmentLabel,
 } from "@/lib/helpers";
 import {
   Package,
@@ -33,6 +34,7 @@ import {
   RefreshCw,
   ShoppingBag,
   TrendingUp,
+  UtensilsCrossed,
 } from "lucide-react";
 import { toast } from "sonner";
 import { OrderDetailModal } from "@/components/order-detail-modal";
@@ -51,6 +53,14 @@ const statusMap: Record<string, string> = {
   delivery: "on_the_way,ready_for_pickup",
   done: "completed",
 };
+
+function playNotificationSound() {
+  try {
+    const audio = new Audio("/sounds/new-order.mp3");
+    audio.volume = 0.5;
+    audio.play().catch(() => {});
+  } catch {}
+}
 
 function StatSkeleton() {
   return (
@@ -146,6 +156,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const cleanup = connectOrderStream(
       (newOrder) => {
+        playNotificationSound();
         toast.success(`Pesanan baru dari ${newOrder.customer_name_snapshot}!`, {
           description: `${(newOrder.items || []).map((i) => `${i.menu_name} x${i.qty}`).join(", ")}`,
         });
@@ -324,10 +335,14 @@ export default function DashboardPage() {
                             <span className="flex items-center gap-1">
                               {order.fulfillment_method === "delivery" ? (
                                 <MapPin className="w-3 h-3" />
+                              ) : order.fulfillment_method === "dine_in" ? (
+                                <UtensilsCrossed className="w-3 h-3" />
                               ) : (
                                 <ShoppingBag className="w-3 h-3" />
                               )}
-                              {order.fulfillment_method === "delivery" ? "Delivery" : "Pickup"}
+                              {order.fulfillment_method === "dine_in" && order.table_number
+                                ? `Meja ${order.table_number}`
+                                : getFulfillmentLabel(order.fulfillment_method)}
                             </span>
                           </div>
 

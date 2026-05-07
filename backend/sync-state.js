@@ -160,8 +160,10 @@ async function cmdSync(phone) {
   // not from payment sync or admin/test traffic, otherwise first greeting can become polluted.
 
   // Determine if this is a QRIS payment trigger
+  // If paymentMethod is qris but no paymentStatus, assume pending (bot sometimes omits it)
+  const effectivePaymentStatus = ctx.paymentStatus || (ctx.paymentMethod === 'qris' ? 'pending' : null);
   const isQris = ctx.paymentMethod === 'qris' &&
-    ['pending', 'waiting', 'awaiting_payment'].includes(ctx.paymentStatus);
+    ['pending', 'waiting', 'awaiting_payment'].includes(effectivePaymentStatus);
 
   // Step 1: Sync state to bridge
   const bridgePayload = {
@@ -172,6 +174,7 @@ async function cmdSync(phone) {
       rawMessage: ctx.rawMessage || state.rawMessage || null,
       items: ctx.items || state.items || [],
       fulfillmentMethod: ctx.fulfillmentMethod || state.fulfillment || null,
+      tableNumber: ctx.tableNumber || state.tableNumber || null,
       locationStatus: ctx.locationStatus || null,
       shareloc: ctx.shareloc || state.shareloc || null,
       address: ctx.address || null,
@@ -336,19 +339,33 @@ async function cmdSyncQrisDirect(phone, ctx) {
 }
 
 async function cmdSyncQrisDoku(phone, ctx, totalAmount) {
-  const orderId = ctx.clientOrderId || ctx.orderId || `ORD-${Date.now()}`;
+  let orderId = ctx.clientOrderId || ctx.orderId || `ORD-${Date.now()}`;
   const amount = totalAmount > 0 ? totalAmount : null;
 
   if (!amount) {
     die('Cannot generate QRIS: total amount is 0 or missing');
   }
 
-  // Step 1: Generate QRIS via Doku
-  const dokuResult = await fetchJson(`${BACKEND_BASE_URL}/payments/doku/qris`, {
+  // Step 1: Generate QRIS via Doku (with retry on duplicate orderId)
+  let dokuResult = await fetchJson(`${BACKEND_BASE_URL}/payments/doku/qris`, {
     method: 'POST',
     headers: buildHeaders(),
     body: JSON.stringify({ orderId, amount, validityMinutes: 30 })
   });
+
+  // Retry with unique suffix if Doku rejects duplicate orderId (4044718)
+  if (!dokuResult.ok && JSON.stringify(dokuResult).includes('4044718')) {
+    const retryId = `${orderId}-${Date.now().toString(36).slice(-4)}`;
+    dokuResult = await fetchJson(`${BACKEND_BASE_URL}/payments/doku/qris`, {
+      method: 'POST',
+      headers: buildHeaders(),
+      body: JSON.stringify({ orderId: retryId, amount, validityMinutes: 30 })
+    });
+    if (dokuResult.ok) {
+      // Update orderId reference for tracking
+      orderId = retryId;
+    }
+  }
 
   if (!dokuResult.ok) {
     die(`Doku QRIS generation failed: ${dokuResult.error || JSON.stringify(dokuResult)}`);

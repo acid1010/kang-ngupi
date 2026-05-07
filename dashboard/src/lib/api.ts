@@ -1,4 +1,5 @@
-const API_BASE = "https://ngupingupi.me/dashboard/api";
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_BASE || "https://ngupingupi.me/dashboard/api";
 
 export interface User {
   id: number;
@@ -24,13 +25,14 @@ export interface Order {
   client_order_id: string;
   customer_name_snapshot: string;
   customer_phone_snapshot: string;
-  fulfillment_method: "delivery" | "pickup";
+  fulfillment_method: "delivery" | "pickup" | "dine_in";
   payment_method: "qris" | "cod";
   payment_status: "pending" | "confirmed";
   order_status: string;
   location_lat: number | null;
   location_lng: number | null;
   delivery_provider: string | null;
+  table_number?: number;
   created_at: string;
   updated_at: string;
   items: OrderItem[];
@@ -55,6 +57,7 @@ export interface OrderStats {
   pendingDelivery: number;
   onTheWay: number;
   completedToday: number;
+  dine_in?: number;
 }
 
 function getToken(): string | null {
@@ -111,7 +114,7 @@ async function apiFetch<T>(
     removeToken();
     removeUser();
     if (typeof window !== "undefined") {
-      window.location.href = "/app/login";
+      window.location.href = "/login";
     }
     throw new Error("Unauthorized");
   }
@@ -164,6 +167,7 @@ export async function getOrders(params: {
   status?: string;
   payment_status?: string;
   fulfillment?: string;
+  search?: string;
   page?: number;
   per_page?: number;
   sort?: string;
@@ -211,30 +215,44 @@ export function connectOrderStream(
   const token = getToken();
   if (!token) return () => {};
 
-  const url = `${API_BASE}/orders/stream?token=${encodeURIComponent(token)}`;
-  const eventSource = new EventSource(url);
+  let eventSource: EventSource | null = null;
+  let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  let destroyed = false;
 
-  eventSource.onmessage = (event) => {
-    try {
-      const data = JSON.parse(event.data);
-      if (data.type === "new_order") {
-        onNewOrder(data.order);
-      } else if (data.type === "order_update") {
-        onOrderUpdate(data.order);
+  function connect() {
+    if (destroyed) return;
+    const url = `${API_BASE}/orders/stream?token=${encodeURIComponent(token!)}`;
+    eventSource = new EventSource(url);
+
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === "new_order") {
+          onNewOrder(data.order);
+        } else if (data.type === "order_update") {
+          onOrderUpdate(data.order);
+        }
+      } catch {
+        // ignore parse errors
       }
-    } catch {
-      // ignore parse errors
-    }
-  };
+    };
 
-  eventSource.onerror = () => {
-    eventSource.close();
-    if (onError) onError();
-    // Reconnect after 5 seconds
-    setTimeout(() => {
-      connectOrderStream(onNewOrder, onOrderUpdate, onError);
-    }, 5000);
-  };
+    eventSource.onerror = () => {
+      eventSource?.close();
+      eventSource = null;
+      if (onError) onError();
+      if (!destroyed) {
+        reconnectTimer = setTimeout(connect, 5000);
+      }
+    };
+  }
 
-  return () => eventSource.close();
+  connect();
+
+  return () => {
+    destroyed = true;
+    if (reconnectTimer) clearTimeout(reconnectTimer);
+    eventSource?.close();
+    eventSource = null;
+  };
 }

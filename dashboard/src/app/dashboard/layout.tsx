@@ -116,7 +116,7 @@ export default function DashboardLayout({
       <div className="flex items-center justify-center min-h-screen bg-background">
         <div className="flex flex-col items-center gap-3">
           <div className="w-10 h-10 rounded-xl overflow-hidden animate-pulse">
-            <img src="/app/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
+            <img src="/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
           </div>
           <p className="text-xs text-muted-foreground">Memuat...</p>
         </div>
@@ -136,7 +136,7 @@ export default function DashboardLayout({
         <div className="flex items-center justify-between px-4 h-14">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg overflow-hidden ring-1 ring-border">
-              <img src="/app/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
+              <img src="/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
             </div>
             <span className="font-bold text-[var(--ngupi)] text-base">Go Ngupi</span>
           </div>
@@ -157,7 +157,7 @@ export default function DashboardLayout({
               <SheetHeader className="px-5 pt-5 pb-3">
                 <div className="flex items-center gap-2.5">
                   <div className="w-9 h-9 rounded-xl overflow-hidden ring-1 ring-border">
-                    <img src="/app/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
+                    <img src="/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <SheetTitle className="text-[var(--ngupi)] text-base font-bold leading-tight">
@@ -200,7 +200,7 @@ export default function DashboardLayout({
           {/* Logo */}
           <div className="flex items-center gap-3 px-5 h-14 border-b border-border">
             <div className="w-9 h-9 rounded-xl overflow-hidden ring-1 ring-border shadow-lg shadow-black/20">
-              <img src="/app/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
+              <img src="/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
             </div>
             <div>
               <h1 className="font-bold text-[var(--ngupi)] text-base leading-tight">Go Ngupi</h1>
