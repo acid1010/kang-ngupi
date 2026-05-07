@@ -101,6 +101,19 @@ export function getPaymentStatusColor(status: string): string {
   }
 }
 
+export function getFulfillmentLabel(method: string): string {
+  switch (method) {
+    case "delivery":
+      return "Delivery";
+    case "pickup":
+      return "Pickup";
+    case "dine_in":
+      return "Dine-in";
+    default:
+      return method;
+  }
+}
+
 // ── External links ──────────────────────────────────────────────
 export function formatWhatsAppLink(phone: string): string {
   const cleaned = phone.replace(/[^0-9]/g, "");

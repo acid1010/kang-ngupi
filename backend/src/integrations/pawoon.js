@@ -92,7 +92,10 @@ async function loadProductMap() {
 }
 
 function formatOrderTime() {
-  return new Date().toISOString().replace('Z', '+07:00');
+  // Format as WIB (UTC+7) with correct local time
+  const now = new Date();
+  const wib = new Date(now.getTime() + (7 * 60 * 60 * 1000));
+  return wib.toISOString().replace('Z', '+07:00');
 }
 
 export async function pushOrderToPawoon(order, items, payment) {
@@ -144,8 +147,8 @@ export async function pushOrderToPawoon(order, items, payment) {
         notes: `WhatsApp Order - ${order.fulfillment_method || 'delivery'}`,
         items: pawoonItems,
         payment: {
-          amount: totalAmount,
-          method: 'cash'  // Pawoon only accepts 'cash' — QRIS/COD both map to cash
+          amount: (order.payment_method === 'cash_at_counter' && order.payment_status !== 'confirmed') ? 0 : totalAmount,
+          method: 'cash'
         },
         feature_flags: {
           order_accepted_type: 'auto'
@@ -161,9 +164,13 @@ export async function pushOrderToPawoon(order, items, payment) {
       : PAWOON_SALES_TYPE_PICKUP;
 
     // Add table info for dine-in orders
-    if (order.fulfillment_method === 'dine_in' && order.table_number) {
-      orderPayload.data.notes = `Meja ${order.table_number} - WhatsApp Dine-In Order`;
+    const tableNum = order.table_number || order.tableNumber || null;
+    if (order.fulfillment_method === 'dine_in' && tableNum) {
+      orderPayload.data.notes = `Table No: Meja ${tableNum}.`;
+    } else if (order.fulfillment_method === 'dine_in') {
+      orderPayload.data.notes = `WhatsApp Dine-In Order`;
     }
+    logger.info('[pawoon] Dine-in push: fulfillment=%s, table=%s', order.fulfillment_method, tableNum);
     if (salesTypeId) {
       orderPayload.data.company_sales_type_id = salesTypeId;
     }

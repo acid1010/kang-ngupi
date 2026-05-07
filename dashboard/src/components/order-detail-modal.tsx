@@ -22,6 +22,7 @@ import {
   getStatusColor,
   getPaymentStatusLabel,
   getPaymentStatusColor,
+  getFulfillmentLabel,
 } from "@/lib/helpers";
 import {
   Phone,
@@ -38,6 +39,7 @@ import {
   PackageCheck,
   Navigation,
   Truck,
+  UtensilsCrossed,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -65,7 +67,7 @@ function getNextStatuses(current: string, fulfillment?: string): string[] {
     return ["preparing", "cancelled"];
   }
   if (current === "preparing") {
-    if (fulfillment === "pickup") {
+    if (fulfillment === "pickup" || fulfillment === "dine_in") {
       return ["completed", "cancelled"];
     }
     return ["on_the_way", "cancelled"];
@@ -151,11 +153,16 @@ export function OrderDetailModal({
                   <Badge variant="outline" className="capitalize text-muted-foreground border-border">
                     {order.fulfillment_method === "delivery" ? (
                       <Truck className="w-3 h-3 mr-1" />
+                    ) : order.fulfillment_method === "dine_in" ? (
+                      <UtensilsCrossed className="w-3 h-3 mr-1" />
                     ) : (
                       <ShoppingBag className="w-3 h-3 mr-1" />
                     )}
-                    {order.fulfillment_method}
+                    {getFulfillmentLabel(order.fulfillment_method)}
                   </Badge>
+                  {order.fulfillment_method === "dine_in" && order.table_number ? (
+                    <p className="text-[11px] text-[var(--ngupi)] mt-1.5">Meja {order.table_number}</p>
+                  ) : null}
                   <p className="text-[11px] text-muted-foreground/60 mt-1.5">
                     {formatDateTime(order.created_at)}
                   </p>
@@ -361,7 +368,11 @@ export function OrderDetailModal({
 
             {/* ── Meta footer ──────────────────────────────────── */}
             <div className="flex items-center gap-2 text-[11px] text-muted-foreground/50 pt-2">
-              <span className="capitalize">{order.fulfillment_method}</span>
+              <span>
+                {order.fulfillment_method === "dine_in" && order.table_number
+                  ? `Meja ${order.table_number}`
+                  : getFulfillmentLabel(order.fulfillment_method)}
+              </span>
               {order.delivery_provider && (
                 <>
                   <span>·</span>

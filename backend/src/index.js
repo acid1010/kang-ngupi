@@ -662,6 +662,27 @@ app.post('/webhooks/doku', async (req, res) => {
           logger.warn({ error: e.message }, '[doku] Webhook: WhatsApp notification failed');
         }
 
+        // Push to Pawoon POS
+        try {
+          const { pushOrderToPawoon } = await import('./integrations/pawoon.js');
+          const sb2 = getSupabase();
+          const { data: dbOrder } = await sb2.from('orders').select('*').eq('client_order_id', partnerReferenceNo).single();
+          if (dbOrder) {
+            const { data: orderItems } = await sb2.from('order_items').select('menu_name, menu_id, qty, temperature, notes').eq('order_id', dbOrder.id);
+            const pawoonOrder = {
+              ...dbOrder,
+              table_number: dbOrder.table_number || payment.tableNumber || null
+            };
+            const pawoonPayment = { amount: dbOrder.total_amount || payment.amount, method: 'cash' };
+            const pawoonResult = await pushOrderToPawoon(pawoonOrder, orderItems || [], pawoonPayment);
+            if (pawoonResult.ok) {
+              logger.info({ orderId: partnerReferenceNo, pawoonId: pawoonResult.pawoonOrderId }, '[doku] Webhook: pushed to Pawoon');
+            }
+          }
+        } catch (pawErr) {
+          logger.warn({ orderId: partnerReferenceNo, error: pawErr.message }, '[doku] Webhook: Pawoon push failed');
+        }
+
         // Remove from pending (so poller doesn't double-process)
         await fs.unlink(pendingFile).catch(() => {});
 
@@ -813,8 +834,21 @@ app.post('/webhooks/pawoon', async (req, res) => {
 });
 
 // Dashboard API (CORS enabled for Next.js frontend)
+const DASHBOARD_ORIGINS = [
+  'https://ngupingupi.me',
+  'http://localhost:3000',
+  'http://localhost:3002',
+  ...(process.env.DASHBOARD_EXTRA_ORIGINS || '').split(',').filter(Boolean),
+];
 const dashboardCors = cors({
-  origin: ['https://ngupingupi.me', 'http://localhost:3000', 'http://localhost:3002'],
+  origin: (origin, cb) => {
+    // Allow no-origin (mobile apps, curl) + whitelisted + any *.vercel.app
+    if (!origin || DASHBOARD_ORIGINS.includes(origin) || /\.vercel\.app$/.test(origin)) {
+      cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  },
   credentials: true
 });
 app.use('/dashboard', dashboardCors, dashboardRouter);

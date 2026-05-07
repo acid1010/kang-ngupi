@@ -17,6 +17,7 @@ import { promisify } from 'node:util';
 import logger from '../lib/logger.js';
 import { getSupabase } from '../supabase.js';
 import { runWacliSafe } from '../notifications/whatsapp.js';
+import { processIdleChats } from './idle-nudge.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -283,5 +284,22 @@ export function startScheduler() {
     }
   }, { timezone: 'Asia/Jakarta' });
 
-  logger.info('[scheduler] Internal scheduler started — QRIS(*/10 9-22), expire(*/6h), drafts(midnight), backup(22:00)');
+  // Idle chat nudge: every 15 min during business hours (09-21 WIB)
+  cron.schedule('*/15 9-21 * * *', processIdleChats, { timezone: 'Asia/Jakarta' });
+
+  // Process order queue: every 5 min (catch any unprocessed queue files)
+  cron.schedule('*/5 * * * *', async () => {
+    try {
+      const { processAllQueues } = await import('../queue/processor.js');
+      const result = await processAllQueues();
+      const total = (result.draft?.length || 0) + (result.final?.length || 0);
+      if (total > 0) {
+        logger.info('[scheduler] Queue sweep: processed %d items', total);
+      }
+    } catch (err) {
+      logger.warn('[scheduler] Queue sweep error: %s', err.message);
+    }
+  });
+
+  logger.info('[scheduler] Internal scheduler started — QRIS(*/10 9-22), nudge(*/15 9-21), expire(*/6h), drafts(midnight), backup(22:00)');
 }

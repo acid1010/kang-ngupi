@@ -434,7 +434,7 @@ export async function evaluateAndEnqueue(state) {
           customer_name_snapshot: payload.order.customer?.name,
           customer_phone_snapshot: payload.order.customer?.phone,
           fulfillment_method: payload.order.fulfillment?.method,
-          table_number: payload.order.fulfillment?.table_number,
+          table_number: payload.order.fulfillment?.table_number ?? state.orderContext?.tableNumber ?? null,
           payment_method: 'cash',
           notes: payload.order.notes
         };

@@ -63,7 +63,7 @@ export default function LoginPage() {
           {/* Logo */}
           <div className="mx-auto mb-5 w-20 h-20 rounded-2xl overflow-hidden shadow-lg shadow-black/30 ring-1 ring-border">
             <img
-              src="/app/logo.jpg"
+              src="/logo.jpg"
               alt="Ngupi Ngupi"
               className="w-full h-full object-cover"
             />
