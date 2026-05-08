@@ -168,6 +168,11 @@ function validateOrderPayload(eventType, order) {
   return null;
 }
 
+// Landing page
+app.get('/', (_req, res) => {
+  res.sendFile(join(__dirname, '..', 'public', 'landing.html'));
+});
+
 app.get('/health', async (_req, res) => {
   try {
     const supabase = getSupabase();
