@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kang Ngupi — AI Ordering Assistant</title>
+    <meta name="description" content="Pesan kopi dan makanan via WhatsApp dengan Kang Ngupi, asisten digital Kedai Ngupi-Ngupi Purwakarta.">
+    <link rel="icon" href="/menu-images/../favicon.png" type="image/png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0d1b1b;
+            --card: #112626;
+            --ngupi: #3CC8C8;
+            --ngupi-dark: #1F8A8A;
+            --text: #f0f4f4;
+            --muted: #7a9a9a;
+            --border: #1e4040;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            padding: 2rem 1.5rem;
+        }
+        .hero {
+            text-align: center;
+            padding: 4rem 0 3rem;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--ngupi);
+            margin-bottom: 0.5rem;
+        }
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+        .hero .tagline {
+            font-size: 1.3rem;
+            color: var(--text);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--ngupi-dark);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .cta-btn:hover {
+            background: var(--ngupi);
+            color: var(--bg);
+            transform: translateY(-2px);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+        .feature {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        .feature .icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        .feature h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+        .feature p {
+            font-size: 0.85rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+        .how-it-works {
+            margin: 3rem 0;
+            text-align: center;
+        }
+        .how-it-works h2 {
+            font-size: 1.5rem;
+            color: var(--ngupi);
+            margin-bottom: 2rem;
+        }
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            text-align: left;
+        }
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .step-num {
+            background: var(--ngupi-dark);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .step-text h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+        .step-text p {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        .tech {
+            margin: 3rem 0;
+            text-align: center;
+        }
+        .tech h2 {
+            font-size: 1.5rem;
+            color: var(--ngupi);
+            margin-bottom: 1rem;
+        }
+        .tech-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        .badge {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+            width: 100%;
+        }
+        footer a {
+            color: var(--ngupi);
+            text-decoration: none;
+        }
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2rem; }
+            .hero .tagline { font-size: 1.1rem; }
+            .features { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="hero">
+            <h1>☕ Kang Ngupi</h1>
+            <p class="subtitle">Asisten Digital Kedai Ngupi-Ngupi Purwakarta</p>
+            <p class="tagline">Pesan kopi & makanan semudah chat WhatsApp.<br>AI yang ngerti bahasa lo, bukan robot.</p>
+            <a href="https://wa.me/6287786434813?text=Halo%20Kang%20Ngupi%2C%20mau%20pesan%20nih!" class="cta-btn">
+                💬 Chat Kang Ngupi
+            </a>
+        </section>
+
+        <section class="features">
+            <div class="feature">
+                <div class="icon">📱</div>
+                <h3>Order via WhatsApp</h3>
+                <p>Nggak perlu download app. Langsung chat, pesan, bayar — semua di WhatsApp.</p>
+            </div>
+            <div class="feature">
+                <div class="icon">🛵</div>
+                <h3>Delivery Go Ngupi</h3>
+                <p>Antar ke lokasi kamu. Ongkir mulai Rp10.000, max 8km dari kedai.</p>
+            </div>
+            <div class="feature">
+                <div class="icon">💳</div>
+                <h3>Bayar QRIS</h3>
+                <p>Scan QR, bayar dari e-wallet atau m-banking manapun. Auto-verified.</p>
+            </div>
+            <div class="feature">
+                <div class="icon">🪑</div>
+                <h3>Dine-In QR</h3>
+                <p>Scan QR di meja, pesan langsung tanpa antri. Bayar QRIS atau di kasir.</p>
+            </div>
+            <div class="feature">
+                <div class="icon">⚡</div>
+                <h3>Fast Response</h3>
+                <p>AI yang ngerti konteks. Nggak perlu ketik panjang — "kopsu 2" aja cukup.</p>
+            </div>
+            <div class="feature">
+                <div class="icon">🧾</div>
+                <h3>Auto Receipt</h3>
+                <p>Struk digital otomatis setelah bayar. Pesanan langsung masuk ke dapur.</p>
+            </div>
+        </section>
+
+        <section class="how-it-works">
+            <h2>Gimana Caranya?</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-text">
+                        <h4>Chat "Halo Kang Ngupi"</h4>
+                        <p>Buka WhatsApp, chat ke nomor Kang Ngupi atau scan QR di meja.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-text">
+                        <h4>Pesan menu favorit</h4>
+                        <p>Bilang aja "kopsu 2" atau "nasi goreng 1 pedas". Kang Ngupi ngerti.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-text">
+                        <h4>Bayar & tunggu</h4>
+                        <p>Scan QRIS, bayar dari e-wallet. Pesanan langsung diproses.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tech">
+            <h2>Powered By</h2>
+            <div class="tech-badges">
+                <span class="badge">OpenClaw</span>
+                <span class="badge">GPT-5.4</span>
+                <span class="badge">Node.js</span>
+                <span class="badge">Next.js</span>
+                <span class="badge">Supabase</span>
+                <span class="badge">Doku QRIS</span>
+                <span class="badge">Pawoon POS</span>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Kedai Ngupi Ngupi Purwakarta — Jl. KK Singawinata No.9, Nagri Tengah, Purwakarta 41114</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="https://github.com/acid1010/kang-ngupi">GitHub</a> · 
+            <a href="https://instagram.com/kedaingupingupi">Instagram</a>
+        </p>
+    </footer>
+</body>
+</html>
