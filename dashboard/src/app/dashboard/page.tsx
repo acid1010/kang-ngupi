@@ -40,23 +40,18 @@ import { toast } from "sonner";
 import { OrderDetailModal } from "@/components/order-detail-modal";
 
 const filterTabs = [
-  { key: "all", label: "Semua" },
-  { key: "new", label: "Baru" },
-  { key: "process", label: "Dibuat" },
-  { key: "delivery", label: "Diantar" },
+  { key: "all", label: "Belum Selesai" },
   { key: "done", label: "Selesai" },
 ];
 
 const statusMap: Record<string, string> = {
-  new: "awaiting_payment,ready_to_submit",
-  process: "preparing",
-  delivery: "on_the_way,ready_for_pickup",
+  all: "awaiting_payment,ready_to_submit,preparing,on_the_way,ready_for_pickup",
   done: "completed",
 };
 
 function playNotificationSound() {
   try {
-    const audio = new Audio("/sounds/new-order.mp3");
+    const audio = new Audio("/sounds/new-order.wav");
     audio.volume = 0.5;
     audio.play().catch(() => {});
   } catch {}
@@ -133,8 +128,9 @@ export default function DashboardPage() {
         per_page: 50,
         sort: "created_at",
         order: "desc",
+        fulfillment: "delivery",
       };
-      if (filter !== "all" && statusMap[filter]) {
+      if (statusMap[filter]) {
         params.status = statusMap[filter];
       }
       const res = await getOrders(params);

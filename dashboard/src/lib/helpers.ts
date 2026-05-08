@@ -38,9 +38,9 @@ export function formatDateTime(dateStr: string): string {
 
 // ── Order status ────────────────────────────────────────────────
 const STATUS_LABELS: Record<string, string> = {
-  awaiting_payment: "Menunggu Bayar",
-  ready_to_submit: "Siap Diproses",
-  preparing: "Sedang Dibuat",
+  awaiting_payment: "Sedang Diantar",
+  ready_to_submit: "Sedang Diantar",
+  preparing: "Sedang Diantar",
   ready_for_pickup: "Siap Diambil",
   picked_up: "Sudah Diambil",
   on_the_way: "Sedang Diantar",

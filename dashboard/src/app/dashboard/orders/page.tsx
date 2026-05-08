@@ -45,7 +45,7 @@ import { OrderDetailModal } from "@/components/order-detail-modal";
 
 function playNotificationSound() {
   try {
-    const audio = new Audio("/sounds/new-order.mp3");
+    const audio = new Audio("/sounds/new-order.wav");
     audio.volume = 0.5;
     audio.play().catch(() => {});
   } catch {}
@@ -86,7 +86,7 @@ export default function OrdersPage() {
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState("__all__");
   const [paymentFilter, setPaymentFilter] = useState("__all__");
-  const [fulfillmentFilter, setFulfillmentFilter] = useState("__all__");
+  const [fulfillmentFilter, setFulfillmentFilter] = useState("delivery");
   const [showFilters, setShowFilters] = useState(false);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
