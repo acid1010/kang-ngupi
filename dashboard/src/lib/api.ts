@@ -114,7 +114,7 @@ async function apiFetch<T>(
     removeToken();
     removeUser();
     if (typeof window !== "undefined") {
-      window.location.href = "/login";
+      window.location.href = "/app/login";
     }
     throw new Error("Unauthorized");
   }

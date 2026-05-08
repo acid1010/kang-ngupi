@@ -45,3 +45,11 @@ outbox/order-context/*.json
 soccer-parlay-system/venv/
 state/doku-pending/
 backend/doku-private.key
+backend/doku-private.key
+backend/doku-public-key.pem
+state/customers/*.json
+state/nudge-tracking/*.json
+state/reservasi/*.json
+state/doku-pending/*.json
+memory/*.md
+!memory/.gitkeep

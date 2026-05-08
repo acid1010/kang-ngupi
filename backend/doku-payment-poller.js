@@ -172,11 +172,30 @@ async function pollPendingPayments() {
         // Notify courier if delivery
         if (payment.fulfillmentMethod === 'delivery') {
           try {
-            const { notifyCourier } = await import('./src/notifications/courier.js');
-            if (typeof notifyCourier === 'function') {
-              await notifyCourier(payment);
+            const { notifyCouriers } = await import('./src/notifications/courier.js');
+            const courierOrder = {
+              client_order_id: payment.orderId,
+              customer_name_snapshot: payment.customerName,
+              customer_phone_snapshot: payment.phone,
+              fulfillment_method: 'delivery',
+              payment_method: 'qris',
+              location_lat: ctx.shareloc?.lat || null,
+              location_lng: ctx.shareloc?.lng || null
+            };
+            const courierItems = (ctx.items || []).map(i => ({
+              menu_name: i.menuName || i.menu_name,
+              qty: i.quantity || i.qty || 1,
+              temperature: i.temperature || null
+            }));
+            const totalAmount = courierItems.reduce((sum, i) => sum + ((i.price || 0) * i.qty), 0) + (Number(ctx.deliveryFee) || 0);
+            const courierPayment = { amount: totalAmount, total_payment: totalAmount };
+            const courierResult = await notifyCouriers(courierOrder, courierItems, courierPayment);
+            if (courierResult.ok) {
+              logger.info({ orderId: payment.orderId }, '[doku-poller] Courier notified');
             }
-          } catch (_) {}
+          } catch (courierErr) {
+            logger.warn({ orderId: payment.orderId, error: courierErr.message }, '[doku-poller] Courier notification failed');
+          }
         }
 
         // Remove from pending

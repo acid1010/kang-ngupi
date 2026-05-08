@@ -44,8 +44,6 @@ import {
 import { toast } from "sonner";
 
 const STATUS_FLOW = [
-  "awaiting_payment",
-  "preparing",
   "on_the_way",
   "completed",
 ];
@@ -63,19 +61,12 @@ const STATUS_ICONS: Record<string, React.ElementType> = {
 function getNextStatuses(current: string, fulfillment?: string): string[] {
   if (current === "cancelled" || current === "completed") return [];
 
-  if (current === "awaiting_payment" || current === "ready_to_submit") {
-    return ["preparing", "cancelled"];
-  }
-  if (current === "preparing") {
-    if (fulfillment === "pickup" || fulfillment === "dine_in") {
-      return ["completed", "cancelled"];
-    }
-    return ["on_the_way", "cancelled"];
-  }
+  // Simplified 2-step: Sedang Diantar → Selesai
   if (current === "on_the_way") {
     return ["completed", "cancelled"];
   }
-  return ["cancelled"];
+  // Any other status → Sedang Diantar
+  return ["on_the_way", "cancelled"];
 }
 
 interface OrderDetailModalProps {
