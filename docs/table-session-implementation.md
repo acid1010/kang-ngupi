@@ -365,6 +365,10 @@ Then replace the `pushOrderToPawoon` export with this updated version that wraps
 /**
  * Push order to Pawoon with table session tracking for dine-in.
  * This is the main entry point — call this instead of the raw push.
+ *
+ * Key behavior: injects a clear sequence label into the Pawoon order notes
+ * so the cashier can visually group orders from the same table session.
+ * e.g. "Meja 1 - Order #2 (Session total: Rp85.000)"
  */
 export async function pushOrderToPawoonWithSession(order, items, payment) {
   // For non-dine-in orders, just push directly
@@ -385,12 +389,26 @@ export async function pushOrderToPawoonWithSession(order, items, payment) {
       customerName: order.customer_name_snapshot
     });
 
-    // Push to Pawoon (existing logic)
+    // Calculate this order's amount
+    const orderAmount = items.reduce((sum, i) => sum + ((Number(i.price) || 0) * (Number(i.qty) || 1)), 0);
+
+    // Determine order sequence number for this session
+    const orderSeq = (session.orders?.length || 0) + 1;
+    const runningTotal = (session.total_amount || 0) + orderAmount;
+
+    // Inject session label into order notes for cashier visibility
+    const sessionLabel = orderSeq === 1
+      ? `Meja ${tableNum} - Order #1`
+      : `Meja ${tableNum} - Order #${orderSeq} (Session total: Rp${runningTotal.toLocaleString('id-ID')})`;
+
+    // Override the notes field so Pawoon shows the session context
+    order._sessionNotes = sessionLabel;
+
+    // Push to Pawoon (existing logic — see modification to pushOrderToPawoon below)
     const result = await pushOrderToPawoon(order, items, payment);
 
     if (result.ok) {
       // Track this order in the session
-      const orderAmount = items.reduce((sum, i) => sum + ((Number(i.price) || 0) * (Number(i.qty) || 1)), 0);
       await addOrderToSession(session.id, {
         orderId: order.client_order_id,
         pawoonOrderId: result.pawoonOrderId,
@@ -401,8 +419,8 @@ export async function pushOrderToPawoonWithSession(order, items, payment) {
       result.tableSession = {
         sessionId: session.id,
         tableLabel: session.table_label,
-        orderCount: (session.orders?.length || 0) + 1,
-        runningTotal: (session.total_amount || 0) + orderAmount
+        orderCount: orderSeq,
+        runningTotal: runningTotal
       };
     }
 
@@ -415,7 +433,22 @@ export async function pushOrderToPawoonWithSession(order, items, payment) {
 }
 ```
 
-Keep the original `pushOrderToPawoon` function as-is (it still does the actual Pawoon API call). The new `pushOrderToPawoonWithSession` wraps it with session logic.
+**Also modify the existing `pushOrderToPawoon` function** — change the dine-in notes section to use `_sessionNotes` if available:
+
+```javascript
+    // Add table info for dine-in orders (REPLACE the existing block)
+    const tableNum = order.table_number || order.tableNumber || null;
+    if (order._sessionNotes) {
+      // Session-aware label from pushOrderToPawoonWithSession
+      orderPayload.data.notes = order._sessionNotes;
+    } else if (order.fulfillment_method === 'dine_in' && tableNum) {
+      orderPayload.data.notes = `Table No: Meja ${tableNum}.`;
+    } else if (order.fulfillment_method === 'dine_in') {
+      orderPayload.data.notes = `WhatsApp Dine-In Order`;
+    }
+```
+
+Keep the original `pushOrderToPawoon` function as-is for the rest. The new `pushOrderToPawoonWithSession` wraps it with session logic and injects the label.
 
 ---
 
