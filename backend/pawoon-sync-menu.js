@@ -58,9 +58,13 @@ async function fetchPaginated(token, endpoint) {
 
 async function fetchVariants(token, productId) {
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
     const res = await fetch(`${PAWOON_BASE_URL}/products/${productId}/variants?outlet_id=${PAWOON_OUTLET_ID}`, {
-      headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
+      headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` },
+      signal: controller.signal
     });
+    clearTimeout(timeout);
     const data = await res.json();
     return (data.data || []).map(v => ({
       name: v.name,
@@ -74,9 +78,13 @@ async function fetchVariants(token, productId) {
 
 async function fetchModifiers(token, productId) {
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
     const res = await fetch(`${PAWOON_BASE_URL}/products/${productId}/modifier-groups?outlet_id=${PAWOON_OUTLET_ID}`, {
-      headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
+      headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` },
+      signal: controller.signal
     });
+    clearTimeout(timeout);
     const data = await res.json();
     return (data.data || []).map(mg => ({
       name: mg.name,
@@ -137,15 +145,24 @@ async function syncMenu() {
   console.log(`Fetching variants for ${withVariants.length} products...`);
   console.log(`Fetching modifiers for ${withModifiers.length} products...`);
 
-  const variantMap = {};
-  for (const p of withVariants) {
-    variantMap[p.id] = await fetchVariants(token, p.id);
+  // Batch fetch with concurrency limit to avoid Pawoon timeout
+  async function batchFetch(items, fn, concurrency = 5) {
+    const results = {};
+    for (let i = 0; i < items.length; i += concurrency) {
+      const batch = items.slice(i, i + concurrency);
+      const settled = await Promise.allSettled(batch.map(async p => {
+        const data = await fn(token, p.id);
+        return { id: p.id, data };
+      }));
+      for (const r of settled) {
+        if (r.status === 'fulfilled') results[r.value.id] = r.value.data;
+      }
+    }
+    return results;
   }
 
-  const modifierMap = {};
-  for (const p of withModifiers) {
-    modifierMap[p.id] = await fetchModifiers(token, p.id);
-  }
+  const variantMap = await batchFetch(withVariants, fetchVariants, 5);
+  const modifierMap = await batchFetch(withModifiers, fetchModifiers, 5);
 
   // Build new menu
   let added = 0, updated = 0, unchanged = 0;

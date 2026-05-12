@@ -183,7 +183,12 @@ async function getOrderByFilter(column, value) {
 }
 
 export async function getOrderById(id) {
-  return getOrderByFilter('id', id);
+  // If id looks like a UUID, query by id; otherwise try client_order_id
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+  if (isUuid) {
+    return getOrderByFilter('id', id);
+  }
+  return getOrderByFilter('client_order_id', id);
 }
 
 export async function getOrderByClientOrderId(clientOrderId) {

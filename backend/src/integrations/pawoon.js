@@ -17,7 +17,7 @@ function withTimeout(ms = PAWOON_TIMEOUT_MS) {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const PAWOON_BASE_URL = process.env.PAWOON_BASE_URL || 'https://open-api.pawoon.com';
+export const PAWOON_BASE_URL = process.env.PAWOON_BASE_URL || 'https://open-api.pawoon.com';
 const PAWOON_CLIENT_ID = process.env.PAWOON_CLIENT_ID;
 const PAWOON_CLIENT_SECRET = process.env.PAWOON_CLIENT_SECRET;
 const PAWOON_OUTLET_ID = process.env.PAWOON_OUTLET_ID || 'c531acc0-3205-11ea-a231-e565033da4bd';
@@ -29,7 +29,7 @@ const PAWOON_SALES_TYPE_DINE_IN = process.env.PAWOON_SALES_TYPE_DINE_IN || null;
 let cachedToken = null;
 let tokenExpiresAt = 0;
 
-async function getToken() {
+export async function getToken() {
   if (cachedToken && Date.now() < tokenExpiresAt) return cachedToken;
 
   const { signal, clear } = withTimeout();
@@ -114,7 +114,16 @@ export async function pushOrderToPawoon(order, items, payment) {
       const menuId = (item.menu_id || '').toLowerCase();
 
       // Try to find Pawoon product by name or slug
-      const pawoonProduct = pMap.get(menuName) || pMap.get(menuId);
+      // Also try stripping variant suffix (e.g. "Chicken Cordon Bleu - Nasi" -> "chicken cordon bleu")
+      let pawoonProduct = pMap.get(menuName) || pMap.get(menuId);
+      if (!pawoonProduct && menuName.includes(' - ')) {
+        const baseName = menuName.split(' - ')[0].trim();
+        pawoonProduct = pMap.get(baseName);
+      }
+      if (!pawoonProduct && menuName.includes(' (')) {
+        const baseName = menuName.split(' (')[0].trim();
+        pawoonProduct = pMap.get(baseName);
+      }
 
       if (!pawoonProduct) {
         logger.warn('[pawoon] Product not found in Pawoon: %s', item.menu_name);
@@ -133,6 +142,18 @@ export async function pushOrderToPawoon(order, items, payment) {
       return { ok: false, skipped: true, reason: 'no_matching_products' };
     }
 
+    // Add delivery fee as line item if applicable
+    const deliveryFee = Number(order.delivery_fee || order.deliveryFee || 0);
+    if (deliveryFee > 0 && order.fulfillment_method === 'delivery') {
+      const ONGKIR_PRODUCT_ID = '9c23ba40-4d12-11f1-8296-0d3c147312bf';
+      pawoonItems.push({
+        product_id: ONGKIR_PRODUCT_ID,
+        qty: 1,
+        notes: 'Ongkir Go Ngupi',
+        price: deliveryFee
+      });
+    }
+
     // Build order payload
     const totalAmount = Number(payment?.total_payment || payment?.amount || 
       pawoonItems.reduce((sum, i) => sum + (i.price * i.qty), 0)) || 0;
@@ -147,11 +168,11 @@ export async function pushOrderToPawoon(order, items, payment) {
         notes: `WhatsApp Order - ${order.fulfillment_method || 'delivery'}`,
         items: pawoonItems,
         payment: {
-          amount: (order.payment_method === 'cash_at_counter' && order.payment_status !== 'confirmed') ? 0 : totalAmount,
+          amount: totalAmount,
           method: 'cash'
         },
         feature_flags: {
-          order_accepted_type: 'auto'
+          order_accepted_type: 'manual'
         }
       }
     };
@@ -165,12 +186,24 @@ export async function pushOrderToPawoon(order, items, payment) {
 
     // Add table info for dine-in orders
     const tableNum = order.table_number || order.tableNumber || null;
+    const customerNotes = order.notes || order.customerNotes || '';
+    const notesStr = typeof customerNotes === 'string' ? customerNotes : (Array.isArray(customerNotes) ? customerNotes.join(', ') : '');
+
+    const isFinalBill = order._isFinalBill === true;
+
     if (order.fulfillment_method === 'dine_in' && tableNum) {
-      orderPayload.data.notes = `Table No: Meja ${tableNum}.`;
+      if (isFinalBill) {
+        orderPayload.data.notes = `⭐ FINAL BILL - Meja ${tableNum}${notesStr ? ' | ' + notesStr : ''}`;
+        orderPayload.data.receipt_code = (order.client_order_id || `WA-${Date.now()}`) + '-FINAL';
+      } else {
+        orderPayload.data.notes = `Meja ${tableNum} - Prep Order${notesStr ? ' | ' + notesStr : ''}`;
+      }
     } else if (order.fulfillment_method === 'dine_in') {
-      orderPayload.data.notes = `WhatsApp Dine-In Order`;
+      orderPayload.data.notes = `WhatsApp Dine-In Order${notesStr ? ' | ' + notesStr : ''}`;
+    } else {
+      orderPayload.data.notes = `WhatsApp Order - ${order.fulfillment_method || 'delivery'}${notesStr ? ' | ' + notesStr : ''}`;
     }
-    logger.info('[pawoon] Dine-in push: fulfillment=%s, table=%s', order.fulfillment_method, tableNum);
+    logger.info('[pawoon] Dine-in push: fulfillment=%s, table=%s, final=%s', order.fulfillment_method, tableNum, isFinalBill);
     if (salesTypeId) {
       orderPayload.data.company_sales_type_id = salesTypeId;
     }

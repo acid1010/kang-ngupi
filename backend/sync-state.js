@@ -152,8 +152,49 @@ async function cmdSync(phone) {
     die(`No active order state found for ${normalized}. File expected at: ${stateFilePath(normalized)}`);
   }
 
+  // Issue 2 fix: Detect stale state (>2 hours old, still pending) and archive before proceeding
+  const ctx0 = state.orderContext || state;
+  const stateCreatedAt = ctx0.createdAt || state.createdAt;
+  if (stateCreatedAt) {
+    const ageMs = Date.now() - new Date(stateCreatedAt).getTime();
+    const isStale = ageMs > 2 * 60 * 60 * 1000; // >2 hours
+    const isPending = !ctx0.paymentStatus || ctx0.paymentStatus === 'pending';
+    if (isStale && isPending) {
+      // Archive stale state
+      const expiredDir = path.join(WORKSPACE_ROOT, 'state', 'orders-expired');
+      await fs.mkdir(expiredDir, { recursive: true });
+      const staleId = ctx0.clientOrderId || ctx0.orderId || state.orderId || 'unknown';
+      await fs.rename(stateFilePath(normalized), path.join(expiredDir, `${normalized}-${staleId}-stale-expired.json`)).catch(() => {});
+      die(`Stale order detected (${staleId}, ${Math.round(ageMs / 60000)}min old). Archived. Please write a fresh state file.`);
+    }
+  }
+
   // Support both nested (orderContext wrapper) and flat state formats
   const ctx = state.orderContext || state;
+
+  // Preserve Pawoon tracking fields (bot may overwrite state file without these)
+  // Read from separate tracking file that bot doesn't touch
+  const trackingFile = path.join(WORKSPACE_ROOT, 'state', 'orders-active', `.${makeStateFileName(normalized)}.pawoon`);
+  let _pawoonPushed = false;
+  let _pawoonLastItemCount = 0;
+  try {
+    const trackRaw = await fs.readFile(trackingFile, 'utf8');
+    const trackData = JSON.parse(trackRaw);
+    _pawoonPushed = trackData._pawoonPushed || false;
+    _pawoonLastItemCount = trackData._pawoonLastItemCount || 0;
+  } catch (_) {}
+  // Also check state file as fallback
+  if (!_pawoonPushed) {
+    _pawoonPushed = ctx._pawoonPushed || state._pawoonPushed || false;
+    _pawoonLastItemCount = ctx._pawoonLastItemCount || state._pawoonLastItemCount || 0;
+  }
+
+  // Issue 3 fix: Ensure createdAt exists for scheduler age tracking
+  if (!ctx.createdAt && !state.createdAt) {
+    ctx.createdAt = new Date().toISOString();
+    // Write back so scheduler can read it
+    await fs.writeFile(stateFilePath(normalized), JSON.stringify(state.orderContext ? state : ctx, null, 2), 'utf8');
+  }
 
   // Do not auto-write customer profiles during sync.
   // Customer profile persistence should happen only from deliberate customer/profile flows,
@@ -188,11 +229,30 @@ async function cmdSync(phone) {
     }
   };
 
-  // clientOrderId: use from ctx, or generate from orderId in flat format
-  const clientOrderId = ctx.clientOrderId || state.orderId || null;
-  if (clientOrderId) {
-    bridgePayload.updates.clientOrderId = clientOrderId;
+  // clientOrderId: use from ctx, or auto-generate based on fulfillment
+  let clientOrderId = ctx.clientOrderId || state.orderId || null;
+  if (!clientOrderId) {
+    // Auto-generate using order-counter.js for collision-safe IDs
+    const prefix = ctx.fulfillmentMethod === 'delivery' ? 'DL'
+      : ctx.fulfillmentMethod === 'dine_in' ? 'DI'
+      : 'PU';
+    try {
+      const { execFileSync } = await import('node:child_process');
+      const counterOut = execFileSync('node', ['/home/ubuntu/workspace-sobatngupi/backend/order-counter.js', 'next', prefix], { timeout: 5000, encoding: 'utf8' });
+      const counterData = JSON.parse(counterOut.trim());
+      clientOrderId = counterData.orderId;
+    } catch (_) {
+      const now = new Date(Date.now() + 7 * 3600000);
+      const ddmm = String(now.getDate()).padStart(2, '0') + String(now.getMonth() + 1).padStart(2, '0');
+      const hhmm = now.toISOString().slice(11, 16).replace(':', '');
+      clientOrderId = `${prefix}-${ddmm}-${hhmm}-${Date.now().toString(36).slice(-3)}`;
+    }
   }
+  bridgePayload.updates.clientOrderId = clientOrderId;
+
+  // Pass Pawoon tracking fields to bridge so evaluator can detect delta pushes
+  bridgePayload.updates._pawoonPushed = _pawoonPushed;
+  bridgePayload.updates._pawoonLastItemCount = _pawoonLastItemCount;
 
   const bridgeResult = await fetchJson(`${BACKEND_BASE_URL}/bridge/order-context`, {
     method: 'POST',
@@ -282,6 +342,89 @@ async function cmdSync(phone) {
   }
 
   // Non-QRIS sync
+  // For cash_at_counter dine-in: push EVERY time (barista sees each order, printer fires)
+  // Use table session tracking (DB + file) to add sequence labels
+  if (ctx.paymentMethod === 'cash_at_counter') {
+    const trackFile = path.join(WORKSPACE_ROOT, 'state', 'orders-active', `.${makeStateFileName(normalized)}.pawoon`);
+    (async () => {
+      try {
+        // Read tracking to get session order count
+        const trackRaw = await fs.readFile(trackFile, 'utf8').catch(() => '{}');
+        const trackData = JSON.parse(trackRaw);
+        const orderSeq = (trackData.trackedOrderId === clientOrderId && trackData._pawoonPushed)
+          ? (trackData.orderSeq || 1) + 1
+          : 1;
+
+        // Build items for this push (ALL current items)
+        const allItems = (ctx.items || []).map(i => ({
+          menu_name: i.menuName || i.menu_name,
+          qty: i.quantity || i.qty || 1,
+          price: Number(i.price || 0),
+          notes: i.notes || null
+        }));
+
+        // Calculate running total
+        const orderAmount = allItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+
+        // Session label for Pawoon notes
+        const sessionLabel = orderSeq === 1
+          ? `Meja ${ctx.tableNumber} - Order #1`
+          : `Meja ${ctx.tableNumber} - Order #${orderSeq} (Total: Rp${orderAmount.toLocaleString('id-ID')})`;
+
+        // If this is a re-push (item added), only push NEW items
+        let pushItems = allItems;
+        if (orderSeq > 1 && trackData._pawoonLastItemCount) {
+          // Push only the new items (delta)
+          pushItems = allItems.slice(trackData._pawoonLastItemCount);
+          if (pushItems.length === 0) return; // No new items, skip
+        }
+
+        const pushRes = await fetchJson(`${BACKEND_BASE_URL}/integrations/pawoon/push`, {
+          method: 'POST',
+          headers: buildHeaders(),
+          body: JSON.stringify({
+            client_order_id: clientOrderId + (orderSeq > 1 ? '-' + orderSeq : ''),
+            customer_name: ctx.customerName || null,
+            customer_phone: normalized,
+            fulfillment_method: ctx.fulfillmentMethod || 'dine_in',
+            table_number: ctx.tableNumber || null,
+            payment_method: 'cash',
+            payment_status: ctx.paymentStatus,
+            items: pushItems,
+            notes: sessionLabel
+          })
+        });
+
+        // Track in DB (table_sessions)
+        try {
+          const { getOrCreateTableSession, addOrderToSession } = await import('./src/table-session.js');
+          const session = await getOrCreateTableSession(ctx.tableNumber, {
+            customerPhone: normalized,
+            customerName: ctx.customerName || null
+          });
+          await addOrderToSession(session.id, {
+            orderId: clientOrderId + (orderSeq > 1 ? '-' + orderSeq : ''),
+            pawoonOrderId: pushRes?.pawoonOrderId || null,
+            amount: pushItems.reduce((sum, i) => sum + (i.price * (i.qty || 1)), 0)
+          });
+        } catch (dbErr) {
+          // Non-fatal — file tracking is primary, DB is bonus
+          console.error('[sync] table_sessions DB error:', dbErr.message);
+        }
+
+        // Write tracking file
+        await fs.writeFile(trackFile, JSON.stringify({
+          _pawoonPushed: true,
+          _pawoonLastItemCount: allItems.length,
+          pawoonOrderId: pushRes?.pawoonOrderId || null,
+          trackedOrderId: clientOrderId,
+          orderSeq,
+          pushedAt: new Date().toISOString()
+        }), 'utf8');
+      } catch (_) {}
+    })();
+  }
+
   output({
     ok: true,
     action: 'sync',
@@ -340,11 +483,73 @@ async function cmdSyncQrisDirect(phone, ctx) {
 }
 
 async function cmdSyncQrisDoku(phone, ctx, totalAmount) {
-  let orderId = ctx.clientOrderId || ctx.orderId || `ORD-${Date.now()}`;
+  let orderId = ctx.clientOrderId || ctx.orderId;
+  if (!orderId) {
+    // Use order-counter.js for collision-safe ID generation
+    const prefix = ctx.fulfillmentMethod === 'delivery' ? 'DL'
+      : ctx.fulfillmentMethod === 'dine_in' ? 'DI' : 'PU';
+    try {
+      const { execFileSync } = await import('node:child_process');
+      const counterOut = execFileSync('node', ['/home/ubuntu/workspace-sobatngupi/backend/order-counter.js', 'next', prefix], { timeout: 5000, encoding: 'utf8' });
+      const counterData = JSON.parse(counterOut.trim());
+      orderId = counterData.orderId;
+    } catch (counterErr) {
+      // Fallback: use timestamp-based ID if counter fails
+      const now = new Date(Date.now() + 7 * 3600000);
+      const ddmm = (now.getDate() + '').padStart(2, '0') + (now.getMonth() + 1 + '').padStart(2, '0');
+      const hhmm = now.toISOString().slice(11, 16).replace(':', '');
+      orderId = `${prefix}-${ddmm}-${hhmm}-${Date.now().toString(36).slice(-3)}`;
+    }
+  }
   const amount = totalAmount > 0 ? totalAmount : null;
 
   if (!amount) {
     die('Cannot generate QRIS: total amount is 0 or missing');
+  }
+
+  // Step 0: Ensure order exists in DB (so webhook/poller can update it later)
+  try {
+    const dbCheck = await fetchJson(`${BACKEND_BASE_URL}/orders/${encodeURIComponent(orderId)}`, {
+      method: 'GET',
+      headers: buildHeaders()
+    });
+    if (!dbCheck.ok || !dbCheck.data?.id) {
+      // Create order in DB via webhook endpoint
+      const orderPayload = {
+        event_type: 'final_order',
+        order: {
+          client_order_id: orderId,
+          customer: { name: ctx.customerName || null, phone },
+          channel: 'whatsapp',
+          raw_message: ctx.rawMessage || null,
+          items: (ctx.items || []).map(i => ({
+            menu_id: i.menuId || null,
+            menu_name: i.menuName || i.menu_name || 'Unknown',
+            qty: i.qty || i.quantity || 1,
+            temperature: i.temperature || null,
+            notes: i.notes || null
+          })),
+          fulfillment: {
+            method: ctx.fulfillmentMethod || 'delivery',
+            shareloc: ctx.deliveryLocation || ctx.shareloc || null,
+            delivery_fee: ctx.deliveryFee || 0
+          },
+          payment: { method: 'qris', status: 'pending' },
+          status: 'awaiting_payment',
+          notes: ctx.customerNotes ? [ctx.customerNotes] : []
+        }
+      };
+      const createResult = await fetchJson(`${BACKEND_BASE_URL}/webhooks/orders`, {
+        method: 'POST',
+        headers: buildHeaders(),
+        body: JSON.stringify(orderPayload)
+      });
+      if (createResult.ok) {
+        // Order created in DB
+      }
+    }
+  } catch (_) {
+    // Non-fatal — order may not exist in DB but QRIS flow continues
   }
 
   // Step 1: Generate QRIS via Doku (with retry on duplicate orderId)
@@ -419,6 +624,61 @@ async function cmdSyncQrisDoku(phone, ctx, totalAmount) {
     clientOrderId: orderId,
     referenceNo,
     amount
+  });
+}
+
+async function cmdFinalBill(phone) {
+  const normalized = normalizePhone(phone);
+  if (!normalized) die(`Invalid phone: ${phone}`);
+
+  const state = await loadState(normalized);
+  if (!state) die(`No active order state found for ${normalized}`);
+
+  const ctx = state.orderContext || state;
+  const clientOrderId = ctx.clientOrderId || state.orderId || null;
+  const tableNum = ctx.tableNumber || null;
+
+  if (!clientOrderId) die('No clientOrderId in state');
+  if (ctx.fulfillmentMethod !== 'dine_in') die('final-bill only for dine-in orders');
+
+  // Build ALL items for final bill
+  const allItems = (ctx.items || []).map(i => ({
+    menu_name: i.menuName || i.menu_name,
+    qty: i.quantity || i.qty || 1,
+    price: Number(i.price || 0),
+    notes: i.notes || null
+  }));
+
+  if (allItems.length === 0) die('No items in order');
+
+  const totalAmount = allItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+
+  // Push FINAL BILL to Pawoon (all items, marked as final)
+  const pushRes = await fetchJson(`${BACKEND_BASE_URL}/integrations/pawoon/push`, {
+    method: 'POST',
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      client_order_id: clientOrderId,
+      customer_name: ctx.customerName || null,
+      customer_phone: normalized,
+      fulfillment_method: 'dine_in',
+      table_number: tableNum,
+      payment_method: 'cash',
+      payment_status: ctx.paymentStatus || 'pending_at_counter',
+      items: allItems,
+      _isFinalBill: true
+    })
+  });
+
+  output({
+    ok: true,
+    action: 'final-bill',
+    phone: normalized,
+    clientOrderId,
+    tableNumber: tableNum,
+    totalAmount,
+    itemCount: allItems.length,
+    pawoonOrderId: pushRes?.pawoonOrderId || null
   });
 }
 
@@ -506,8 +766,8 @@ async function cmdStatus(phone) {
 
 const [,, command, phone] = process.argv;
 
-if (!command || !['sync', 'status'].includes(command)) {
-  die('Usage: node backend/sync-state.js <sync|status> <customer_phone>');
+if (!command || !['sync', 'status', 'final-bill'].includes(command)) {
+  die('Usage: node backend/sync-state.js <sync|status|final-bill> <customer_phone>');
 }
 
 if (!phone) {
@@ -519,6 +779,8 @@ try {
     await cmdSync(phone);
   } else if (command === 'status') {
     await cmdStatus(phone);
+  } else if (command === 'final-bill') {
+    await cmdFinalBill(phone);
   }
 } catch (err) {
   die(`Unexpected error: ${err.message}`);

@@ -100,14 +100,52 @@ async function pollPendingPayments() {
           logger.warn({ error: e.message }, '[doku-poller] Failed to update state file');
         }
 
-        // Update DB if exists
+        // Update DB (upsert: create if not exists)
         try {
           const sb = getSupabase();
-          await sb.from('orders')
-            .update({ payment_status: 'confirmed', paid_at: result.paidTime || new Date().toISOString() })
-            .eq('client_order_id', payment.orderId);
+          const { data: existingOrder } = await sb.from('orders').select('id').eq('client_order_id', payment.orderId).limit(1);
+          if (existingOrder && existingOrder.length > 0) {
+            await sb.from('orders')
+              .update({ payment_status: 'confirmed', order_status: 'preparing' })
+              .eq('client_order_id', payment.orderId);
+          } else {
+            // Order not in DB — create from state file
+            const stateFile2 = path.join(WORKSPACE_ROOT, 'state', 'orders-active', `${payment.phone.replace(/[^a-zA-Z0-9+._-]/g, '_')}.json`);
+            let stateCtx = payment;
+            try {
+              const sr = await fs.readFile(stateFile2, 'utf-8');
+              const sd = JSON.parse(sr);
+              stateCtx = sd.orderContext || sd;
+            } catch (_) {}
+            const orderRow = {
+              client_order_id: payment.orderId,
+              customer_name_snapshot: payment.customerName || stateCtx.customerName || null,
+              customer_phone_snapshot: payment.phone || stateCtx.customerPhone || null,
+              fulfillment_method: payment.fulfillmentMethod || stateCtx.fulfillmentMethod || 'delivery',
+              payment_method: 'qris',
+              payment_status: 'confirmed',
+              order_status: 'preparing',
+              delivery_fee: stateCtx.deliveryFee || 0,
+              location_lat: stateCtx.deliveryLocation?.lat || null,
+              location_lng: stateCtx.deliveryLocation?.lng || null,
+              location_label: stateCtx.deliveryLocation?.label || null,
+              notes: stateCtx.customerNotes || null,
+              created_at: payment.createdAt || new Date().toISOString()
+            };
+            const { data: ins } = await sb.from('orders').insert(orderRow).select('id');
+            if (ins && ins[0]) {
+              const items = (stateCtx.items || []).map(i => ({
+                order_id: ins[0].id,
+                menu_name: i.menuName || i.menu_name || 'Unknown',
+                qty: i.qty || i.quantity || 1,
+                notes: i.notes || null
+              }));
+              if (items.length) await sb.from('order_items').insert(items);
+              logger.info({ orderId: payment.orderId }, '[doku-poller] Order created in DB (was missing)');
+            }
+          }
         } catch (e) {
-          logger.warn({ error: e.message }, '[doku-poller] Failed to update DB');
+          logger.warn({ error: e.message }, '[doku-poller] Failed to update/create DB order');
         }
 
         // Push to Pawoon POS
@@ -127,20 +165,33 @@ async function pollPendingPayments() {
                 fulfillment_method: ctx.fulfillmentMethod || 'dine_in',
                 table_number: ctx.tableNumber || null,
                 payment_method: 'qris',
-                notes: ctx.notes
+                notes: ctx.customerNotes || ctx.notes || null
               };
               const pawoonItems = (ctx.items || []).map(i => ({
                 menu_name: i.menuName || i.menu_name,
                 qty: i.quantity || i.qty || 1,
-                price: i.price || 0
+                price: i.price || 0,
+                notes: i.notes || null
               }));
               const totalAmount = pawoonItems.reduce((sum, i) => sum + (i.price * i.qty), 0) + (Number(ctx.deliveryFee) || 0);
+              // QRIS already paid → use 'cash' method with full amount (Pawoon rejects 'other')
               const pawoonPayment = { amount: totalAmount, method: 'cash' };
               const pawoonResult = await pushOrderToPawoon(pawoonOrder, pawoonItems, pawoonPayment);
               if (pawoonResult.ok) {
                 logger.info({ orderId: payment.orderId, pawoonId: pawoonResult.pawoonOrderId }, '[doku-poller] Pushed to Pawoon');
               } else {
                 logger.warn({ orderId: payment.orderId, reason: pawoonResult.reason }, '[doku-poller] Pawoon push skipped/failed');
+              }
+
+              // Close table session if dine-in QRIS paid
+              if (ctx.fulfillmentMethod === 'dine_in' && ctx.tableNumber) {
+                try {
+                  const { closeTableSession } = await import('./src/table-session.js');
+                  await closeTableSession(ctx.tableNumber, 'customer', payment.phone || ctx.customerPhone || null);
+                  logger.info({ table: ctx.tableNumber }, '[doku-poller] Table session closed (QRIS paid)');
+                } catch (tsErr) {
+                  logger.debug('[doku-poller] Table session close error: %s', tsErr.message);
+                }
               }
             } catch (pawErr) {
               logger.warn({ orderId: payment.orderId, error: pawErr.message }, '[doku-poller] Pawoon push error');
@@ -172,6 +223,11 @@ async function pollPendingPayments() {
         // Notify courier if delivery
         if (payment.fulfillmentMethod === 'delivery') {
           try {
+            // Re-read state for delivery details
+            const stateFile2 = path.join(WORKSPACE_ROOT, 'state', 'orders-active', `${payment.phone.replace(/[^a-zA-Z0-9+._-]/g, '_')}.json`);
+            const stateRaw2 = await fs.readFile(stateFile2, 'utf-8').catch(() => null);
+            const state2 = stateRaw2 ? JSON.parse(stateRaw2) : {};
+            const orderCtx = state2.orderContext || state2;
             const { notifyCouriers } = await import('./src/notifications/courier.js');
             const courierOrder = {
               client_order_id: payment.orderId,
@@ -179,15 +235,16 @@ async function pollPendingPayments() {
               customer_phone_snapshot: payment.phone,
               fulfillment_method: 'delivery',
               payment_method: 'qris',
-              location_lat: ctx.shareloc?.lat || null,
-              location_lng: ctx.shareloc?.lng || null
+              location_lat: orderCtx.deliveryLocation?.lat || null,
+              location_lng: orderCtx.deliveryLocation?.lng || null
             };
-            const courierItems = (ctx.items || []).map(i => ({
+            const courierItems = (orderCtx.items || []).map(i => ({
               menu_name: i.menuName || i.menu_name,
               qty: i.quantity || i.qty || 1,
+              price: i.price || 0,
               temperature: i.temperature || null
             }));
-            const totalAmount = courierItems.reduce((sum, i) => sum + ((i.price || 0) * i.qty), 0) + (Number(ctx.deliveryFee) || 0);
+            const totalAmount = courierItems.reduce((sum, i) => sum + ((i.price || 0) * i.qty), 0) + (Number(orderCtx.deliveryFee) || 0);
             const courierPayment = { amount: totalAmount, total_payment: totalAmount };
             const courierResult = await notifyCouriers(courierOrder, courierItems, courierPayment);
             if (courierResult.ok) {

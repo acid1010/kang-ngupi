@@ -107,13 +107,15 @@ router.get('/', async (req, res) => {
       const clientOrderIds = orders.map(o => o.client_order_id).filter(Boolean);
       const { data: payments } = await supabase
         .from('order_payments')
-        .select('id, payment_status, amount, total_payment, qr_image_url, expired_at, paid_at')
-        .in('provider_order_id', clientOrderIds.map(id => `pakasir_${id}`));
+        .select('id, client_order_id, provider_order_id, payment_status, amount, total_payment, qr_image_url, expired_at, paid_at')
+        .or(`client_order_id.in.(${clientOrderIds.join(',')}),provider_order_id.in.(${clientOrderIds.map(id => `pakasir_${id}`).join(',')})`);
 
       const paymentByOrderId = {};
       for (const p of (payments || [])) {
-        const clientId = p.provider_order_id?.replace('pakasir_', '');
-        if (clientId) paymentByOrderId[clientId] = p;
+        const directId = p.client_order_id || null;
+        const providerId = p.provider_order_id?.replace('pakasir_', '') || null;
+        if (directId) paymentByOrderId[directId] = p;
+        else if (providerId) paymentByOrderId[providerId] = p;
       }
 
       for (const o of orders) {
@@ -148,13 +150,29 @@ router.get('/stats/summary', async (req, res) => {
       { count: totalToday },
       { count: pendingDelivery },
       { count: onTheWay },
-      { count: completed }
+      { count: completed },
+      { count: dineInToday },
+      { count: pickupToday },
+      { count: deliveryToday }
     ] = await Promise.all([
       supabase.from('orders').select('*', { count: 'exact', head: true }).gte('created_at', today).in('payment_status', ['confirmed', 'paid', 'settled']),
-      supabase.from('orders').select('*', { count: 'exact', head: true }).in('order_status', ['ready_to_submit', 'preparing', 'ready_for_pickup']).in('payment_status', ['confirmed', 'paid', 'settled']),
-      supabase.from('orders').select('*', { count: 'exact', head: true }).eq('order_status', 'on_the_way'),
-      supabase.from('orders').select('*', { count: 'exact', head: true }).eq('order_status', 'completed').gte('created_at', today)
+      supabase.from('orders').select('*', { count: 'exact', head: true }).eq('fulfillment_method', 'delivery').in('order_status', ['ready_to_submit', 'preparing', 'ready_for_pickup']).in('payment_status', ['confirmed', 'paid', 'settled']),
+      supabase.from('orders').select('*', { count: 'exact', head: true }).eq('fulfillment_method', 'delivery').eq('order_status', 'on_the_way'),
+      supabase.from('orders').select('*', { count: 'exact', head: true }).eq('order_status', 'completed').gte('created_at', today),
+      supabase.from('orders').select('*', { count: 'exact', head: true }).eq('fulfillment_method', 'dine_in').gte('created_at', today).in('payment_status', ['confirmed', 'paid', 'settled']),
+      supabase.from('orders').select('*', { count: 'exact', head: true }).eq('fulfillment_method', 'pickup').gte('created_at', today).in('payment_status', ['confirmed', 'paid', 'settled']),
+      supabase.from('orders').select('*', { count: 'exact', head: true }).eq('fulfillment_method', 'delivery').gte('created_at', today).in('payment_status', ['confirmed', 'paid', 'settled'])
     ]);
+
+    // Revenue today
+    const { data: payments } = await supabase
+      .from('order_payments')
+      .select('total_payment, amount')
+      .gte('paid_at', today)
+      .in('payment_status', ['confirmed', 'paid', 'settled']);
+
+    const revenueToday = (payments || []).reduce((sum, p) => sum + (p.total_payment || p.amount || 0), 0);
+    const avgOrderValue = (totalToday && totalToday > 0) ? Math.round(revenueToday / totalToday) : 0;
 
     res.json({
       ok: true,
@@ -162,7 +180,12 @@ router.get('/stats/summary', async (req, res) => {
         totalToday: totalToday || 0,
         pendingDelivery: pendingDelivery || 0,
         onTheWay: onTheWay || 0,
-        completedToday: completed || 0
+        completedToday: completed || 0,
+        dineInToday: dineInToday || 0,
+        pickupToday: pickupToday || 0,
+        deliveryToday: deliveryToday || 0,
+        revenueToday,
+        avgOrderValue
       }
     });
   } catch (error) {
@@ -264,18 +287,18 @@ router.patch('/:id/status', async (req, res) => {
       logger.warn('[dashboard] Customer notification error: %s', notifErr.message);
     }
 
-    // Send feedback request when order is completed
-    if (status === 'completed') {
-      try {
-        const { sendFeedbackRequest } = await import('../notifications/feedback.js');
-        const fbResult = await sendFeedbackRequest(data);
-        if (fbResult.ok) {
-          logger.info('[dashboard] Feedback request sent for order %s', req.params.id);
-        }
-      } catch (fbErr) {
-        logger.warn('[dashboard] Feedback request error: %s', fbErr.message);
-      }
-    }
+    // Feedback request disabled — bot tidak proaktif minta rating
+    // if (status === 'completed') {
+    //   try {
+    //     const { sendFeedbackRequest } = await import('../notifications/feedback.js');
+    //     const fbResult = await sendFeedbackRequest(data);
+    //     if (fbResult.ok) {
+    //       logger.info('[dashboard] Feedback request sent for order %s', req.params.id);
+    //     }
+    //   } catch (fbErr) {
+    //     logger.warn('[dashboard] Feedback request error: %s', fbErr.message);
+    //   }
+    // }
 
     res.json({ ok: true, data });
   } catch (error) {

@@ -56,6 +56,12 @@ app.use('/menu-images', express.static(join(__dirname, '..', 'public', 'menu-ima
   immutable: true
 }));
 
+// Serve public assets (demo screenshots, QR codes, etc.)
+app.use('/assets', express.static(join(__dirname, '..', 'public'), {
+  maxAge: '1d',
+  extensions: ['png', 'jpg', 'jpeg', 'webp', 'svg']
+}));
+
 // Rate limiting
 const apiLimiter = rateLimit({ windowMs: 60_000, max: 100, standardHeaders: true, legacyHeaders: false });
 const loginLimiter = rateLimit({ windowMs: 60_000, max: 5, message: { ok: false, error: 'Too many login attempts, try again in 1 minute' } });
@@ -171,6 +177,10 @@ function validateOrderPayload(eventType, order) {
 // Landing page
 app.get('/', (_req, res) => {
   res.sendFile(join(__dirname, '..', 'public', 'landing.html'));
+});
+
+app.get('/kurir', (_req, res) => {
+  res.redirect(302, '/app/kurir');
 });
 
 app.get('/health', async (_req, res) => {
@@ -646,13 +656,52 @@ app.post('/webhooks/doku', async (req, res) => {
           await fs.writeFile(stateFile, JSON.stringify(state.orderContext ? state : ctx, null, 2));
         } catch (_) {}
 
-        // Update DB
+        // Update DB (upsert: create if not exists, update if exists)
         try {
           const sb = getSupabase();
-          await sb.from('orders')
-            .update({ payment_status: 'confirmed', paid_at: paidTime })
-            .eq('client_order_id', partnerReferenceNo);
-        } catch (_) {}
+          const { data: existingOrder } = await sb.from('orders').select('id').eq('client_order_id', partnerReferenceNo).limit(1);
+          if (existingOrder && existingOrder.length > 0) {
+            await sb.from('orders')
+              .update({ payment_status: 'confirmed', order_status: 'preparing' })
+              .eq('client_order_id', partnerReferenceNo);
+          } else {
+            // Order not in DB yet — create from pending payment file data + state file
+            let stateCtx = null;
+            try {
+              const stateRaw2 = await fs.readFile(stateFile, 'utf-8');
+              const stateData = JSON.parse(stateRaw2);
+              stateCtx = stateData.orderContext || stateData;
+            } catch (_) { stateCtx = payment; }
+            const orderRow = {
+              client_order_id: partnerReferenceNo,
+              customer_name_snapshot: payment.customerName || stateCtx.customerName || null,
+              customer_phone_snapshot: payment.phone || stateCtx.customerPhone || null,
+              fulfillment_method: payment.fulfillmentMethod || stateCtx.fulfillmentMethod || 'delivery',
+              payment_method: 'qris',
+              payment_status: 'confirmed',
+              order_status: 'preparing',
+              delivery_fee: stateCtx.deliveryFee || 0,
+              location_lat: stateCtx.deliveryLocation?.lat || stateCtx.shareloc?.lat || null,
+              location_lng: stateCtx.deliveryLocation?.lng || stateCtx.shareloc?.lng || null,
+              location_label: stateCtx.deliveryLocation?.label || stateCtx.shareloc?.label || null,
+              notes: stateCtx.customerNotes || null,
+              created_at: payment.createdAt || new Date().toISOString()
+            };
+            const { data: ins } = await sb.from('orders').insert(orderRow).select('id');
+            if (ins && ins[0]) {
+              const items = (stateCtx.items || []).map(i => ({
+                order_id: ins[0].id,
+                menu_name: i.menuName || i.menu_name || 'Unknown',
+                qty: i.qty || i.quantity || 1,
+                notes: i.notes || null
+              }));
+              if (items.length) await sb.from('order_items').insert(items);
+              logger.info({ orderId: partnerReferenceNo }, '[doku] Webhook: order created in DB (was missing)');
+            }
+          }
+        } catch (dbErr) {
+          logger.warn({ error: dbErr.message, orderId: partnerReferenceNo }, '[doku] Webhook: DB update/create failed');
+        }
 
         // Send WhatsApp success notification
         try {
@@ -686,6 +735,31 @@ app.post('/webhooks/doku', async (req, res) => {
           }
         } catch (pawErr) {
           logger.warn({ orderId: partnerReferenceNo, error: pawErr.message }, '[doku] Webhook: Pawoon push failed');
+        }
+
+        // Notify courier for delivery orders
+        try {
+          if (payment.fulfillmentMethod === 'delivery') {
+            const { notifyCouriers } = await import('./notifications/courier.js');
+            const sb3 = getSupabase();
+            const { data: dbOrder2 } = await sb3.from('orders').select('*').eq('client_order_id', partnerReferenceNo).single();
+            if (dbOrder2) {
+              const { data: orderItems2 } = await sb3.from('order_items').select('menu_name, menu_id, qty, temperature, notes').eq('order_id', dbOrder2.id);
+              const stateRaw3 = await fs.readFile(stateFile, 'utf-8').catch(() => null);
+              const stateCtx3 = stateRaw3 ? (JSON.parse(stateRaw3).orderContext || JSON.parse(stateRaw3)) : {};
+              const itemsWithPrice = (stateCtx3.items || []).map(i => ({
+                menu_name: i.menuName || i.menu_name,
+                qty: i.quantity || i.qty || 1,
+                price: i.price || 0
+              }));
+              const totalAmount = itemsWithPrice.reduce((sum, i) => sum + (i.price * i.qty), 0) + (Number(stateCtx3.deliveryFee || dbOrder2.delivery_fee) || 0);
+              const courierPayment = { amount: totalAmount, total_payment: totalAmount };
+              await notifyCouriers(dbOrder2, orderItems2 || itemsWithPrice, courierPayment);
+              logger.info({ orderId: partnerReferenceNo }, '[doku] Webhook: courier notified');
+            }
+          }
+        } catch (courierErr) {
+          logger.warn({ orderId: partnerReferenceNo, error: courierErr.message }, '[doku] Webhook: courier notification failed');
         }
 
         // Remove from pending (so poller doesn't double-process)
@@ -793,6 +867,56 @@ app.get('/orders/:id', requireApiKey, async (req, res) => {
   }
 });
 
+// Pawoon push endpoint — push order to Pawoon POS (used by sync-state.js for cash_at_counter)
+app.post('/integrations/pawoon/push', async (req, res) => {
+  try {
+    const { client_order_id, customer_name, customer_phone, fulfillment_method, table_number, payment_method, payment_status, items, _isFinalBill, notes } = req.body;
+    if (!client_order_id || !items?.length) {
+      return res.status(400).json({ ok: false, error: 'Missing client_order_id or items' });
+    }
+    const { pushOrderToPawoon } = await import('./integrations/pawoon.js');
+    const order = {
+      client_order_id,
+      customer_name_snapshot: customer_name,
+      customer_phone_snapshot: customer_phone,
+      fulfillment_method: fulfillment_method || 'dine_in',
+      table_number: table_number || null,
+      payment_method: payment_method || 'cash',
+      payment_status: payment_status || 'pending',
+      notes: notes || null,
+      _isFinalBill: _isFinalBill || false
+    };
+    const totalAmount = items.reduce((sum, i) => sum + ((i.price || 0) * (i.qty || 1)), 0);
+    const payment = { amount: totalAmount, method: 'cash' };
+    const result = await pushOrderToPawoon(order, items, payment);
+    res.json({ ok: result.ok, pawoonOrderId: result.pawoonOrderId || null });
+  } catch (err) {
+    logger.error('[pawoon-push] Error: %s', err.message);
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// Pawoon delete endpoint — delete a saved transaction (used for replace strategy on item additions)
+app.post('/integrations/pawoon/delete', async (req, res) => {
+  try {
+    const { pawoon_order_id } = req.body;
+    if (!pawoon_order_id) {
+      return res.status(400).json({ ok: false, error: 'Missing pawoon_order_id' });
+    }
+    const { getToken, PAWOON_BASE_URL } = await import('./integrations/pawoon.js');
+    const token = await getToken();
+    const delRes = await fetch(`${PAWOON_BASE_URL}/orders/${pawoon_order_id}`, {
+      method: 'DELETE',
+      headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` }
+    });
+    logger.info('[pawoon-delete] Deleted order %s, status: %d', pawoon_order_id, delRes.status);
+    res.json({ ok: delRes.status === 200, status: delRes.status });
+  } catch (err) {
+    logger.error('[pawoon-delete] Error: %s', err.message);
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 // Pawoon Webhook — receive stock/product updates from POS
 app.post('/webhooks/pawoon', async (req, res) => {
   try {
@@ -830,6 +954,114 @@ app.post('/webhooks/pawoon', async (req, res) => {
         logger.warn('[pawoon-webhook] Menu sync failed: %s', syncErr.message);
       }
     }
+
+    // Handle order payment settled (bill closed at cashier)
+    // Detect via:
+    // 1. Explicit event type (order/transaction/payment)
+    // 2. Pawoon native format: total_change !== null means kasir closed bill
+    const orderData = payload?.data || payload;
+    const receiptCode = orderData?.receipt_code || orderData?.receipt_number || null;
+    const pawoonStatus = (orderData?.status || orderData?.payment_status || '').toLowerCase();
+    const isPaidExplicit = ['paid', 'settled', 'completed', 'closed'].includes(pawoonStatus);
+    // Pawoon native: total_change is set (not null) when kasir closes bill
+    const isPaidNative = receiptCode && orderData?.total_change !== null && orderData?.total_change !== undefined && orderData?.final_amount > 0;
+    const isPaid = isPaidExplicit || isPaidNative;
+
+    if (receiptCode && isPaid) {
+        logger.info('[pawoon-webhook] Order settled: %s (status: %s)', receiptCode, pawoonStatus);
+        try {
+          const { getSupabase } = await import('./supabase.js');
+          const sb = getSupabase();
+
+          // Find order by client_order_id
+          const { data: orders } = await sb.from('orders')
+            .select('id, client_order_id, customer_phone_snapshot, customer_name_snapshot, payment_status, payment_method, fulfillment_method, table_number')
+            .eq('client_order_id', receiptCode)
+            .limit(1);
+
+          const order = orders?.[0];
+          if (order && !['paid', 'settled'].includes(order.payment_status)) {
+            // Update payment status (handles both pending and pending_at_counter → confirmed)
+            await sb.from('orders').update({
+              payment_status: 'paid',
+              order_status: 'completed'
+            }).eq('id', order.id);
+
+            // Update payment record if exists
+            await sb.from('order_payments').update({
+              payment_status: 'settled',
+              paid_at: new Date().toISOString()
+            }).eq('order_id', order.id);
+
+            logger.info('[pawoon-webhook] Order %s marked as paid', receiptCode);
+
+            // Notify customer via WhatsApp with digital receipt
+            const phone = order.customer_phone_snapshot;
+            const name = order.customer_name_snapshot || 'kak';
+            if (phone) {
+              try {
+                const { runWacliSafe } = await import('./notifications/whatsapp.js');
+                const { formatReceipt } = await import('/home/ubuntu/workspace-sobatngupi/backend/format-receipt.js');
+                const { readFile: readFileAsync } = await import('node:fs/promises');
+                const { join: joinPath } = await import('node:path');
+                const jid = phone.replace(/^\+/, '') + '@s.whatsapp.net';
+
+                // Try to build receipt from state file (has prices)
+                let receiptText = null;
+                try {
+                  const stateFile = joinPath('/home/ubuntu/workspace-sobatngupi/state/orders-active', `${phone}.json`);
+                  const stateRaw = await readFileAsync(stateFile, 'utf8');
+                  const stateData = JSON.parse(stateRaw);
+                  receiptText = formatReceipt({
+                    orderId: receiptCode,
+                    customerName: name,
+                    items: stateData.items || [],
+                    fulfillmentMethod: order.fulfillment_method || stateData.fulfillmentMethod,
+                    tableNumber: order.table_number || stateData.tableNumber,
+                    deliveryFee: stateData.deliveryFee || 0,
+                    paymentMethod: stateData.paymentMethod || order.payment_method,
+                    paidAt: new Date().toISOString()
+                  });
+                } catch (_) {
+                  // Fallback: build from DB items (no prices, use menu lookup)
+                  const { data: dbItems } = await sb.from('order_items').select('menu_name, menu_id, qty').eq('order_id', order.id);
+                  receiptText = formatReceipt({
+                    orderId: receiptCode,
+                    customerName: name,
+                    items: (dbItems || []).map(i => ({ menuName: i.menu_name, menu_id: i.menu_id, qty: i.qty })),
+                    fulfillmentMethod: order.fulfillment_method,
+                    tableNumber: order.table_number,
+                    deliveryFee: 0,
+                    paymentMethod: order.payment_method,
+                    paidAt: new Date().toISOString()
+                  });
+                }
+
+                await runWacliSafe(['send', 'text', '--to', jid, '--message', receiptText]);
+                logger.info('[pawoon-webhook] Receipt sent to %s', phone);
+              } catch (waErr) {
+                logger.warn('[pawoon-webhook] Failed to send receipt to %s: %s', phone, waErr.message);
+              }
+            }
+
+            // Move state file to expired
+            try {
+              const { rename, mkdir: mkdirFs } = await import('node:fs/promises');
+              const { join: joinPath } = await import('node:path');
+              const stateFile = joinPath('/home/ubuntu/workspace-sobatngupi/state/orders-active', `${phone}.json`);
+              const expiredDir = '/home/ubuntu/workspace-sobatngupi/state/orders-expired';
+              await mkdirFs(expiredDir, { recursive: true });
+              await rename(stateFile, joinPath(expiredDir, `${phone}-${receiptCode}-kasir-paid.json`)).catch(() => {});
+            } catch (_) {}
+          } else if (order) {
+            logger.debug('[pawoon-webhook] Order %s already confirmed, skipping', receiptCode);
+          } else {
+            logger.debug('[pawoon-webhook] Order %s not found in DB (may be manual Pawoon order)', receiptCode);
+          }
+        } catch (dbErr) {
+          logger.error('[pawoon-webhook] DB error processing settled order %s: %s', receiptCode, dbErr.message);
+        }
+      }
 
     res.json({ ok: true, received: true });
   } catch (error) {

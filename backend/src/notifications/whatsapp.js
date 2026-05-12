@@ -76,13 +76,13 @@ function buildQrisCaption({ customerName = null, amount = null } = {}) {
 function getEstimatedTimeText(fulfillmentMethod) {
   switch (fulfillmentMethod) {
     case 'dine_in':
-      return '~10-15 menit';
+      return null; // dine-in doesn't need time estimate
     case 'self_pickup':
-      return '~15-20 menit';
+      return '~10-20 menit';
     case 'delivery':
-      return '~25-40 menit';
+      return '~10-20 menit';
     default:
-      return '~15-20 menit';
+      return '~10-20 menit';
   }
 }
 
@@ -207,7 +207,12 @@ export async function sendQrisSuccessWhatsApp({ to, customerName = null, order =
 
   const salutation = customerName ? `Siap kak ${customerName},` : 'Siap kak,';
   const estimatedTime = getEstimatedTimeText(order?.fulfillment_method);
-  const message = `${salutation} pembayaran QRIS-nya sudah terverifikasi ya ✅\n\nPesanan kamu lagi diproses. Estimasinya ${estimatedTime} ya kak. Ditunggu bentar ☕`;
+  let message;
+  if (order?.fulfillment_method === 'dine_in') {
+    message = `${salutation} pembayaran QRIS-nya sudah terverifikasi ya ✅\n\nPesanan kamu lagi disiapkan. Santai aja kak, nanti diantar ke meja ya ☕`;
+  } else {
+    message = `${salutation} pembayaran QRIS-nya sudah terverifikasi ya ✅\n\nPesanan kamu lagi diproses. Estimasinya ${estimatedTime} ya kak. Ditunggu bentar ☕`;
+  }
 
   try {
     const result = await runWacli(['send', 'text', '--to', recipient, '--message', message]);

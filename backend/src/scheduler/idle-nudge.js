@@ -2,27 +2,23 @@
  * Idle Chat Nudge — remind customers who left a conversation hanging
  * 
  * Logic:
- * 1. Check OpenClaw WA sessions that are idle (last activity > NUDGE_AFTER_MS)
+ * 1. Check ALL WA sessions that are idle (last activity > 15 min)
  * 2. Only nudge if the LAST message was from the BOT (we're waiting on customer)
- * 3. Only nudge once per session (track in state file)
- * 4. Don't nudge if order is already completed/cancelled
- * 5. Only during business hours (09:00-21:00 WIB)
+ * 3. Only nudge ONCE per session per day — no second nudge, no auto-cancel
+ * 4. Only during business hours (09:00-21:00 WIB)
+ * 5. Don't nudge if session is too old (> 4 hours)
  * 
  * Run via scheduler: every 15 min during business hours
  */
 
-import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
-import { join, basename } from 'node:path';
-import { existsSync } from 'node:fs';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { join } from 'node:path';
 import logger from '../lib/logger.js';
 import { runWacliSafe } from '../notifications/whatsapp.js';
 
 const NUDGE_STATE_DIR = '/home/ubuntu/workspace-sobatngupi/state/nudge-tracking';
-const SESSIONS_DIR = '/home/ubuntu/.openclaw/agents/main/sessions';
-const NUDGE_AFTER_MS = 15 * 60 * 1000;  // 15 minutes idle → first nudge
-const CANCEL_AFTER_MS = 30 * 60 * 1000; // 30 minutes idle → auto-cancel
-const NUDGE_COOLDOWN_MS = 4 * 60 * 60 * 1000; // Don't re-nudge within 4 hours
-const MAX_NUDGE_PER_DAY = 2; // Max 2 nudges per customer per day (1 reminder + 1 cancel)
+const NUDGE_AFTER_MS = 15 * 60 * 1000;  // 15 minutes idle
+const MAX_AGE_MS = 4 * 60 * 60 * 1000;  // Don't nudge sessions older than 4 hours
 
 function toJid(phone) {
   let p = String(phone).trim().replace(/[\s\-()]/g, '');
@@ -43,14 +39,15 @@ async function sendWa(phone, message) {
   }
 }
 
-function getNudgeMessage(nudgeCount) {
-  if (nudgeCount === 0) {
-    // First nudge (15 min) — gentle ask
-    return 'Kak, orderannya jadi dilanjut nggak? Kalau mau lanjut, chat aja ya 😊';
-  } else {
-    // Second nudge (30 min) — cancel notice
-    return 'Hai kak, karena belum ada respon, orderannya aku cancel dulu ya. Kalau mau pesan lagi nanti, tinggal chat aja 🙏';
-  }
+function getNudgeMessage(customerName) {
+  const name = customerName ? ` kak ${customerName}` : ' kak';
+  // Randomize slightly to feel natural
+  const templates = [
+    `Hai${name}, masih mau lanjut atau ada yang bisa dibantu? 😊`,
+    `Hai${name}, masih mau pesan atau ada yang bisa aku bantu? ☕`,
+    `Hai${name}, kalau masih mau order tinggal chat aja ya 😊`,
+  ];
+  return templates[Math.floor(Math.random() * templates.length)];
 }
 
 async function loadNudgeState(phone) {
@@ -59,7 +56,7 @@ async function loadNudgeState(phone) {
     const raw = await readFile(filePath, 'utf8');
     return JSON.parse(raw);
   } catch {
-    return { nudgeCount: 0, lastNudgeAt: null, date: null };
+    return { nudged: false, date: null };
   }
 }
 
@@ -70,29 +67,24 @@ async function saveNudgeState(phone, state) {
 }
 
 /**
- * Check OpenClaw session files for idle WA conversations
- * A session is "idle" if:
- * - It's a WA direct session
- * - Last message was from assistant (bot replied, waiting on customer)
- * - More than NUDGE_AFTER_MS since last activity
- * - Not already nudged today
+ * Check OpenClaw session files for idle WA conversations.
+ * Nudges ALL idle sessions (not just those with active orders).
+ * Only nudges once per day per customer.
  */
 export async function processIdleChats() {
   try {
     await mkdir(NUDGE_STATE_DIR, { recursive: true });
     
-    // Find active WA sessions by checking session transcript files
     const { execFile } = await import('node:child_process');
     const { promisify } = await import('node:util');
     const execFileAsync = promisify(execFile);
     
-    // Use openclaw sessions list to find active WA sessions
+    // Find active WA sessions
     let sessions = [];
     try {
       const { stdout } = await execFileAsync('openclaw', ['sessions', 'list', '--json', '--channel', 'whatsapp'], { timeout: 10000 });
       sessions = JSON.parse(stdout);
     } catch {
-      // Fallback: scan session files directly
       try {
         const { stdout } = await execFileAsync('openclaw', ['sessions', 'list', '--json'], { timeout: 10000 });
         const all = JSON.parse(stdout);
@@ -109,7 +101,7 @@ export async function processIdleChats() {
 
     for (const session of sessions) {
       try {
-        // Extract phone from session key: agent:main:whatsapp:direct:+62xxx
+        // Extract phone from session key
         const keyMatch = session.key?.match(/whatsapp:direct:(\+?\d+)/);
         if (!keyMatch) continue;
         const phone = keyMatch[1];
@@ -123,17 +115,14 @@ export async function processIdleChats() {
         // Not idle enough
         if (idleMs < NUDGE_AFTER_MS) continue;
         
-        // Too old (> 4 hours = probably abandoned, don't bother)
-        if (idleMs > NUDGE_COOLDOWN_MS) continue;
+        // Too old — probably abandoned
+        if (idleMs > MAX_AGE_MS) continue;
 
-        // Check nudge state
+        // Already nudged today? Skip.
         const nudgeState = await loadNudgeState(phone);
-        
-        // Already nudged today
-        if (nudgeState.date === today && nudgeState.nudgeCount >= MAX_NUDGE_PER_DAY) continue;
-        
+        if (nudgeState.date === today && nudgeState.nudged) continue;
+
         // Check if last message was from bot (we're waiting on customer)
-        // Read last few lines of transcript
         if (session.transcriptPath) {
           try {
             const { stdout: tail } = await execFileAsync('tail', ['-n', '5', session.transcriptPath], { timeout: 5000 });
@@ -141,47 +130,28 @@ export async function processIdleChats() {
             const lastLine = lines[lines.length - 1];
             if (lastLine) {
               const parsed = JSON.parse(lastLine);
-              // Only nudge if last message was assistant (bot waiting on customer)
               if (parsed.role !== 'assistant') continue;
             }
           } catch {
-            continue; // Can't read transcript, skip
+            continue;
           }
         }
 
-        // Determine nudge stage
-        const currentNudgeCount = nudgeState.date === today ? nudgeState.nudgeCount : 0;
-        
-        // Stage 1: 15 min idle → ask if continuing
-        // Stage 2: 30 min idle → cancel + notify
-        if (currentNudgeCount === 0 && idleMs < CANCEL_AFTER_MS) {
-          // First nudge: gentle reminder
-          const message = getNudgeMessage(0);
-          const sent = await sendWa(phone, message);
-          if (sent) {
-            nudged++;
-            await saveNudgeState(phone, { nudgeCount: 1, lastNudgeAt: new Date().toISOString(), date: today });
-            logger.info('[nudge] Reminder sent to %s (idle %dmin)', phone, Math.round(idleMs / 60000));
-          }
-        } else if (currentNudgeCount === 1 && idleMs >= CANCEL_AFTER_MS) {
-          // Second nudge: auto-cancel
-          const message = getNudgeMessage(1);
-          const sent = await sendWa(phone, message);
-          if (sent) {
-            nudged++;
-            await saveNudgeState(phone, { nudgeCount: 2, lastNudgeAt: new Date().toISOString(), date: today });
-            logger.info('[nudge] Auto-cancel sent to %s (idle %dmin)', phone, Math.round(idleMs / 60000));
-            
-            // Clean up state file (cancel the order)
-            try {
-              const { rename, mkdir: mkdirAsync } = await import('node:fs/promises');
-              const { join: joinPath } = await import('node:path');
-              const stateFile = joinPath('/home/ubuntu/workspace-sobatngupi/state/orders-active', `${phone}.json`);
-              const expiredDir = '/home/ubuntu/workspace-sobatngupi/state/orders-expired';
-              await mkdirAsync(expiredDir, { recursive: true });
-              await rename(stateFile, joinPath(expiredDir, `${phone}-idle-cancelled.json`)).catch(() => {});
-            } catch (_) {}
-          }
+        // Load customer name for personalized nudge
+        let customerName = null;
+        try {
+          const custFile = join('/home/ubuntu/workspace-sobatngupi/state/customers', phone + '.json');
+          const custRaw = await readFile(custFile, 'utf8');
+          customerName = JSON.parse(custRaw).name || null;
+        } catch (_) {}
+
+        // Send nudge (1x only)
+        const message = getNudgeMessage(customerName);
+        const sent = await sendWa(phone, message);
+        if (sent) {
+          nudged++;
+          await saveNudgeState(phone, { nudged: true, lastNudgeAt: new Date().toISOString(), date: today });
+          logger.info('[nudge] Reminder sent to %s (idle %dmin)', phone, Math.round(idleMs / 60000));
         }
       } catch (err) {
         logger.debug('[nudge] Error processing session: %s', err.message);

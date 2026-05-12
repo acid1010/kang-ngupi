@@ -3,10 +3,20 @@
  */
 
 import { Router } from 'express';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { authenticateUser, createUser, authMiddleware, adminOnly } from './auth.js';
 import ordersRouter from './orders.js';
 
 const router = Router();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT_DIR = path.resolve(__dirname, '../../..');
+
+function loadMenuSchema() {
+  const raw = readFileSync(path.join(ROOT_DIR, 'menu-schema.json'), 'utf8');
+  return JSON.parse(raw);
+}
 
 // Public: Login
 router.post('/api/auth/login', async (req, res) => {
@@ -49,6 +59,51 @@ router.get('/api/auth/me', (req, res) => {
 
 // Orders API (protected)
 router.use('/api/orders', ordersRouter);
+
+// Menu stats API
+router.get('/api/menu/stats', async (req, res) => {
+  try {
+    const schema = loadMenuSchema();
+    const menus = Array.isArray(schema.menus) ? schema.menus : [];
+    const unavailableItems = menus.filter((item) => item.available === false);
+    const availableItems = menus.filter((item) => item.available !== false);
+
+    const unavailableByCategory = unavailableItems.reduce((acc, item) => {
+      const key = item.category || 'Uncategorized';
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    }, {});
+
+    const topUnavailableCategories = Object.entries(unavailableByCategory)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 4)
+      .map(([category, count]) => ({ category, count }));
+
+    const latestUnavailable = unavailableItems
+      .slice(0, 6)
+      .map((item) => ({
+        id: item.id,
+        name: item.name,
+        category: item.category,
+        price: item.price
+      }));
+
+    res.json({
+      ok: true,
+      data: {
+        totalItems: menus.length,
+        availableItems: availableItems.length,
+        unavailableItems: unavailableItems.length,
+        availabilityRate: menus.length ? Math.round((availableItems.length / menus.length) * 100) : 0,
+        topUnavailableCategories,
+        latestUnavailable,
+        lastSyncedAt: schema.lastSyncedAt || null
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: 'Failed to fetch menu stats' });
+  }
+});
 
 // Feedback API
 router.get('/api/feedback', async (req, res) => {

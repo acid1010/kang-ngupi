@@ -39,7 +39,7 @@ const kedaiOpenMin = isWeekend ? 8 * 60 : 9 * 60;
 const kedaiCloseMin = isWeekend ? 23 * 60 + 30 : 23 * 60;
 const kedaiOpen = currentMinutes >= kedaiOpenMin && currentMinutes < kedaiCloseMin;
 
-const deliveryOpen = currentMinutes < 21 * 60; // before 21:00
+const deliveryOpen = botOpen && currentMinutes < 21 * 60; // only during bot hours AND before 21:00
 
 const timeStr = wib.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 

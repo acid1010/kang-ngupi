@@ -44,6 +44,10 @@ async function sendWa(phone, message) {
   } catch (_) {}
 }
 
+function hasUsableOrderId(orderId) {
+  return typeof orderId === 'string' && orderId.trim() !== '' && orderId.trim().toLowerCase() !== 'unknown';
+}
+
 // ─── QRIS Cancel/Remind ────────────────────────────────────
 
 async function processQrisOrders() {
@@ -73,6 +77,12 @@ async function processQrisOrders() {
         const phone = basename(file, '.json');
         const orderId = state.orderId || state.orderContext?.clientOrderId || 'unknown';
         const name = state.customerName || 'kak';
+
+        if (!hasUsableOrderId(orderId)) {
+          active++;
+          logger.warn('[scheduler] Skip QRIS reminder/cancel for %s: missing usable orderId', phone);
+          continue;
+        }
 
         // >1 hour → cancel
         if (elapsed >= QRIS_CANCEL_MS) {
@@ -213,6 +223,97 @@ async function cleanupDrafts() {
 
 // ─── Schedule ──────────────────────────────────────────────
 
+// ─── Dine-In Auto-Close (cash_at_counter timer) ─────────
+
+const DINEIN_AUTOCLOSE_MS = 30 * 60 * 1000; // 30 minutes after order created
+
+async function processDineInAutoClose() {
+  try {
+    const files = await readdir(ACTIVE_DIR);
+    const jsonFiles = files.filter(f => f.endsWith('.json'));
+    const now = Date.now();
+    let closed = 0;
+
+    for (const file of jsonFiles) {
+      try {
+        const filePath = join(ACTIVE_DIR, file);
+        const raw = await readFile(filePath, 'utf8');
+        const state = JSON.parse(raw);
+
+        // Only auto-close cash_at_counter dine-in orders
+        if (state.paymentMethod !== 'cash_at_counter') continue;
+        if (state.paymentStatus === 'confirmed' || state.paymentStatus === 'paid') continue;
+
+        const createdAt = state.createdAt || state.updatedAt;
+        if (!createdAt) continue;
+
+        const elapsed = now - new Date(createdAt).getTime();
+        if (elapsed < DINEIN_AUTOCLOSE_MS) continue;
+
+        const phone = basename(file, '.json');
+        const orderId = state.orderId || 'unknown';
+        const name = state.customerName || 'kak';
+
+        // Skip if orderId is unknown/missing
+        if (!orderId || orderId === 'unknown') continue;
+
+        logger.info('[scheduler] Dine-in auto-close: %s order %s (%dmin)', phone, orderId, Math.round(elapsed / 60000));
+
+        // Mark as paid in DB
+        try {
+          const sb = getSupabase();
+          await sb.from('orders').update({
+            payment_status: 'paid',
+            order_status: 'completed'
+          }).eq('client_order_id', orderId);
+
+          await sb.from('order_payments').update({
+            payment_status: 'settled',
+            paid_at: new Date().toISOString()
+          }).eq('order_id', orderId);
+        } catch (_) {}
+
+        // Send digital receipt
+        try {
+          const { formatReceipt } = await import('/home/ubuntu/workspace-sobatngupi/backend/format-receipt.js');
+          const receiptText = formatReceipt({
+            orderId,
+            customerName: name,
+            items: state.items || [],
+            fulfillmentMethod: state.fulfillmentMethod || 'dine_in',
+            tableNumber: state.tableNumber,
+            deliveryFee: 0,
+            paymentMethod: 'cash_at_counter',
+            paidAt: new Date().toISOString()
+          });
+
+          const jid = phone.replace(/^\+/, '') + '@s.whatsapp.net';
+          await runWacliSafe(['send', 'text', '--to', jid, '--message', receiptText]);
+          logger.info('[scheduler] Dine-in receipt sent to %s', phone);
+        } catch (waErr) {
+          logger.warn('[scheduler] Failed to send dine-in receipt to %s: %s', phone, waErr.message);
+        }
+
+        // Move state file to expired
+        try {
+          await mkdir(EXPIRED_DIR, { recursive: true });
+          await rename(filePath, join(EXPIRED_DIR, `${phone}-${orderId}-dinein-closed.json`));
+        } catch (_) {}
+
+        closed++;
+      } catch (err) {
+        logger.debug('[scheduler] Error processing dine-in %s: %s', file, err.message);
+      }
+    }
+
+    if (closed > 0) {
+      logger.info('[scheduler] Dine-in auto-closed: %d orders', closed);
+    }
+  } catch (err) {
+    logger.warn('[scheduler] processDineInAutoClose error: %s', err.message);
+  }
+}
+
 // ─── State File Watcher (auto-sync QRIS) ────────────────────
 
 import { watch as fsWatch } from 'node:fs';
@@ -263,6 +364,19 @@ export function startScheduler() {
 
   // Expire stale orders: every 6 hours
   cron.schedule('0 */6 * * *', expireStaleOrders, { timezone: 'Asia/Jakarta' });
+
+  // Close stale table sessions (>3hr inactive): every 6 hours
+  cron.schedule('30 */6 * * *', async () => {
+    try {
+      const { closeStaleTableSessions } = await import('../table-session.js');
+      const closed = await closeStaleTableSessions();
+      if (closed.length > 0) {
+        logger.info('[scheduler] Closed %d stale table sessions', closed.length);
+      }
+    } catch (err) {
+      logger.debug('[scheduler] Table session cleanup error: %s', err.message);
+    }
+  }, { timezone: 'Asia/Jakarta' });
 
   // Cleanup drafts: midnight WIB
   cron.schedule('0 0 * * *', cleanupDrafts, { timezone: 'Asia/Jakarta' });

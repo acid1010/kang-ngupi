@@ -54,6 +54,10 @@ async function sendWa(phone, message) {
   } catch (_) {}
 }
 
+function hasUsableOrderId(orderId) {
+  return typeof orderId === 'string' && orderId.trim() !== '' && orderId.trim().toLowerCase() !== 'unknown';
+}
+
 async function cancelInDb(clientOrderId) {
   const db = await getSupabase();
   if (!db || !clientOrderId) return;
@@ -104,6 +108,12 @@ async function processQris() {
       const phone = basename(file, '.json');
       const orderId = state.orderId || state.orderContext?.clientOrderId || 'unknown';
       const name = state.customerName || 'kak';
+
+      if (!hasUsableOrderId(orderId)) {
+        active++;
+        console.log(`Skipped: ${phone} pending QRIS without usable orderId`);
+        continue;
+      }
 
       // >1 hour → cancel
       if (elapsed >= QRIS_CANCEL_MS) {

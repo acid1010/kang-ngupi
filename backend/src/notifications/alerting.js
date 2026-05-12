@@ -5,7 +5,7 @@
 
 import logger from '../lib/logger.js';
 import { runWacliSafe } from './whatsapp.js';
-const ADMIN_PHONE = process.env.ADMIN_ALERT_PHONE || process.env.COURIER_PHONES?.split(',')[0] || '';
+const ADMIN_PHONES = (process.env.ADMIN_ALERT_PHONE || process.env.COURIER_PHONES?.split(',')[0] || '').split(',').map(p => p.trim()).filter(Boolean);
 const THROTTLE_MS = 10 * 60 * 1000; // 10 minutes
 
 const recentAlerts = new Map();
@@ -26,11 +26,8 @@ function toJid(phone) {
 }
 
 export async function alertAdmin(errorType, message, details = '') {
-  if (!ADMIN_PHONE) return;
+  if (!ADMIN_PHONES.length) return;
   if (!shouldAlert(errorType)) return;
-
-  const jid = toJid(ADMIN_PHONE);
-  if (!jid) return;
 
   // Strip HTML/technical noise from details
   let cleanDetails = String(details || '').replace(/<[^>]*>/g, '').replace(/<!-.*?->/g, '').trim().slice(0, 150);
@@ -38,11 +35,15 @@ export async function alertAdmin(errorType, message, details = '') {
 
   const text = `⚠️ *ALERT — Kang Ngupi*\n\nType: ${errorType}\n${message}${cleanDetails ? '\n\nDetail: ' + cleanDetails : ''}\n\nTime: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`;
 
-  try {
-    await runWacliSafe(['send', 'text', '--to', jid, '--message', text]);
-    logger.info('[alert] Admin notified: %s', errorType);
-  } catch (err) {
-    logger.warn('[alert] Failed to notify admin: %s', err.message);
+  for (const phone of ADMIN_PHONES) {
+    const jid = toJid(phone);
+    if (!jid) continue;
+    try {
+      await runWacliSafe(['send', 'text', '--to', jid, '--message', text]);
+      logger.info('[alert] Admin notified %s: %s', phone, errorType);
+    } catch (err) {
+      logger.warn('[alert] Failed to notify %s: %s', phone, err.message);
+    }
   }
 }
 

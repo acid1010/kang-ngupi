@@ -31,6 +31,24 @@ function buildPricingFromSchema() {
       price: menu.price,
       aliases
     };
+
+    for (const variant of menu.variants ?? []) {
+      const variantName = String(variant.name ?? '').trim();
+      if (!variantName) continue;
+      const variantKey = `${menu.id}:${variantName.toLowerCase()}`;
+      const variantAliases = [
+        variantName,
+        variantName.toLowerCase(),
+        variantName.replace(/^.*?-\s*/, '').trim(),
+        `${menu.name} ${variantName.replace(/^.*?-\s*/, '').trim()}`,
+        `${menu.id} ${variantName.replace(/^.*?-\s*/, '').trim()}`
+      ];
+      map[variantKey] = {
+        name: variantName,
+        price: Number(variant.price ?? menu.price ?? 0),
+        aliases: variantAliases
+      };
+    }
   }
 
   return map;

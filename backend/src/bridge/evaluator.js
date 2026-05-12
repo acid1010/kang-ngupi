@@ -238,20 +238,22 @@ export function isFinalReady(state) {
   if (!context.paymentMethod) return false;
 
   if (context.fulfillmentMethod === 'self_pickup') {
+    if (context.paymentMethod === 'cod' || context.paymentMethod === 'cash_at_counter') {
+      return true; // Pickup COD/kasir — push immediately
+    }
     return context.paymentStatus === 'confirmed';
   }
 
   if (context.fulfillmentMethod === 'delivery') {
     if (context.paymentMethod === 'cod') {
-      return Boolean(context.deliveryProvider);
+      return true; // COD delivery — push immediately (kurir collect cash)
     }
-
     return context.paymentStatus === 'confirmed';
   }
 
   if (context.fulfillmentMethod === 'dine_in') {
     if (context.paymentMethod === 'cash_at_counter') {
-      return true; // Push to Pawoon immediately so staff sees the order
+      return true; // Always push to Pawoon (barista sees every order, printer fires)
     }
     return context.paymentStatus === 'confirmed'; // QRIS paid
   }
@@ -424,36 +426,6 @@ export async function evaluateAndEnqueue(state) {
     state.finalSentAt = new Date().toISOString();
     state.orderContext.status = payload.order.status;
     events.push({ type: 'final_order', ...queued });
-
-    // Auto-push to Pawoon for cash_at_counter (dine-in pay at cashier)
-    if (state.orderContext.paymentMethod === 'cash_at_counter') {
-      try {
-        const { pushOrderToPawoon } = await import('../integrations/pawoon.js');
-        const orderForPawoon = {
-          client_order_id: payload.order.client_order_id,
-          customer_name_snapshot: payload.order.customer?.name,
-          customer_phone_snapshot: payload.order.customer?.phone,
-          fulfillment_method: payload.order.fulfillment?.method,
-          table_number: payload.order.fulfillment?.table_number ?? state.orderContext?.tableNumber ?? null,
-          payment_method: 'cash',
-          notes: payload.order.notes
-        };
-        const pawoonItems = (payload.order.items || []).map(i => ({
-          menu_name: i.menu_name,
-          qty: i.qty || 1,
-          price: i.price || 0
-        }));
-        const pawoonPayment = {
-          amount: pawoonItems.reduce((sum, i) => sum + (i.price * i.qty), 0),
-          method: 'cash'
-        };
-        const pawoonResult = await pushOrderToPawoon(orderForPawoon, pawoonItems, pawoonPayment);
-        events.push({ type: 'pawoon_push', result: pawoonResult });
-        logger.info('[evaluator] Cash-at-counter order pushed to Pawoon: %s', payload.order.client_order_id);
-      } catch (err) {
-        logger.error('[evaluator] Failed to push cash-at-counter to Pawoon: %s', err.message);
-      }
-    }
   }
 
   // Auto-create QRIS payment if conditions met

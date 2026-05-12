@@ -196,6 +196,7 @@ async function syncCustomers() {
       favoriteItems,
       preferredPayment,
       preferredFulfillment,
+      lastDeliveryLocation: existing.lastDeliveryLocation || null,
       preferences: existing.preferences || {},
       updatedAt: new Date().toISOString()
     };

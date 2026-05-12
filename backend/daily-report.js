@@ -30,7 +30,7 @@ import { promisify } from 'node:util';
 
 const execFileAsync = promisify(execFile);
 const WACLI_BIN = process.env.WACLI_BIN || 'wacli';
-const ADMIN_PHONE = process.env.ADMIN_PHONE || '+6285155022960';
+const ADMIN_PHONES = (process.env.ADMIN_PHONE || '+6285155022960').split(',').map(p => p.trim()).filter(Boolean);
 
 const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
@@ -50,13 +50,14 @@ async function generateReport(dateStr) {
   const startWIB = new Date(dateStr + 'T00:00:00+07:00');
   const endWIB = new Date(dateStr + 'T23:59:59+07:00');
 
-  // Fetch completed/paid orders for the day
+  // Fetch completed/paid orders for the day (exclude test/draft orders)
   const { data: orders, error } = await sb
     .from('orders')
     .select('id, client_order_id, customer_name_snapshot, fulfillment_method, payment_method, payment_status, order_status, created_at')
     .gte('created_at', startWIB.toISOString())
     .lte('created_at', endWIB.toISOString())
-    .in('payment_status', ['confirmed', 'paid', 'settled']);
+    .in('payment_status', ['confirmed', 'paid', 'settled'])
+    .in('order_status', ['preparing', 'completed', 'delivered', 'ready_for_pickup']);
 
   if (error) {
     console.error('DB error:', error.message);
@@ -67,12 +68,35 @@ async function generateReport(dateStr) {
     return { empty: true, date: dateStr };
   }
 
-  // Fetch items for all orders
+  // Fetch items for all orders (no price column in DB — use menu lookup)
   const orderIds = orders.map(o => o.id);
   const { data: allItems } = await sb
     .from('order_items')
-    .select('order_id, menu_name, qty, price')
+    .select('order_id, menu_name, qty')
     .in('order_id', orderIds);
+
+  // Load menu-schema for price lookup (order_items may not have price)
+  let menuPrices = {};
+  try {
+    const menuRaw = readFileSync(join(__dirname, '..', 'menu-schema.json'), 'utf8');
+    const menu = JSON.parse(menuRaw);
+    const items = menu.menus || menu.products || [];
+    for (const item of items) {
+      if (item.name && item.price) {
+        menuPrices[item.name.toLowerCase()] = item.price;
+      }
+    }
+  } catch (_) {}
+
+  function lookupPrice(menuName) {
+    const key = (menuName || '').toLowerCase();
+    // Exact match first
+    if (menuPrices[key]) return menuPrices[key];
+    // Try without variant suffix (e.g. "Chicken Cordon Bleu - Nasi" → "Chicken Cordon Bleu")
+    const base = key.split(' - ')[0];
+    if (menuPrices[base]) return menuPrices[base];
+    return 0;
+  }
 
   // Calculate stats
   let totalRevenue = 0;
@@ -80,8 +104,9 @@ async function generateReport(dateStr) {
   const itemCounts = {};
   let pickupCount = 0;
   let deliveryCount = 0;
+  let dineInCount = 0;
   let qrisCount = 0;
-  let codCount = 0;
+  let kasirCount = 0;
 
   for (const order of orders) {
     const items = (allItems || []).filter(i => i.order_id === order.id);
@@ -89,8 +114,9 @@ async function generateReport(dateStr) {
 
     for (const item of items) {
       const qty = item.qty || 1;
-      const price = Number(item.price || 0) * qty;
-      orderTotal += price;
+      const price = Number(item.price || 0) || lookupPrice(item.menu_name);
+      const lineTotal = price * qty;
+      orderTotal += lineTotal;
       totalItems += qty;
 
       const name = item.menu_name || 'Unknown';
@@ -100,10 +126,11 @@ async function generateReport(dateStr) {
     totalRevenue += orderTotal;
 
     if (order.fulfillment_method === 'delivery') deliveryCount++;
+    else if (order.fulfillment_method === 'dine_in') dineInCount++;
     else pickupCount++;
 
     if (order.payment_method === 'qris') qrisCount++;
-    else codCount++;
+    else kasirCount++;
   }
 
   // Top 5 items
@@ -111,36 +138,18 @@ async function generateReport(dateStr) {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 5);
 
-  // Calculate ongkir from state files
+  // Calculate ongkir from DB (delivery_fee column)
   let totalOngkir = 0;
-  try {
-    const { readdir, readFile: rf } = await import('node:fs/promises');
-    const stateDir = join(__dirname, '..', 'state', 'orders-active');
-    const expiredDir = join(__dirname, '..', 'state', 'orders-expired');
-    
-    for (const dir of [stateDir, expiredDir]) {
-      try {
-        const files = await readdir(dir);
-        for (const file of files.filter(f => f.endsWith('.json'))) {
-          try {
-            const raw = await rf(join(dir, file), 'utf-8');
-            const state = JSON.parse(raw);
-            const ctx = state.orderContext || state;
-            if (ctx.fulfillmentMethod !== 'delivery') continue;
-            const fee = Number(ctx.deliveryFee || ctx.ongkir || 0);
-            if (fee <= 0) continue;
-            const paidAt = ctx.paidAt || state.lastUpdatedAt;
-            if (paidAt && paidAt.startsWith(dateStr)) totalOngkir += fee;
-            else if (paidAt) {
-              const d = new Date(paidAt);
-              const wib = new Date(d.getTime() + 7 * 3600000);
-              if (wib.toISOString().slice(0, 10) === dateStr) totalOngkir += fee;
-            }
-          } catch (_) {}
-        }
-      } catch (_) {}
+  const deliveryOrders = orders.filter(o => o.fulfillment_method === 'delivery');
+  if (deliveryOrders.length > 0) {
+    const { data: dlOrders } = await sb
+      .from('orders')
+      .select('delivery_fee')
+      .in('id', deliveryOrders.map(o => o.id));
+    if (dlOrders) {
+      totalOngkir = dlOrders.reduce((sum, o) => sum + (Number(o.delivery_fee) || 0), 0);
     }
-  } catch (_) {}
+  }
 
   return {
     empty: false,
@@ -148,10 +157,11 @@ async function generateReport(dateStr) {
     orderCount: orders.length,
     totalRevenue,
     totalItems,
+    dineInCount,
     pickupCount,
     deliveryCount,
     qrisCount,
-    codCount,
+    kasirCount,
     topItems,
     totalOngkir
   };
@@ -172,12 +182,13 @@ function formatReport(report) {
   msg += `🧋 Total Item: ${report.totalItems}\n\n`;
 
   msg += `📍 *Fulfillment:*\n`;
+  msg += `- Dine-in: ${report.dineInCount}\n`;
   msg += `- Pickup: ${report.pickupCount}\n`;
   msg += `- Delivery: ${report.deliveryCount}\n\n`;
 
   msg += `💳 *Pembayaran:*\n`;
   msg += `- QRIS: ${report.qrisCount}\n`;
-  msg += `- COD: ${report.codCount}\n\n`;
+  msg += `- Kasir: ${report.kasirCount}\n\n`;
 
   if (report.totalOngkir > 0) {
     msg += `🛵 *Ongkir Go Ngupi:*\n`;
@@ -198,20 +209,22 @@ function formatReport(report) {
 }
 
 async function sendToAdmin(message) {
-  const jid = toJid(ADMIN_PHONE);
-  if (!jid) {
-    console.error('Invalid admin phone:', ADMIN_PHONE);
-    return false;
+  let sent = false;
+  for (const phone of ADMIN_PHONES) {
+    const jid = toJid(phone);
+    if (!jid) {
+      console.error('Invalid admin phone:', phone);
+      continue;
+    }
+    try {
+      await execFileAsync(WACLI_BIN, ['send', 'text', '--to', jid, '--message', message], { timeout: 15_000 });
+      console.log('Report sent to', phone);
+      sent = true;
+    } catch (err) {
+      console.error('Failed to send to %s:', phone, err.message);
+    }
   }
-
-  try {
-    await execFileAsync(WACLI_BIN, ['send', 'text', '--to', jid, '--message', message], { timeout: 15_000 });
-    console.log('Report sent to', ADMIN_PHONE);
-    return true;
-  } catch (err) {
-    console.error('Failed to send:', err.message);
-    return false;
-  }
+  return sent;
 }
 
 // Main
