@@ -56,6 +56,7 @@ export async function getToken() {
 
 // Map our menu IDs to Pawoon product IDs
 let productMap = null;
+let variantMap = null;
 
 async function loadProductMap() {
   if (productMap) return productMap;
@@ -87,7 +88,28 @@ async function loadProductMap() {
     productMap.set(slug, p);
   }
 
-  logger.info('[pawoon] Loaded %d products for mapping', allProducts.length);
+  // Load variants for products that have them
+  variantMap = new Map();
+  const productsWithVariants = allProducts.filter(p => p.has_variant);
+  const BATCH_SIZE = 10;
+  for (let i = 0; i < productsWithVariants.length; i += BATCH_SIZE) {
+    const batch = productsWithVariants.slice(i, i + BATCH_SIZE);
+    await Promise.all(batch.map(async (p) => {
+      try {
+        const vRes = await fetch(
+          `${PAWOON_BASE_URL}/products/${p.id}/variants?outlet_id=${PAWOON_OUTLET_ID}`,
+          { headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${token}` } }
+        );
+        const vData = await vRes.json();
+        for (const v of (vData.data || [])) {
+          // Map variant by full name (lowercase)
+          variantMap.set(v.name.toLowerCase(), { ...v, parentProduct: p });
+        }
+      } catch (_) {}
+    }));
+  }
+
+  logger.info('[pawoon] Loaded %d products + %d variants for mapping', allProducts.length, variantMap.size);
   return productMap;
 }
 
@@ -112,17 +134,50 @@ export async function pushOrderToPawoon(order, items, payment) {
     for (const item of (items || [])) {
       const menuName = (item.menu_name || '').toLowerCase();
       const menuId = (item.menu_id || '').toLowerCase();
+      const temperature = (item.temperature || '').toLowerCase().trim();
+      const itemNotes = (item.notes || '').toLowerCase().trim();
 
-      // Try to find Pawoon product by name or slug
-      // Also try stripping variant suffix (e.g. "Chicken Cordon Bleu - Nasi" -> "chicken cordon bleu")
-      let pawoonProduct = pMap.get(menuName) || pMap.get(menuId);
-      if (!pawoonProduct && menuName.includes(' - ')) {
+      // Try to match variant first (e.g. "Mie Ramen Instan - Extra Pedas")
+      let pawoonProduct = null;
+      let matchedVariant = null;
+
+      if (variantMap && (temperature || itemNotes)) {
+        // Build possible variant names to search
         const baseName = menuName.split(' - ')[0].trim();
-        pawoonProduct = pMap.get(baseName);
+        const variantSuffixes = [temperature, itemNotes].filter(Boolean);
+        
+        for (const suffix of variantSuffixes) {
+          // Try "Product - Variant" format
+          const variantKey = `${baseName} - ${suffix}`;
+          matchedVariant = variantMap.get(variantKey);
+          if (matchedVariant) break;
+          
+          // Try with menu name as-is + suffix
+          const variantKey2 = `${menuName} - ${suffix}`;
+          matchedVariant = variantMap.get(variantKey2);
+          if (matchedVariant) break;
+        }
+
+        // Also try combined: "Product - Temp - Notes" or "Product - Notes"
+        if (!matchedVariant && temperature && itemNotes) {
+          const combined = `${baseName} - ${temperature} - ${itemNotes}`;
+          matchedVariant = variantMap.get(combined);
+        }
       }
-      if (!pawoonProduct && menuName.includes(' (')) {
-        const baseName = menuName.split(' (')[0].trim();
-        pawoonProduct = pMap.get(baseName);
+
+      if (matchedVariant) {
+        pawoonProduct = { id: matchedVariant.id, price: matchedVariant.price, name: matchedVariant.name };
+      } else {
+        // Fallback to base product match
+        pawoonProduct = pMap.get(menuName) || pMap.get(menuId);
+        if (!pawoonProduct && menuName.includes(' - ')) {
+          const baseName = menuName.split(' - ')[0].trim();
+          pawoonProduct = pMap.get(baseName);
+        }
+        if (!pawoonProduct && menuName.includes(' (')) {
+          const baseName = menuName.split(' (')[0].trim();
+          pawoonProduct = pMap.get(baseName);
+        }
       }
 
       if (!pawoonProduct) {
@@ -133,7 +188,7 @@ export async function pushOrderToPawoon(order, items, payment) {
       pawoonItems.push({
         product_id: pawoonProduct.id,
         qty: Number(item.qty) || 1,
-        notes: item.temperature ? `${item.temperature}${item.notes ? ' - ' + item.notes : ''}` : (item.notes || ''),
+        notes: matchedVariant ? '' : (item.temperature ? `${item.temperature}${item.notes ? ' - ' + item.notes : ''}` : (item.notes || '')),
         price: Number(pawoonProduct.price) || 0
       });
     }
