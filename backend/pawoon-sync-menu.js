@@ -194,6 +194,17 @@ async function syncMenu() {
     // Add variants
     if (variantMap[p.id]?.length) {
       item.variants = variantMap[p.id];
+      // If all variant prices are the same and differ from base, update base price
+      const variantPrices = item.variants.map(v => v.price).filter(p => p > 0);
+      if (variantPrices.length > 0) {
+        const allSame = variantPrices.every(vp => vp === variantPrices[0]);
+        if (allSame && variantPrices[0] !== item.price) {
+          item.price = variantPrices[0];
+        } else if (!allSame) {
+          // Use lowest variant price as base
+          item.price = Math.min(...variantPrices);
+        }
+      }
     }
 
     // Add modifiers
@@ -213,7 +224,27 @@ async function syncMenu() {
     } else if (existing.price !== price || existing.category !== catName || existing.available !== (p.sellable === true)) {
       updated++;
     } else {
-      unchanged++;
+      // Also check variant prices
+      const existingVariants = existing.variants || [];
+      const newVariants = item.variants || [];
+      let variantChanged = false;
+      if (newVariants.length !== existingVariants.length) {
+        variantChanged = true;
+      } else {
+        for (let vi = 0; vi < newVariants.length; vi++) {
+          const nv = newVariants[vi];
+          const ev = existingVariants.find(v => v.name === nv.name);
+          if (!ev || ev.price !== nv.price) {
+            variantChanged = true;
+            break;
+          }
+        }
+      }
+      if (variantChanged) {
+        updated++;
+      } else {
+        unchanged++;
+      }
     }
 
     newMenus.push(item);

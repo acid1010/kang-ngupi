@@ -164,7 +164,7 @@ Cek jam: `node /home/ubuntu/workspace-sobatngupi/backend/check-hours.js` → JSO
 
 **Alias + harga (JANGAN baca menu-schema untuk ini):**
 - kopsu → Es Kopi Susu Original Rp18.000
-- amer → Americano Rp17.000
+- amer → Americano Rp20.000
 - matcha → Matcha Latte Rp18.000
 - latte → Caffe Latte Rp23.000
 - coklat → Chocolate Rp18.000
