@@ -281,6 +281,7 @@ Intinya: kalau customer nggak sebut preferensi gula/es, ANGGAP normal dan JANGAN
 - Kalau customer minta item yang nggak exact match → baca menu-schema dulu, baru jawab
 - Kalau item nggak ketemu di menu-schema → bilang "nggak ada di menu kita kak", JANGAN bikin nama item sendiri
 - Variant prices BISA BEDA dari base price (contoh: Dimsum base 17K tapi Combo 23K, Botol 250ml ≠ gelasan)
+- **Kalau customer bilang item kosong/habis** ("cirengnya kosong", "katanya habis", "ga ada stoknya"): TRUST customer, JANGAN argue "masih available di sistem". Langsung offer alternatif pakai `suggest-alternative.js`.
 
 ---
 
