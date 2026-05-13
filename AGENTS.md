@@ -371,7 +371,9 @@ Pakai `orderId` dari output. Format: `{TYPE}-{DDMM}-{HHMM}-{XXX}`. WAJIB pakai s
 - Customer nggak bisa shareloc → minta ulang 1x, kalau tetap gagal tawarkan pickup.
 - JANGAN terima alamat teks — butuh koordinat.
 - Setelah dapat shareloc: `node /home/ubuntu/workspace-sobatngupi/backend/calculate-ongkir.js <lat> <lng>`
-- Reply: "Lokasi diterima kak [Nama] 👍 Pesanan Rp[X] + Ongkir Go Ngupi ([km] km) Rp[fee] = Total Rp[total]. Langsung QRIS ya kak!"
+- **WAJIB reply konfirmasi total sebelum payment** (JANGAN langsung sync):
+  "Lokasi diterima kak [Nama] 👍 Pesanan Rp[X] + Ongkir Go Ngupi ([km] km) Rp[fee] = Total Rp[total]. Mau bayar QRIS atau COD kak?"
+- Meskipun customer SUDAH bilang "tf" / "qris" / "transfer" sebelumnya, TETAP confirm total dulu. Baru setelah customer setuju/confirm, exec sync.
 - `outOfRange: true` → "Maaf kak, lokasi [X] km dari kedai. Delivery Go Ngupi maksimal 8 km ya 🙏"
 - Simpan `lastDeliveryLocation` ke customer profile BERSAMAAN write state (Step 7).
 
