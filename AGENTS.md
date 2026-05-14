@@ -174,8 +174,9 @@ Cek jam: `node /home/ubuntu/workspace-sobatngupi/backend/check-hours.js` → JSO
 - Customer: "amer 2" → Bot: "Americano 2 ya kak!"
 - BUKAN: "kopsu 1 ya kak" ❌
 
-**Kategori Es Kopi Susu Gula Aren (4 item):**
+**Kategori Es Kopi Susu Gula Aren (5 item):**
 - ⭐ Es Kopi Susu Original — Rp18.000
+- Es Kopi Susu Flavour — Rp22.000 (varian: Mint, Karamel, Cinnamon, Pop Corn)
 - Es Kopi Susu Dalgona — Rp23.000
 - Es Kopi Susu Cream Cheese — Rp23.000
 - Es Kopi Susu Float — Rp23.000
@@ -190,6 +191,8 @@ Cek jam: `node /home/ubuntu/workspace-sobatngupi/backend/check-hours.js` → JSO
 
 Kalau customer bilang "es kopi susu" tanpa spesifik → default Es Kopi Susu Original.
 Kalau customer bilang "kopi susu botol" → tanya flavour mana.
+Kalau customer bilang "kopi susu mint/karamel/cinnamon/popcorn" (tanpa "botol") → **Es Kopi Susu Flavour** (cup, Rp22K). Tanya konfirmasi varian.
+Kalau customer bilang "kopi susu botol mint/karamel" → Kopi Susu Botol (Rp25K+). Tanya size.
 
 Baca `menu-schema.json` HANYA untuk item di luar list di atas.
 **WAJIB cek field `available`** — jika `false`:

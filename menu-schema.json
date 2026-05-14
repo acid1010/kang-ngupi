@@ -1,1 +1,1712 @@
-{"version":1,"brand":"Kedai Ngupi Ngupi Purwakarta","channel":"whatsapp","defaultLanguage":"id","businessProfile":{"city":"Purwakarta","hours":"09:00-17:00","instagram":"@kedaingupingupi"},"menus":[{"id":"ongkir-go-ngupi","name":"Ongkir Go Ngupi","category":"Lain-lain","price":10000,"available":true},{"id":"rice-bowl-ikan-dori-saus-mentai","name":"Rice Bowl Ikan Dori Saus Mentai","category":"Rice Bowls & Noodles","price":25000,"available":false},{"id":"bihun-goreng-seafood","name":"Bihun Goreng Seafood","category":"Rice Bowls & Noodles","price":27000,"available":false},{"id":"rice-bowl-cumi-sambal-matah","name":"Rice Bowl Cumi Sambal Matah","category":"Rice Bowls & Noodles","price":25000,"available":false},{"id":"nasi-goreng-spesial","name":"Nasi Goreng Spesial","category":"Nasi Goreng","price":25000,"description":"Nasi goreng yang memiliki cita rasa yang khas dengan bumbu kencur dan topping ayam suwir, telor ceplok dan keripik tempe","available":false},{"id":"tahu-baso-saos-mentai","name":"Tahu Baso Saos Mentai","category":"Makanan Ringan","price":23000,"available":false},{"id":"nachos-bolognese-sauce","name":"Nachos Bolognese Sauce","category":"Makanan Ringan","price":23000,"description":"Camilan perpaduan kuliner Meksiko dan Italia, berupa keripik tortilla jagung renyah yang disajikan dengan siraman saus daging bolognese, bawang bombay, dan lelehan keju","available":false},{"id":"chamomile-calming-mint-tea","name":"Chamomile Calming Mint Tea","category":"Tea","price":20000,"available":false},{"id":"chamomile-lime-iced-tea","name":"Chamomile Lime Iced Tea","category":"Tea","price":20000,"available":false,"aliases":["chamomile lime iced tea"]},{"id":"butterscotch-cream-coffee","name":"Butterscotch Cream Coffee","category":"Signature Coffee","price":25000,"description":"Minuman kopi kekinian yang memadukan espresso dengan sirup atau saus butterscotch (campuran mentega dan gula cokelat) yang manis, gurih dan creamy","available":false},{"id":"kopi-sanger","name":"Kopi Sanger","category":"Espresso & Manual Brew","price":18000,"description":"Kopi Blend Robusta-Arabica yang diseduh menggunakan mesin espresso ditambah Susu Kental Manis dan Air","available":false},{"id":"immune-booster-juice","name":"Immune Booster Juice","category":"Fresh & Healthy","price":20000,"description":"Minuman jus sayuran wortel dan buah nanas dengan sirup markisa dan perasan jeruk lemon","available":false},{"id":"chocolate-peanut-butter-smoothie","name":"Chocolate Peanut Butter Smoothie","category":"Fresh & Healthy","price":25000,"description":"Minuman smoothies cokelat dengan campuran buah pisang dan selai peanut butter","available":false},{"id":"kurma-smoothie","name":"Kurma Smoothie","category":"Fresh & Healthy","price":23000,"description":"Minuman smoothies terbuat dari buah pisang dan kurma dengan tambahan sirup vanilla","available":false},{"id":"lotus-biscoff-frappuccino","name":"Lotus Biscoff Frappuccino","category":"Es Kopi Blend","price":27000,"available":false},{"id":"cinnamon-greek-frappuccino","name":"Cinnamon Greek Frappuccino","category":"Es Kopi Blend","price":25000,"available":false},{"id":"choco-mint-frappuccino","name":"Choco Mint Frappuccino","category":"Es Kopi Blend","price":27000,"available":false},{"id":"salted-caramel-frappuccino","name":"Salted Caramel Frappuccino","category":"Es Kopi Blend","price":25000,"available":false},{"id":"pop-corn-choco-blend","name":"Pop Corn Choco Blend","category":"Chocolate","price":25000,"description":"Minuman cokelat yang diblend dengan sirup jagung bakar (pop corn)","available":false},{"id":"chocolate-strawberry-cream","name":"Chocolate Strawberry Cream","category":"Chocolate","price":25000,"description":"Minuman cokelat yang tebal, milky dan creamy dengan topping strawberry cream","available":false},{"id":"salted-caramel-coffee","name":"Salted Caramel Coffee","category":"Signature Coffee","price":25000,"available":false},{"id":"tiramisu-cream-coffee","name":"Tiramisu Cream Coffee","category":"Signature Coffee","price":25000,"available":false},{"id":"matcha-strawberry-cream","name":"Matcha Strawberry Cream","category":"Tea","price":23000,"available":false},{"id":"chicken-katsu","name":"Chicken Katsu","category":"Western Foods","price":25000,"description":"Dada ayam fillet yang dilumuri tepung crispy","available":true,"aliases":["chicken katsu"],"variantOptions":"Kentang,Nasi"},{"id":"es-batu-cup","name":"Es Batu + Cup","category":"Lain-lain","price":2000,"available":true,"aliases":["es batu + cup","batu + cup"]},{"id":"nasi","name":"Nasi","category":"Lain-lain","price":5000,"available":true,"aliases":["nasi"]},{"id":"topping-minuman","name":"Topping Minuman","category":"Lain-lain","price":4000,"available":true,"aliases":["topping minuman"],"variantOptions":"Ice Cream (Float),Cream Cheese,Dalgona,Whipped Cream"},{"id":"chocolate-single-origin-sachet","name":"Chocolate Single Origin Sachet","category":"Lain-lain","price":18000,"description":"Minuman cokelat dalam kemasan sachet yang memiliki karakter rasa berbeda-beda berdasarkan asal daerahnya","available":true,"aliases":["chocolate single origin sachet"]},{"id":"lotus-biscoff-biscuit","name":"Lotus Biscoff Biscuit","category":"Lain-lain","price":2000,"available":true,"aliases":["lotus biscoff biscuit"]},{"id":"air-mineral","name":"Air Mineral","category":"Lain-lain","price":5000,"available":true,"aliases":["air mineral"],"variantOptions":"Biasa,Dingin"},{"id":"ice-cream","name":"Ice Cream","category":"Dessert","price":15000,"available":true,"aliases":["ice cream"],"variantOptions":"Vanilla,Strawberry,Cokelat"},{"id":"udang-keju-lumer","name":"Udang Keju Lumer","category":"Makanan Ringan","price":23000,"description":"Camilan gurih berupa olahan udang dan ayam cincang yang diisi keju mozzarella atau quick melt, kemudian dilapisi tepung roti dan digoreng hingga renyah","available":true,"aliases":["udang keju lumer"]},{"id":"churros-with-choco-sauce","name":"Churros with Choco Sauce","category":"Dessert","price":17000,"available":false},{"id":"roti-karamel-ice-cream","name":"Roti Karamel Ice Cream","category":"Dessert","price":23000,"available":false,"aliases":["roti karamel ice cream"]},{"id":"banana-split-ice-cream","name":"Banana Split Ice Cream","category":"Dessert","price":23000,"description":"Hidangan penutup klasik berbahan dasar pisang yang dibelah dua secara memanjang, disajikan dengan tiga sekop es krim vanila, cokelat, dan stroberi di tengahnya","available":true,"aliases":["banana split ice cream"]},{"id":"pisang-goreng-crispy","name":"Pisang Goreng Crispy","category":"Makanan Ringan","price":17000,"description":"Pisang yang dilumuri tepung roti dan digoreng sampai kering kecoklatan","available":true,"aliases":["pisang goreng crispy"]},{"id":"pisang-dan-roti-bakar","name":"Pisang dan Roti Bakar","category":"Makanan Ringan","price":14000,"description":"Pisang dan Roti bakar dengan pilihan berbagai topping, ada keju, cokelat dan nutella","available":false,"aliases":["pisang dan roti bakar"],"variantOptions":"Roti Bakar,Pisang Bakar"},{"id":"sosis-barbeque-kentang","name":"Sosis Barbeque Kentang","category":"Makanan Ringan","price":23000,"description":"Sosis sapi yang dibakar dan dilumuri saus barbeque serta disajikan dengan kentang goreng","available":true,"aliases":["sosis barbeque kentang"]},{"id":"kentang-goreng","name":"Kentang Goreng","category":"Makanan Ringan","price":17000,"description":"Kentang goreng dengan bentuk crinkle cut yang tebal disajikan beserta saus cabe dan tomat","available":true,"variants":[{"name":"Kentang Goreng - Kentang Goreng","price":17000},{"name":"Kentang Goreng - Kentang Sosis","price":23000},{"name":"Kentang Goreng - Kentang Fishcake","price":23000},{"name":"Kentang Goreng - Mix Platter","price":25000}],"aliases":["kentang goreng"]},{"id":"dimsum","name":"Dimsum","category":"Makanan Ringan","price":17000,"description":"Dimsum udang, ayam atau seafood dengan pilihan jenis siomay, kulit tahu, lumpia, nori dan hakau","available":true,"variants":[{"name":"Dimsum - Ayam","price":17000},{"name":"Dimsum - Udang","price":17000},{"name":"Dimsum - Combo","price":23000}],"aliases":["dimsum"]},{"id":"potato-cheese-ball","name":"Potato Cheese Ball","category":"Makanan Ringan","price":17000,"description":"Camilan berbahan dasar kentang tumbuk yang dibentuk bulat, diisi keju mozzarella yang lumer, lalu dilapisi tepung roti dan digoreng renyah","available":true,"aliases":["potato cheese ball"]},{"id":"cireng-bumbu-rujak","name":"Cireng Bumbu Rujak","category":"Makanan Ringan","price":17000,"description":"Camilan khas Bandung berupa aci goreng bertekstur renyah di luar dan kenyal di dalam, disajikan bersama sambal rujak cair pedas manis yang terbuat dari gula merah, cabai, dan asam jawa","available":true,"aliases":["cireng bumbu rujak"]},{"id":"pempek-pasundan","name":"Pempek Pasundan","category":"Makanan Ringan","price":25000,"description":"Makanan khas Palembang, Sumatera Selatan, yang terbuat dari daging ikan giling tenggiri dicampur tepung kanji, bumbu dan air","available":true,"aliases":["pempek pasundan"]},{"id":"rice-bowl-telor-sosis","name":"Rice Bowl Telor Sosis","category":"Rice Bowls & Noodles","price":22000,"available":true,"aliases":["rice bowl telor sosis"]},{"id":"rice-bowl-ayam-teriyaki","name":"Rice Bowl Ayam Teriyaki","category":"Rice Bowls & Noodles","price":25000,"available":true,"aliases":["rice bowl ayam teriyaki"]},{"id":"rice-bowl-ayam-lada-hitam","name":"Rice Bowl Ayam Lada Hitam","category":"Rice Bowls & Noodles","price":25000,"available":true,"aliases":["rice bowl ayam lada hitam"]},{"id":"rice-bowl-ayam-asam-manis","name":"Rice Bowl Ayam Asam Manis","category":"Rice Bowls & Noodles","price":25000,"available":true,"aliases":["rice bowl ayam asam manis"]},{"id":"indomie-telor-sosis","name":"Indomie Telor Sosis","category":"Rice Bowls & Noodles","price":18000,"available":true,"aliases":["indomie telor sosis"],"variantOptions":"Indomie Rebus - Tidak Pedas,Indomie Rebus - Pedas,Indomie Rebus - Extra Pedas,Indomie Goreng - Tidak Pedas,Indomie Goreng - Pedas,Indomie Goreng - Extra Pedas,Indomie Rebus - Pedas Sedang,Indomie Goreng - Pedas Sedang"},{"id":"mie-ramen-instan","name":"Mie Ramen Instan","category":"Rice Bowls & Noodles","price":20000,"available":true,"aliases":["mie ramen instan"],"variantOptions":"Pedas Sedang,Pedas,Extra Pedas"},{"id":"bakmi-godok-jawa","name":"Bakmi Godok Jawa","category":"Rice Bowls & Noodles","price":23000,"description":"Sajian mi khas Jawa yang dimasak menggunakan bumbu rempah tradisional dan disajikan dengan topping kol, sawi, ayam suwir dan bakso ikan","available":true,"aliases":["bakmi godok jawa"],"variantOptions":"Tidak Pedas,Pedas Sedang,Pedas,Extra Pedas"},{"id":"bakmi-goreng-jawa","name":"Bakmi Goreng Jawa","category":"Rice Bowls & Noodles","price":23000,"description":"Sajian mi khas Jawa yang dimasak menggunakan bumbu rempah tradisional dan disajikan dengan topping kol, sawi, ayam suwir dan bakso ikan","available":true,"aliases":["bakmi goreng jawa"],"variantOptions":"Tidak Pedas,Pedas Sedang,Pedas,Extra Pedas"},{"id":"nasi-goreng-seafood","name":"Nasi Goreng Seafood","category":"Nasi Goreng","price":30000,"description":"Nasi goreng Chinese memiliki cita rasa yang khas dengan topping cumi, udang dan mix vegetable","available":true,"aliases":["nasi goreng seafood"],"variantOptions":"Tidak Pedas,Pedas Sedang,Pedas,Extra Pedas"},{"id":"nasi-goreng-hongkong","name":"Nasi Goreng Hongkong","category":"Nasi Goreng","price":23000,"description":"Nasi goreng chinese yang memiliki cita rasa gurih dengan topping bakso ikan dan mix vegetable","available":true,"aliases":["nasi goreng hongkong"],"variantOptions":"Tidak Pedas,Pedas Sedang,Pedas,Extra Pedas"},{"id":"nasi-goreng-kampung","name":"Nasi Goreng Kampung","category":"Nasi Goreng","price":23000,"description":"Nasi goreng kampung dengan bumbu bercita rasa kencur dengan topping telor ceplok","available":true,"aliases":["nasi goreng kampung"],"variantOptions":"Tidak Pedas,Pedas Sedang,Pedas,Extra Pedas"},{"id":"nasi-goreng-kambing","name":"Nasi Goreng Kambing","category":"Nasi Goreng","price":32000,"description":"Nasi goreng kambing dengan bumbu rempah khas Timur Tengah","available":true,"aliases":["nasi goreng kambing"],"variantOptions":"Tidak Pedas,Pedas Sedang,Pedas,Extra Pedas"},{"id":"nasi-goreng-chicken-katsu","name":"Nasi Goreng Chicken Katsu","category":"Nasi Goreng","price":28000,"description":"Nasi goreng yang dimasak dengan bumbu dasar rica-rica dengan topping potongan daging chicken katsu","available":true,"aliases":["nasi goreng chicken katsu"],"variantOptions":"Pedas Sedang,Pedas,Extra Pedas"},{"id":"es-kopi-susu-original","name":"Es Kopi Susu Original","category":"Es Kopi Susu Gula Aren","price":18000,"description":"Kopi Susu Gula Aren khas Kedai Ngupi Ngupi dengan karakter cokelat dan nutty yang memiliki tekstur creamy dan pahit-manis seimbang","available":true,"aliases":["es kopi susu","es kopi susu original","kopsu","kopi susu","kopi susu original"],"variantOptions":"Less Sugar - Less Ice,Less Sugar - Normal,Less Sugar - Extra Ice,Normal - Less Ice,Normal - Normal,Normal - Extra Ice,Extra Sugar - Less Ice,Extra Sugar - Normal,Extra Sugar - Extra Ice"},{"id":"nasi-telor-fuyunghai","name":"Nasi Telor Fuyunghai","category":"Indonesian Foods","price":20000,"description":"Masakan Tionghoa-Indonesia berupa dadar telur tebal yang dicampur sayuran dan tepung","available":true,"aliases":["nasi telor fuyunghai"]},{"id":"nasi-udang-bumbu-saos-padang","name":"Nasi Udang Bumbu Saos Padang","category":"Indonesian Foods","price":30000,"description":"Hidangan nasi yang disajikan dengan udang tepung yang dimasak menggunakan bumbu merah khas Padang—kombinasi bawang merah, bawang putih, cabai merah, dan jahe","available":true,"aliases":["nasi udang bumbu saos padang"],"variantOptions":"Pedas Sedang,Pedas,Extra Pedas"},{"id":"nasi-udang-bumbu-asam-manis","name":"Nasi Udang Bumbu Asam Manis","category":"Indonesian Foods","price":30000,"description":"Hidangan populer yang memadukan udang segar dengan saus kental bercita rasa asam, manis, dan gurih, yang disajikan di atas nasi putih hangat","available":true,"aliases":["nasi udang bumbu asam manis"]},{"id":"nasi-tongseng-kambing","name":"Nasi Tongseng Kambing","category":"Indonesian Foods","price":38000,"description":"Hidangan khas Jawa Tengah berupa daging kambing yang dimasak dengan bumbu gulai kental, kecap manis, kol, dan tomat, lalu disajikan bersama nasi putih","available":true,"aliases":["nasi tongseng kambing"],"variantOptions":"Pedas Sedang,Pedas,Extra Pedas"},{"id":"nasi-tongseng-sapi","name":"Nasi Tongseng Sapi","category":"Indonesian Foods","price":35000,"description":"Hidangan khas Jawa Tengah berupa daging sapi yang dimasak dengan bumbu gulai kental, kecap manis, kol, dan tomat, lalu disajikan bersama nasi putih","available":true,"aliases":["nasi tongseng sapi"],"variantOptions":"Pedas Sedang,Pedas,Extra Pedas"},{"id":"nasi-tongseng-ayam","name":"Nasi Tongseng Ayam","category":"Indonesian Foods","price":28000,"description":"Hidangan khas Jawa Tengah berupa daging ayam yang dimasak dengan bumbu gulai kental, kecap manis, kol, dan tomat, lalu disajikan bersama nasi putih","available":true,"aliases":["nasi tongseng ayam"],"variantOptions":"Pedas Sedang,Pedas,Extra Pedas"},{"id":"nasi-soto-bandung","name":"Nasi Soto Bandung","category":"Indonesian Foods","price":35000,"description":"Hidangan sup khas Bandung, Jawa Barat, yang terdiri dari nasi hangat disajikan dengan soto daging sapi bening tanpa santan dan irisan lobak putih, tomat dan taburan kacang kedelai goreng","available":true,"aliases":["nasi soto bandung"]},{"id":"nasi-ayam-rica-rica","name":"Nasi Ayam Rica-rica","category":"Indonesian Foods","price":28000,"description":"Hidangan nasi putih hangat yang disajikan dengan ayam bumbu rica-rica, masakan khas Manado, Sulawesi Utara, yang terkenal dengan cita rasa sangat pedas dan kaya rempah","available":true,"aliases":["nasi ayam rica-rica"],"variantOptions":"Pedas Sedang,Pedas,Extra Pedas"},{"id":"spaghetti-bolognaise","name":"Spaghetti Bolognaise","category":"Western Foods","price":23000,"description":"Hidangan pasta populer berupa spaghetti yang disajikan dengan saus daging berbahan dasar tomat, dikenal juga sebagai Ragù alla Bolognese","available":false},{"id":"fish-chips-with-tartar-sauce","name":"Fish & Chips with Tartar Sauce","category":"Western Foods","price":35000,"description":"Hidangan klasik asal Inggris yang terdiri dari fillet ikan dori yang dibalur tepung terigu lalu digoreng garing (deep-fried), disajikan bersama kentang goreng tebal","available":false},{"id":"wagyu-steak","name":"Wagyu Steak","category":"Western Foods","price":45000,"description":"Potongan daging sapi wagyu khas Jepang yang berkualitas premium dengan pilihan saus barbeque atau lada hitam","available":true,"aliases":["wagyu steak"],"variantOptions":"Barbeque - Nasi,Barbeque - Kentang,Lada Hitam - Nasi,Lada Hitam - Kentang"},{"id":"chicken-steak","name":"Chicken Steak","category":"Western Foods","price":35000,"description":"Potongan dada ayam fillet yang dilumuri tepung dengan pilihan saus barbeque atau lada hitam","available":true,"aliases":["chicken steak"],"variantOptions":"Kentang - Barbeque,Kentang - Lada Hitam,Nasi - Barbeque,Nasi - Lada Hitam"},{"id":"chicken-cordon-bleu","name":"Chicken Cordon Bleu","category":"Western Foods","price":30000,"description":"Dada ayam fillet yang berisi keju lumer berbalut smoked beef dengan topping saus barbeque","available":true,"aliases":["chicken cordon bleu"],"variantOptions":"Kentang,Nasi"},{"id":"matcha-latte","name":"Matcha Latte","category":"Tea","price":18000,"description":"Minuman teh dengan bahan dasar pure matcha yang manis dan creamy","available":true,"aliases":["matcha latte","matcha","green tea latte"],"variantOptions":"Hot,Ice"},{"id":"honey-milk-tea","name":"Honey Milk Tea","category":"Tea","price":18000,"description":"Teh Tarik dengan madu dan susu","available":true,"aliases":["honey milk tea"],"variantOptions":"Hot,Ice"},{"id":"lychee-iced-tea","name":"Lychee Iced Tea","category":"Tea","price":17000,"description":"Teh dengan rasa dan buah leci","available":true,"aliases":["lychee iced tea"]},{"id":"lemon-tea","name":"Lemon Tea","category":"Tea","price":15000,"description":"Teh dengan rasa buah lemon","available":true,"aliases":["lemon tea"],"variantOptions":"Hot,Ice"},{"id":"special-tea","name":"Special Tea","category":"Tea","price":15000,"description":"Teh artisan dengan varian rasa dan aroma","available":true,"aliases":["special tea"],"variantOptions":"Hot - No Sugar,Hot - Less Sugar,Hot - Normal,Hot - Extra Sugar,Ice - No Sugar,Ice - Less Sugar,Ice - Normal,Ice - Extra Sugar"},{"id":"reguler-tea","name":"Reguler Tea","category":"Tea","price":8000,"description":"Minuman teh original","available":true,"aliases":["es teh manis","es teh","teh","reguler tea","teh panas","tea","teh manis"],"variantOptions":"No Sugar - Hot,No Sugar - Ice,Less Sugar - Hot,Less Sugar - Ice,Normal - Hot,Normal - Ice,Extra Sugar - Hot,Extra Sugar - Ice"},{"id":"hazelnut-choco-blend","name":"Hazelnut Choco Blend","category":"Chocolate","price":23000,"description":"Minuman cokelat yang diblend dengan sirup hazelnut","available":true,"aliases":["hazelnut choco blend"]},{"id":"double-choco-chips","name":"Double Choco Chips","category":"Chocolate","price":23000,"description":"Minuman cokelat yang tebal dan creamy dengan topping whipped cream serta taburan cokelat chips","available":true,"aliases":["double choco chips"]},{"id":"choco-pandan-latte","name":"Choco Pandan Latte","category":"Chocolate","price":23000,"description":"Minuman cokelat yang tebal, milky dan creamy dengan sirup pandan","available":true,"aliases":["choco pandan latte"]},{"id":"ice-choco-mint","name":"Ice Choco Mint","category":"Chocolate","price":23000,"description":"Minuman cokelat yang tebal dan creamy dengan sirup mint","available":true,"aliases":["ice choco mint"]},{"id":"single-origin-chocolate","name":"Single Origin Chocolate","category":"Chocolate","price":28000,"description":"Minuman cokelat tebal, milky dan creamy serta memiliki karakter rasa berbeda berdasarkan asal daerahnya","available":true,"aliases":["single origin chocolate"],"variantOptions":"Hot,Ice"},{"id":"chocolate-cinnamon","name":"Chocolate Cinnamon","category":"Chocolate","price":20000,"description":"Minuman cokelat yang tebal, milky dan creamy dengan aroma cinnamon (kayu manis)","available":true,"aliases":["chocolate cinnamon"],"variantOptions":"Hot,Ice"},{"id":"red-velvet-latte","name":"Red Velvet Latte","category":"Chocolate","price":18000,"description":"Minuman cokelat red velvet yang milky, tebal dan creamy","available":true,"aliases":["red velvet latte"],"variantOptions":"Hot,Ice"},{"id":"chocolate","name":"Chocolate","category":"Chocolate","price":18000,"description":"Minuman cokelat yang tebal, milky dan creamy","available":true,"aliases":["chocolate","coklat","cokelat","hot chocolate","es coklat","es cokelat"],"variantOptions":"Hot,Ice"},{"id":"vanilla-milkshake","name":"Vanilla Milkshake","category":"Milkshake","price":20000,"description":"Minuman susu yang diblend dengan ice cream dan sirup vanilla","available":true,"aliases":["vanilla milkshake"]},{"id":"strawberry-milkshake","name":"Strawberry Milkshake","category":"Milkshake","price":20000,"description":"Minuman susu yang diblend dengan ice cream dan sirup strawberry","available":true,"aliases":["strawberry milkshake"]},{"id":"red-velvet-milkshake","name":"Red Velvet Milkshake","category":"Milkshake","price":20000,"description":"Minuman susu yang diblend dengan ice cream cokelat dan powder red velvet","available":true,"aliases":["red velvet milkshake"]},{"id":"oreo-milkshake","name":"Oreo Milkshake","category":"Milkshake","price":23000,"description":"Minuman susu yang diblend dengan ice cream cokelat dan biskuit oreo","available":true,"aliases":["oreo milkshake"]},{"id":"matcha-mint-milkshake","name":"Matcha Mint Milkshake","category":"Milkshake","price":25000,"description":"Minuman susu yang diblend dengan ice cream vanilla dan powder matcha serta sirup mint","available":true,"aliases":["matcha mint milkshake","matcha"]},{"id":"kurma-milkshake","name":"Kurma Milkshake","category":"Milkshake","price":23000,"description":"Minuman susu yang diblend dengan ice cream vanilla dan buah kurma","available":true,"aliases":["kurma milkshake"]},{"id":"cookies-cream","name":"Cookies & Cream","category":"Milkshake","price":23000,"description":"Minuman susu yang diblend dengan ice cream dan biskuit dengan topping whipped cream","available":true,"aliases":["cookies & cream"]},{"id":"chocolate-milkshake","name":"Chocolate Milkshake","category":"Milkshake","price":20000,"description":"Minuman susu yang diblend dengan ice cream dan powder cokelat","available":true,"aliases":["chocolate milkshake"]},{"id":"strawberry-smoothie","name":"Strawberry Smoothie","category":"Fresh & Healthy","price":20000,"description":"Minuman smoothies terbuat dari buah pisang dan strawberry dengan tambahan sirup strawberry","available":true,"aliases":["strawberry smoothie"]},{"id":"strawberry-milky-latte","name":"Strawberry Milky Latte","category":"Fresh & Healthy","price":20000,"description":"Minuman susu dan buah strawberry yang milky dan segar","available":true,"aliases":["strawberry milky latte"]},{"id":"green-leaf-juice","name":"Green Leaf Juice","category":"Fresh & Healthy","price":17000,"description":"Minuman jus yang segar terbuat dari bahan sayur pakcoy dengan sirup markisa dan perasan jeruk lemon","available":true,"aliases":["green leaf juice"]},{"id":"chocolate-smoothie","name":"Chocolate Smoothie","category":"Fresh & Healthy","price":20000,"description":"Minuman smoothies terbuat dari buah pisang dan cokelat bubuk","available":true,"aliases":["chocolate smoothie"]},{"id":"blue-lagoon-mocktail","name":"Blue Lagoon Mocktail","category":"Fresh & Healthy","price":20000,"description":"Minuman dingin menyegarkan dengan cita rasa sirup blue curacao dan buah lemon","available":true,"aliases":["blue lagoon mocktail"]},{"id":"best-green-smoothie","name":"Best Green Smoothie","category":"Fresh & Healthy","price":20000,"description":"Minuman smoothies terbuat dari buah pisang dan sayur pakcoy diblend susu dan yoghurt","available":true,"aliases":["best green smoothie"]},{"id":"kopi-susu-botol-pop-corn","name":"Kopi Susu Botol Pop Corn","category":"Kopi Susu Botol","price":25000,"description":"Kopi Susu Gula Aren dengan cita rasa jagung bakar (pop corn) dalam kemasan botol untuk ngopi bareng dan praktis dibawa kemana-mana","available":true,"variants":[{"name":"Kopi Susu Botol Pop Corn - 250 ml","price":25000},{"name":"Kopi Susu Botol Pop Corn - 500 ml","price":65000},{"name":"Kopi Susu Botol Pop Corn - 1 liter","price":130000}],"aliases":["kopi susu botol pop corn"]},{"id":"kopi-susu-botol-mint","name":"Kopi Susu Botol Mint","category":"Kopi Susu Botol","price":25000,"description":"Kopi Susu Gula Aren dengan cita rasa mint yang dingin dan menyegarkan dalam kemasan botol untuk ngopi bareng dan praktis dibawa kemana-mana","available":true,"variants":[{"name":"Kopi Susu Botol Mint - 250 ml","price":25000},{"name":"Kopi Susu Botol Mint - 500 ml","price":65000},{"name":"Kopi Susu Botol Mint - 1 liter","price":130000}],"aliases":["kopi susu botol mint"]},{"id":"kopi-susu-botol-cheese","name":"Kopi Susu Botol Cheese","category":"Kopi Susu Botol","price":25000,"description":"Kopi Susu Gula Aren dengan cita rasa keju yang creamy dalam kemasan botol untuk ngopi bareng dan praktis dibawa kemana-mana","available":true,"variants":[{"name":"Kopi Susu Botol Cheese - 250 ml","price":25000},{"name":"Kopi Susu Botol Cheese - 500 ml","price":65000},{"name":"Kopi Susu Botol Cheese - 1 liter","price":130000}],"aliases":["kopi susu botol cheese"]},{"id":"kopi-susu-botol-cinnamon","name":"Kopi Susu Botol Cinnamon","category":"Kopi Susu Botol","price":25000,"description":"Kopi Susu Gula Aren dengan cita rasa cinnamon (kayu manis) dalam kemasan botol untuk ngopi bareng dan praktis dibawa kemana-mana","available":true,"variants":[{"name":"Kopi Susu Botol Cinnamon - 250 ml","price":25000},{"name":"Kopi Susu Botol Cinnamon - 500 ml","price":65000},{"name":"Kopi Susu Botol Cinnamon - 1 liter","price":130000}],"aliases":["kopi susu botol cinnamon"]},{"id":"kopi-susu-botol-karamel","name":"Kopi Susu Botol Karamel","category":"Kopi Susu Botol","price":25000,"description":"Kopi Susu Gula Aren dengan cita rasa susu karamel dalam kemasan botol untuk ngopi bareng dan praktis dibawa kemana-mana","available":true,"variants":[{"name":"Kopi Susu Botol Karamel - 250 ml","price":25000},{"name":"Kopi Susu Botol Karamel - 500 ml","price":65000},{"name":"Kopi Susu Botol Karamel - 1 liter","price":130000}],"aliases":["kopi susu botol karamel"]},{"id":"kopi-susu-botol-original","name":"Kopi Susu Botol Original","category":"Kopi Susu Botol","price":20000,"description":"Kopi Susu Gula Aren dengan karakter cokelat dan nutty  dalam kemasan botol untuk ngopi bareng dan praktis dibawa kemana-mana","available":true,"variants":[{"name":"Kopi Susu Botol Original - 250 ml","price":20000},{"name":"Kopi Susu Botol Original - 500 ml","price":55000},{"name":"Kopi Susu Botol Original - 1 liter","price":110000}],"aliases":["kopi susu botol original"]},{"id":"vanilla-frappuccino","name":"Vanilla Frappuccino","category":"Es Kopi Blend","price":25000,"description":"Blended Espresso dengan susu dan Syrup Vanilla ditambah topping whipped cream","available":true,"aliases":["vanilla frappuccino"]},{"id":"oreo-frappuccino","name":"Oreo Frappuccino","category":"Es Kopi Blend","price":27000,"description":"Blended Espresso dengan susu dan biskuit Oreo ditambah topping whipped cream","available":true,"aliases":["oreo frappuccino"]},{"id":"mocha-frappuccino","name":"Mocha Frappuccino","category":"Es Kopi Blend","price":25000,"description":"Blended Espresso dengan susu dan cokelat ditambah topping whipped cream","available":true,"aliases":["mocha frappuccino"]},{"id":"hazelnut-frappuccino","name":"Hazelnut Frappuccino","category":"Es Kopi Blend","price":25000,"description":"Blended Espresso dengan susu dan Syrup Hazelnut ditambah topping whipped cream","available":true,"aliases":["hazelnut frappuccino"]},{"id":"choco-cookies-frappuccino","name":"Choco Cookies Frappuccino","category":"Es Kopi Blend","price":27000,"description":"Blended Espresso dengan susu dan biskuit cokelat ditambah topping whipped cream","available":false,"aliases":["choco cookies frappuccino"]},{"id":"caramel-frappuccino","name":"Caramel Frappuccino","category":"Es Kopi Blend","price":25000,"description":"Blended Espresso dengan susu dan Syrup Caramel ditambah topping whipped cream","available":true,"aliases":["caramel frappuccino"]},{"id":"tropical-coffee-mocktail","name":"Tropical Coffee Mocktail","category":"Signature Coffee","price":20000,"description":"Mixed Cold Drip Based Coffee dengan sirup buah-buahan","available":true,"aliases":["tropical coffee mocktail"]},{"id":"caramel-macchiatto","name":"Caramel Macchiatto","category":"Signature Coffee","price":25000,"description":"Single Shot Espresso ditambah Syrup Caramel dengan topping milk foam yang tebal","available":true,"aliases":["caramel macchiatto"],"variantOptions":"Hot,Ice"},{"id":"pandan-latte-iced-coffee","name":"Pandan Latte Iced Coffee","category":"Signature Coffee","price":25000,"description":"Mixed Kopi Susu Gula Aren dengan Pandan Latte","available":true,"aliases":["pandan latte iced coffee"]},{"id":"nutella-iced-coffee","name":"Nutella Iced Coffee","category":"Signature Coffee","price":25000,"description":"Kopi Susu Gula Aren dengan cokelat nutella","available":true,"aliases":["nutella iced coffee"]},{"id":"lotus-biscoff-iced-coffee","name":"Lotus Biscoff Iced Coffee","category":"Signature Coffee","price":25000,"description":"Kopi Susu Gula Aren dengan topping Lotus Biscoff Biscuit","available":true,"aliases":["lotus biscoff iced coffee"]},{"id":"lemonade-iced-coffee","name":"Lemonade Iced Coffee","category":"Signature Coffee","price":20000,"description":"Cold Drip Based Coffee dengan sirup dan buah lemon","available":true,"aliases":["lemonade iced coffee"]},{"id":"kopi-susu-madu-jahe-panas","name":"Kopi Susu Madu Jahe Panas","category":"Signature Coffee","price":23000,"description":"Espresso ditambah Susu Kental Manis (SKM) dengan jahe dan madu","available":true,"aliases":["kopi susu madu jahe panas"]},{"id":"cappuccino-hot-creme-brulee","name":"Cappuccino Hot Creme Brulee","category":"Signature Coffee","price":25000,"description":"Cappuccino Based Coffee dengan topping brown sugar caramel","available":true,"aliases":["cappuccino hot creme brulee","cappuccino","capuccino"]},{"id":"es-kopi-susu-dalgona","name":"Es Kopi Susu Dalgona","category":"Es Kopi Susu Gula Aren","price":23000,"description":"Kopi Susu Gula Aren khas Kedai Ngupi Ngupi dengan topping dalgona","available":true,"aliases":["es kopi susu dalgona","kopi susu dalgona"],"variantOptions":"Less Sugar,Normal,Extra Sugar"},{"id":"es-kopi-susu-cream-cheese","name":"Es Kopi Susu Cream Cheese","category":"Es Kopi Susu Gula Aren","price":23000,"description":"Kopi Susu Gula Aren khas Kedai Ngupi Ngupi dengan topping cream cheese","available":true,"aliases":["es kopi susu cream cheese","kopi susu cream cheese"],"variantOptions":"Less Sugar,Normal,Extra Sugar"},{"id":"es-kopi-susu-float","name":"Es Kopi Susu Float","category":"Es Kopi Susu Gula Aren","price":23000,"description":"Kopi Susu Gula Aren khas Kedai Ngupi Ngupi dengan topping es krim vanilla","available":true,"aliases":["es kopi susu float","kopi susu float"],"variantOptions":"Less Sugar,Normal,Extra Sugar"},{"id":"mochaccino","name":"Mochaccino","category":"Milk Based Coffee","price":25000,"description":"Minuman kopi dengan bahan dasar espresso, susu dan cokelat","available":true,"aliases":["mochaccino"],"variantOptions":"Hot,Ice"},{"id":"caffe-bon-bon","name":"Caffe Bon Bon","category":"Milk Based Coffee","price":18000,"description":"Minuman kopi dengan bahan dasar espresso dan Susu Kental Manis tanpa tambahan air","available":true,"aliases":["caffe bon bon"]},{"id":"caffe-latte","name":"Caffe Latte","category":"Milk Based Coffee","price":23000,"description":"Minuman kopi dengan bahan dasar espresso dan susu murni dengan tekstur yang creamy","available":true,"variants":[{"name":"Caffe Latte - Hot - No Syrup","price":23000},{"name":"Caffe Latte - Hot - Vanilla","price":26000},{"name":"Caffe Latte - Hot - Caramel","price":26000},{"name":"Caffe Latte - Hot - Hazelnut","price":26000},{"name":"Caffe Latte - Hot - Pop Corn","price":26000},{"name":"Caffe Latte - Ice - No Syrup","price":23000},{"name":"Caffe Latte - Ice - Vanilla","price":26000},{"name":"Caffe Latte - Ice - Caramel","price":26000},{"name":"Caffe Latte - Ice - Hazelnut","price":26000},{"name":"Caffe Latte - Ice - Pop Corn","price":26000}],"aliases":["latte","cafe latte","caffe latte","kopi latte"]},{"id":"vietnam-drip","name":"Vietnam Drip","category":"Espresso & Manual Brew","price":18000,"description":"Kopi Blend Robusta-Arabica ditambah Susu Kental Manis yang diseduh menggunakan metode Vietnam Drip","available":true,"variants":[{"name":"Vietnam Drip - Hot","price":18000},{"name":"Vietnam Drip - Ice","price":20000}],"aliases":["vietnam drip"]},{"id":"caffe-macchiato","name":"Caffe Macchiato","category":"Milk Based Coffee","price":23000,"description":"Minuman kopi dengan bahan dasar espresso dan foam yang tebal dari susu murni","available":true,"aliases":["caffe macchiato"],"variantOptions":"Hot - No Sugar,Hot - Less Sugar,Hot - Normal,Hot - Extra Sugar,Ice - No Sugar,Ice - Less Sugar,Ice - Normal,Ice - Extra Sugar"},{"id":"cappuccino","name":"Cappuccino","category":"Milk Based Coffee","price":23000,"description":"Minuman kopi dengan bahan dasar espresso dan susu murni dengan tekstur foam yang tebal","available":true,"aliases":["cappuccino","capuccino","cappucino","capucino"],"variantOptions":"Hot - No Sugar,Hot - Less Sugar,Hot - Normal,Hot - Extra Sugar,Ice - No Sugar,Ice - Less Sugar,Ice - Normal,Ice - Extra Sugar"},{"id":"v60-single-origin","name":"V60 Single Origin","category":"Espresso & Manual Brew","price":23000,"description":"Kopi yang diseduh menggunakan metode V60 Filter dengan jenis kopi Arabica Single Origin dari berbagai daerah","available":true,"aliases":["v60 single origin"],"variantOptions":"Hot,Ice (Javanese)"},{"id":"espresso","name":"Espresso","category":"Espresso & Manual Brew","price":15000,"description":"Ekstrak kopi hitam dengan jenis blend kopi full arabica","available":true,"aliases":["espresso"]},{"id":"affogato","name":"Affogato","category":"Espresso & Manual Brew","price":20000,"description":"Dessert kopi khas Italia yang terdiri dari satu scoop es krim vanila yang \"ditenggelamkan\" atau disiram dengan segelas espresso panas","available":true,"aliases":["affogato"]},{"id":"americano","name":"Americano","category":"Espresso & Manual Brew","price":20000,"description":"Kopi hitam yang berasal dari espresso dengan jenis kopi blend full arabica dan tambahan air menghasilkan kopi yang lebih encer tapi tetap intens","available":true,"aliases":["americano","amer","kopi amer"],"variantOptions":"Hot - No Sugar,Hot - Less Sugar,Hot - Normal,Hot - Extra Sugar,Ice - No Sugar,Ice - Less Sugar,Ice - Normal,Ice - Extra Sugar"}],"categories":[{"id":"bf2a8c80-227b-11f0-9d88-c9e89868a3fb","name":"Espresso & Manual Brew","itemCount":6},{"id":"55ef51f0-22b5-11f0-970d-854a22dc6d7c","name":"Es Kopi Susu Gula Aren","itemCount":4},{"id":"71b39e90-22b5-11f0-aa01-4d32c08285dc","name":"Kopi Susu Botol","itemCount":6},{"id":"f1b03460-231c-11f0-8d2d-95f7debceadd","name":"Milk Based Coffee","itemCount":5},{"id":"0360daa0-2371-11f0-bd97-9f2dc7b6ab5f","name":"Signature Coffee","itemCount":11},{"id":"55d80260-2373-11f0-8c6a-579acc173d3e","name":"Es Kopi Blend","itemCount":10},{"id":"bef1e990-2396-11f0-a756-05ffe487927b","name":"Fresh & Healthy","itemCount":9},{"id":"0183bce0-239d-11f0-afe3-290c9db56300","name":"Milkshake","itemCount":8},{"id":"01421bd0-239e-11f0-9163-31b4ab9c6547","name":"Chocolate","itemCount":10},{"id":"9fabb400-23c3-11f0-9486-a3e3bceaa5ff","name":"Tea","itemCount":9},{"id":"e67bae60-23c6-11f0-8534-11153528f41c","name":"Western Foods","itemCount":6},{"id":"3f5d19d0-23cc-11f0-9aa0-8f30dbac453c","name":"Indonesian Foods","itemCount":8},{"id":"7c34eb80-23dd-11f0-b515-03850605e0e6","name":"Nasi Goreng","itemCount":6},{"id":"e64eb920-23e1-11f0-9420-c3ea158194fd","name":"Rice Bowls & Noodles","itemCount":11},{"id":"c0958e80-23ea-11f0-b621-99f209683c70","name":"Makanan Ringan","itemCount":11},{"id":"922885c0-23f2-11f0-9932-17b7edfcfa24","name":"Dessert","itemCount":4},{"id":"67522f50-23f4-11f0-9c5d-09935df75d15","name":"Lain-lain","itemCount":7}],"lastSyncedAt":"2026-05-13T13:52:22.792Z","syncSource":"pawoon-v2","totalItems":131,"totalCategories":17}
+{
+  "version": 1,
+  "brand": "Kedai Ngupi Ngupi Purwakarta",
+  "channel": "whatsapp",
+  "defaultLanguage": "id",
+  "businessProfile": {
+    "city": "Purwakarta",
+    "hours": "09:00-17:00",
+    "instagram": "@kedaingupingupi"
+  },
+  "menus": [
+    {
+      "id": "ongkir-go-ngupi",
+      "name": "Ongkir Go Ngupi",
+      "category": "Lain-lain",
+      "price": 10000,
+      "available": true
+    },
+    {
+      "id": "rice-bowl-ikan-dori-saus-mentai",
+      "name": "Rice Bowl Ikan Dori Saus Mentai",
+      "category": "Rice Bowls & Noodles",
+      "price": 25000,
+      "available": false
+    },
+    {
+      "id": "bihun-goreng-seafood",
+      "name": "Bihun Goreng Seafood",
+      "category": "Rice Bowls & Noodles",
+      "price": 27000,
+      "available": false
+    },
+    {
+      "id": "rice-bowl-cumi-sambal-matah",
+      "name": "Rice Bowl Cumi Sambal Matah",
+      "category": "Rice Bowls & Noodles",
+      "price": 25000,
+      "available": false
+    },
+    {
+      "id": "nasi-goreng-spesial",
+      "name": "Nasi Goreng Spesial",
+      "category": "Nasi Goreng",
+      "price": 25000,
+      "description": "Nasi goreng yang memiliki cita rasa yang khas dengan bumbu kencur dan topping ayam suwir, telor ceplok dan keripik tempe",
+      "available": false
+    },
+    {
+      "id": "tahu-baso-saos-mentai",
+      "name": "Tahu Baso Saos Mentai",
+      "category": "Makanan Ringan",
+      "price": 23000,
+      "available": false
+    },
+    {
+      "id": "nachos-bolognese-sauce",
+      "name": "Nachos Bolognese Sauce",
+      "category": "Makanan Ringan",
+      "price": 23000,
+      "description": "Camilan perpaduan kuliner Meksiko dan Italia, berupa keripik tortilla jagung renyah yang disajikan dengan siraman saus daging bolognese, bawang bombay, dan lelehan keju",
+      "available": false
+    },
+    {
+      "id": "chamomile-calming-mint-tea",
+      "name": "Chamomile Calming Mint Tea",
+      "category": "Tea",
+      "price": 20000,
+      "available": false
+    },
+    {
+      "id": "chamomile-lime-iced-tea",
+      "name": "Chamomile Lime Iced Tea",
+      "category": "Tea",
+      "price": 20000,
+      "available": false,
+      "aliases": [
+        "chamomile lime iced tea"
+      ]
+    },
+    {
+      "id": "butterscotch-cream-coffee",
+      "name": "Butterscotch Cream Coffee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "description": "Minuman kopi kekinian yang memadukan espresso dengan sirup atau saus butterscotch (campuran mentega dan gula cokelat) yang manis, gurih dan creamy",
+      "available": false
+    },
+    {
+      "id": "kopi-sanger",
+      "name": "Kopi Sanger",
+      "category": "Espresso & Manual Brew",
+      "price": 18000,
+      "description": "Kopi Blend Robusta-Arabica yang diseduh menggunakan mesin espresso ditambah Susu Kental Manis dan Air",
+      "available": false
+    },
+    {
+      "id": "immune-booster-juice",
+      "name": "Immune Booster Juice",
+      "category": "Fresh & Healthy",
+      "price": 20000,
+      "description": "Minuman jus sayuran wortel dan buah nanas dengan sirup markisa dan perasan jeruk lemon",
+      "available": false
+    },
+    {
+      "id": "chocolate-peanut-butter-smoothie",
+      "name": "Chocolate Peanut Butter Smoothie",
+      "category": "Fresh & Healthy",
+      "price": 25000,
+      "description": "Minuman smoothies cokelat dengan campuran buah pisang dan selai peanut butter",
+      "available": false
+    },
+    {
+      "id": "kurma-smoothie",
+      "name": "Kurma Smoothie",
+      "category": "Fresh & Healthy",
+      "price": 23000,
+      "description": "Minuman smoothies terbuat dari buah pisang dan kurma dengan tambahan sirup vanilla",
+      "available": false
+    },
+    {
+      "id": "lotus-biscoff-frappuccino",
+      "name": "Lotus Biscoff Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 27000,
+      "available": false
+    },
+    {
+      "id": "cinnamon-greek-frappuccino",
+      "name": "Cinnamon Greek Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 25000,
+      "available": false
+    },
+    {
+      "id": "choco-mint-frappuccino",
+      "name": "Choco Mint Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 27000,
+      "available": false
+    },
+    {
+      "id": "salted-caramel-frappuccino",
+      "name": "Salted Caramel Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 25000,
+      "available": false
+    },
+    {
+      "id": "pop-corn-choco-blend",
+      "name": "Pop Corn Choco Blend",
+      "category": "Chocolate",
+      "price": 25000,
+      "description": "Minuman cokelat yang diblend dengan sirup jagung bakar (pop corn)",
+      "available": false
+    },
+    {
+      "id": "chocolate-strawberry-cream",
+      "name": "Chocolate Strawberry Cream",
+      "category": "Chocolate",
+      "price": 25000,
+      "description": "Minuman cokelat yang tebal, milky dan creamy dengan topping strawberry cream",
+      "available": false
+    },
+    {
+      "id": "salted-caramel-coffee",
+      "name": "Salted Caramel Coffee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "available": false
+    },
+    {
+      "id": "tiramisu-cream-coffee",
+      "name": "Tiramisu Cream Coffee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "available": false
+    },
+    {
+      "id": "matcha-strawberry-cream",
+      "name": "Matcha Strawberry Cream",
+      "category": "Tea",
+      "price": 23000,
+      "available": false
+    },
+    {
+      "id": "chicken-katsu",
+      "name": "Chicken Katsu",
+      "category": "Western Foods",
+      "price": 25000,
+      "description": "Dada ayam fillet yang dilumuri tepung crispy",
+      "available": true,
+      "aliases": [
+        "chicken katsu"
+      ],
+      "variantOptions": "Kentang,Nasi"
+    },
+    {
+      "id": "es-batu-cup",
+      "name": "Es Batu + Cup",
+      "category": "Lain-lain",
+      "price": 2000,
+      "available": true,
+      "aliases": [
+        "es batu + cup",
+        "batu + cup"
+      ]
+    },
+    {
+      "id": "nasi",
+      "name": "Nasi",
+      "category": "Lain-lain",
+      "price": 5000,
+      "available": true,
+      "aliases": [
+        "nasi"
+      ]
+    },
+    {
+      "id": "topping-minuman",
+      "name": "Topping Minuman",
+      "category": "Lain-lain",
+      "price": 4000,
+      "available": true,
+      "aliases": [
+        "topping minuman"
+      ],
+      "variantOptions": "Ice Cream (Float),Cream Cheese,Dalgona,Whipped Cream"
+    },
+    {
+      "id": "chocolate-single-origin-sachet",
+      "name": "Chocolate Single Origin Sachet",
+      "category": "Lain-lain",
+      "price": 18000,
+      "description": "Minuman cokelat dalam kemasan sachet yang memiliki karakter rasa berbeda-beda berdasarkan asal daerahnya",
+      "available": true,
+      "aliases": [
+        "chocolate single origin sachet"
+      ]
+    },
+    {
+      "id": "lotus-biscoff-biscuit",
+      "name": "Lotus Biscoff Biscuit",
+      "category": "Lain-lain",
+      "price": 2000,
+      "available": true,
+      "aliases": [
+        "lotus biscoff biscuit"
+      ]
+    },
+    {
+      "id": "air-mineral",
+      "name": "Air Mineral",
+      "category": "Lain-lain",
+      "price": 5000,
+      "available": true,
+      "aliases": [
+        "air mineral"
+      ],
+      "variantOptions": "Biasa,Dingin"
+    },
+    {
+      "id": "ice-cream",
+      "name": "Ice Cream",
+      "category": "Dessert",
+      "price": 15000,
+      "available": true,
+      "aliases": [
+        "ice cream"
+      ],
+      "variantOptions": "Vanilla,Strawberry,Cokelat"
+    },
+    {
+      "id": "udang-keju-lumer",
+      "name": "Udang Keju Lumer",
+      "category": "Makanan Ringan",
+      "price": 23000,
+      "description": "Camilan gurih berupa olahan udang dan ayam cincang yang diisi keju mozzarella atau quick melt, kemudian dilapisi tepung roti dan digoreng hingga renyah",
+      "available": true,
+      "aliases": [
+        "udang keju lumer"
+      ]
+    },
+    {
+      "id": "churros-with-choco-sauce",
+      "name": "Churros with Choco Sauce",
+      "category": "Dessert",
+      "price": 17000,
+      "available": false
+    },
+    {
+      "id": "roti-karamel-ice-cream",
+      "name": "Roti Karamel Ice Cream",
+      "category": "Dessert",
+      "price": 23000,
+      "available": false,
+      "aliases": [
+        "roti karamel ice cream"
+      ]
+    },
+    {
+      "id": "banana-split-ice-cream",
+      "name": "Banana Split Ice Cream",
+      "category": "Dessert",
+      "price": 23000,
+      "description": "Hidangan penutup klasik berbahan dasar pisang yang dibelah dua secara memanjang, disajikan dengan tiga sekop es krim vanila, cokelat, dan stroberi di tengahnya",
+      "available": true,
+      "aliases": [
+        "banana split ice cream"
+      ]
+    },
+    {
+      "id": "pisang-goreng-crispy",
+      "name": "Pisang Goreng Crispy",
+      "category": "Makanan Ringan",
+      "price": 17000,
+      "description": "Pisang yang dilumuri tepung roti dan digoreng sampai kering kecoklatan",
+      "available": true,
+      "aliases": [
+        "pisang goreng crispy"
+      ]
+    },
+    {
+      "id": "pisang-dan-roti-bakar",
+      "name": "Pisang dan Roti Bakar",
+      "category": "Makanan Ringan",
+      "price": 14000,
+      "description": "Pisang dan Roti bakar dengan pilihan berbagai topping, ada keju, cokelat dan nutella",
+      "available": false,
+      "aliases": [
+        "pisang dan roti bakar"
+      ],
+      "variantOptions": "Roti Bakar,Pisang Bakar"
+    },
+    {
+      "id": "sosis-barbeque-kentang",
+      "name": "Sosis Barbeque Kentang",
+      "category": "Makanan Ringan",
+      "price": 23000,
+      "description": "Sosis sapi yang dibakar dan dilumuri saus barbeque serta disajikan dengan kentang goreng",
+      "available": true,
+      "aliases": [
+        "sosis barbeque kentang"
+      ]
+    },
+    {
+      "id": "kentang-goreng",
+      "name": "Kentang Goreng",
+      "category": "Makanan Ringan",
+      "price": 17000,
+      "description": "Kentang goreng dengan bentuk crinkle cut yang tebal disajikan beserta saus cabe dan tomat",
+      "available": true,
+      "variants": [
+        {
+          "name": "Kentang Goreng - Kentang Goreng",
+          "price": 17000
+        },
+        {
+          "name": "Kentang Goreng - Kentang Sosis",
+          "price": 23000
+        },
+        {
+          "name": "Kentang Goreng - Kentang Fishcake",
+          "price": 23000
+        },
+        {
+          "name": "Kentang Goreng - Mix Platter",
+          "price": 25000
+        }
+      ],
+      "aliases": [
+        "kentang goreng"
+      ]
+    },
+    {
+      "id": "dimsum",
+      "name": "Dimsum",
+      "category": "Makanan Ringan",
+      "price": 17000,
+      "description": "Dimsum udang, ayam atau seafood dengan pilihan jenis siomay, kulit tahu, lumpia, nori dan hakau",
+      "available": true,
+      "variants": [
+        {
+          "name": "Dimsum - Ayam",
+          "price": 17000
+        },
+        {
+          "name": "Dimsum - Udang",
+          "price": 17000
+        },
+        {
+          "name": "Dimsum - Combo",
+          "price": 23000
+        }
+      ],
+      "aliases": [
+        "dimsum"
+      ]
+    },
+    {
+      "id": "potato-cheese-ball",
+      "name": "Potato Cheese Ball",
+      "category": "Makanan Ringan",
+      "price": 17000,
+      "description": "Camilan berbahan dasar kentang tumbuk yang dibentuk bulat, diisi keju mozzarella yang lumer, lalu dilapisi tepung roti dan digoreng renyah",
+      "available": false,
+      "aliases": [
+        "potato cheese ball"
+      ]
+    },
+    {
+      "id": "cireng-bumbu-rujak",
+      "name": "Cireng Bumbu Rujak",
+      "category": "Makanan Ringan",
+      "price": 17000,
+      "description": "Camilan khas Bandung berupa aci goreng bertekstur renyah di luar dan kenyal di dalam, disajikan bersama sambal rujak cair pedas manis yang terbuat dari gula merah, cabai, dan asam jawa",
+      "available": false,
+      "aliases": [
+        "cireng bumbu rujak"
+      ]
+    },
+    {
+      "id": "pempek-pasundan",
+      "name": "Pempek Pasundan",
+      "category": "Makanan Ringan",
+      "price": 25000,
+      "description": "Makanan khas Palembang, Sumatera Selatan, yang terbuat dari daging ikan giling tenggiri dicampur tepung kanji, bumbu dan air",
+      "available": true,
+      "aliases": [
+        "pempek pasundan"
+      ]
+    },
+    {
+      "id": "rice-bowl-telor-sosis",
+      "name": "Rice Bowl Telor Sosis",
+      "category": "Rice Bowls & Noodles",
+      "price": 22000,
+      "available": true,
+      "aliases": [
+        "rice bowl telor sosis"
+      ]
+    },
+    {
+      "id": "rice-bowl-ayam-teriyaki",
+      "name": "Rice Bowl Ayam Teriyaki",
+      "category": "Rice Bowls & Noodles",
+      "price": 25000,
+      "available": true,
+      "aliases": [
+        "rice bowl ayam teriyaki"
+      ]
+    },
+    {
+      "id": "rice-bowl-ayam-lada-hitam",
+      "name": "Rice Bowl Ayam Lada Hitam",
+      "category": "Rice Bowls & Noodles",
+      "price": 25000,
+      "available": true,
+      "aliases": [
+        "rice bowl ayam lada hitam"
+      ]
+    },
+    {
+      "id": "rice-bowl-ayam-asam-manis",
+      "name": "Rice Bowl Ayam Asam Manis",
+      "category": "Rice Bowls & Noodles",
+      "price": 25000,
+      "available": true,
+      "aliases": [
+        "rice bowl ayam asam manis"
+      ]
+    },
+    {
+      "id": "indomie-telor-sosis",
+      "name": "Indomie Telor Sosis",
+      "category": "Rice Bowls & Noodles",
+      "price": 18000,
+      "available": true,
+      "aliases": [
+        "indomie telor sosis"
+      ],
+      "variantOptions": "Indomie Rebus - Tidak Pedas,Indomie Rebus - Pedas,Indomie Rebus - Extra Pedas,Indomie Goreng - Tidak Pedas,Indomie Goreng - Pedas,Indomie Goreng - Extra Pedas,Indomie Rebus - Pedas Sedang,Indomie Goreng - Pedas Sedang"
+    },
+    {
+      "id": "mie-ramen-instan",
+      "name": "Mie Ramen Instan",
+      "category": "Rice Bowls & Noodles",
+      "price": 20000,
+      "available": true,
+      "aliases": [
+        "mie ramen instan"
+      ],
+      "variantOptions": "Pedas Sedang,Pedas,Extra Pedas"
+    },
+    {
+      "id": "bakmi-godok-jawa",
+      "name": "Bakmi Godok Jawa",
+      "category": "Rice Bowls & Noodles",
+      "price": 23000,
+      "description": "Sajian mi khas Jawa yang dimasak menggunakan bumbu rempah tradisional dan disajikan dengan topping kol, sawi, ayam suwir dan bakso ikan",
+      "available": true,
+      "aliases": [
+        "bakmi godok jawa"
+      ],
+      "variantOptions": "Tidak Pedas,Pedas Sedang,Pedas,Extra Pedas"
+    },
+    {
+      "id": "bakmi-goreng-jawa",
+      "name": "Bakmi Goreng Jawa",
+      "category": "Rice Bowls & Noodles",
+      "price": 23000,
+      "description": "Sajian mi khas Jawa yang dimasak menggunakan bumbu rempah tradisional dan disajikan dengan topping kol, sawi, ayam suwir dan bakso ikan",
+      "available": true,
+      "aliases": [
+        "bakmi goreng jawa"
+      ],
+      "variantOptions": "Tidak Pedas,Pedas Sedang,Pedas,Extra Pedas"
+    },
+    {
+      "id": "nasi-goreng-seafood",
+      "name": "Nasi Goreng Seafood",
+      "category": "Nasi Goreng",
+      "price": 30000,
+      "description": "Nasi goreng Chinese memiliki cita rasa yang khas dengan topping cumi, udang dan mix vegetable",
+      "available": true,
+      "aliases": [
+        "nasi goreng seafood"
+      ],
+      "variantOptions": "Tidak Pedas,Pedas Sedang,Pedas,Extra Pedas"
+    },
+    {
+      "id": "nasi-goreng-hongkong",
+      "name": "Nasi Goreng Hongkong",
+      "category": "Nasi Goreng",
+      "price": 23000,
+      "description": "Nasi goreng chinese yang memiliki cita rasa gurih dengan topping bakso ikan dan mix vegetable",
+      "available": true,
+      "aliases": [
+        "nasi goreng hongkong"
+      ],
+      "variantOptions": "Tidak Pedas,Pedas Sedang,Pedas,Extra Pedas"
+    },
+    {
+      "id": "nasi-goreng-kampung",
+      "name": "Nasi Goreng Kampung",
+      "category": "Nasi Goreng",
+      "price": 23000,
+      "description": "Nasi goreng kampung dengan bumbu bercita rasa kencur dengan topping telor ceplok",
+      "available": true,
+      "aliases": [
+        "nasi goreng kampung"
+      ],
+      "variantOptions": "Tidak Pedas,Pedas Sedang,Pedas,Extra Pedas"
+    },
+    {
+      "id": "nasi-goreng-kambing",
+      "name": "Nasi Goreng Kambing",
+      "category": "Nasi Goreng",
+      "price": 32000,
+      "description": "Nasi goreng kambing dengan bumbu rempah khas Timur Tengah",
+      "available": true,
+      "aliases": [
+        "nasi goreng kambing"
+      ],
+      "variantOptions": "Tidak Pedas,Pedas Sedang,Pedas,Extra Pedas"
+    },
+    {
+      "id": "nasi-goreng-chicken-katsu",
+      "name": "Nasi Goreng Chicken Katsu",
+      "category": "Nasi Goreng",
+      "price": 28000,
+      "description": "Nasi goreng yang dimasak dengan bumbu dasar rica-rica dengan topping potongan daging chicken katsu",
+      "available": true,
+      "aliases": [
+        "nasi goreng chicken katsu"
+      ],
+      "variantOptions": "Pedas Sedang,Pedas,Extra Pedas"
+    },
+    {
+      "id": "es-kopi-susu-original",
+      "name": "Es Kopi Susu Original",
+      "category": "Es Kopi Susu Gula Aren",
+      "price": 18000,
+      "description": "Kopi Susu Gula Aren khas Kedai Ngupi Ngupi dengan karakter cokelat dan nutty yang memiliki tekstur creamy dan pahit-manis seimbang",
+      "available": true,
+      "aliases": [
+        "es kopi susu",
+        "es kopi susu original",
+        "kopsu",
+        "kopi susu",
+        "kopi susu original"
+      ],
+      "variantOptions": "Less Sugar - Less Ice,Less Sugar - Normal,Less Sugar - Extra Ice,Normal - Less Ice,Normal - Normal,Normal - Extra Ice,Extra Sugar - Less Ice,Extra Sugar - Normal,Extra Sugar - Extra Ice"
+    },
+    {
+      "id": "nasi-telor-fuyunghai",
+      "name": "Nasi Telor Fuyunghai",
+      "category": "Indonesian Foods",
+      "price": 20000,
+      "description": "Masakan Tionghoa-Indonesia berupa dadar telur tebal yang dicampur sayuran dan tepung",
+      "available": true,
+      "aliases": [
+        "nasi telor fuyunghai"
+      ]
+    },
+    {
+      "id": "nasi-udang-bumbu-saos-padang",
+      "name": "Nasi Udang Bumbu Saos Padang",
+      "category": "Indonesian Foods",
+      "price": 30000,
+      "description": "Hidangan nasi yang disajikan dengan udang tepung yang dimasak menggunakan bumbu merah khas Padang—kombinasi bawang merah, bawang putih, cabai merah, dan jahe",
+      "available": true,
+      "aliases": [
+        "nasi udang bumbu saos padang"
+      ],
+      "variantOptions": "Pedas Sedang,Pedas,Extra Pedas"
+    },
+    {
+      "id": "nasi-udang-bumbu-asam-manis",
+      "name": "Nasi Udang Bumbu Asam Manis",
+      "category": "Indonesian Foods",
+      "price": 30000,
+      "description": "Hidangan populer yang memadukan udang segar dengan saus kental bercita rasa asam, manis, dan gurih, yang disajikan di atas nasi putih hangat",
+      "available": true,
+      "aliases": [
+        "nasi udang bumbu asam manis"
+      ]
+    },
+    {
+      "id": "nasi-tongseng-kambing",
+      "name": "Nasi Tongseng Kambing",
+      "category": "Indonesian Foods",
+      "price": 38000,
+      "description": "Hidangan khas Jawa Tengah berupa daging kambing yang dimasak dengan bumbu gulai kental, kecap manis, kol, dan tomat, lalu disajikan bersama nasi putih",
+      "available": true,
+      "aliases": [
+        "nasi tongseng kambing"
+      ],
+      "variantOptions": "Pedas Sedang,Pedas,Extra Pedas"
+    },
+    {
+      "id": "nasi-tongseng-sapi",
+      "name": "Nasi Tongseng Sapi",
+      "category": "Indonesian Foods",
+      "price": 35000,
+      "description": "Hidangan khas Jawa Tengah berupa daging sapi yang dimasak dengan bumbu gulai kental, kecap manis, kol, dan tomat, lalu disajikan bersama nasi putih",
+      "available": true,
+      "aliases": [
+        "nasi tongseng sapi"
+      ],
+      "variantOptions": "Pedas Sedang,Pedas,Extra Pedas"
+    },
+    {
+      "id": "nasi-tongseng-ayam",
+      "name": "Nasi Tongseng Ayam",
+      "category": "Indonesian Foods",
+      "price": 28000,
+      "description": "Hidangan khas Jawa Tengah berupa daging ayam yang dimasak dengan bumbu gulai kental, kecap manis, kol, dan tomat, lalu disajikan bersama nasi putih",
+      "available": true,
+      "aliases": [
+        "nasi tongseng ayam"
+      ],
+      "variantOptions": "Pedas Sedang,Pedas,Extra Pedas"
+    },
+    {
+      "id": "nasi-soto-bandung",
+      "name": "Nasi Soto Bandung",
+      "category": "Indonesian Foods",
+      "price": 35000,
+      "description": "Hidangan sup khas Bandung, Jawa Barat, yang terdiri dari nasi hangat disajikan dengan soto daging sapi bening tanpa santan dan irisan lobak putih, tomat dan taburan kacang kedelai goreng",
+      "available": true,
+      "aliases": [
+        "nasi soto bandung"
+      ]
+    },
+    {
+      "id": "nasi-ayam-rica-rica",
+      "name": "Nasi Ayam Rica-rica",
+      "category": "Indonesian Foods",
+      "price": 28000,
+      "description": "Hidangan nasi putih hangat yang disajikan dengan ayam bumbu rica-rica, masakan khas Manado, Sulawesi Utara, yang terkenal dengan cita rasa sangat pedas dan kaya rempah",
+      "available": true,
+      "aliases": [
+        "nasi ayam rica-rica"
+      ],
+      "variantOptions": "Pedas Sedang,Pedas,Extra Pedas"
+    },
+    {
+      "id": "spaghetti-bolognaise",
+      "name": "Spaghetti Bolognaise",
+      "category": "Western Foods",
+      "price": 23000,
+      "description": "Hidangan pasta populer berupa spaghetti yang disajikan dengan saus daging berbahan dasar tomat, dikenal juga sebagai Ragù alla Bolognese",
+      "available": false
+    },
+    {
+      "id": "fish-chips-with-tartar-sauce",
+      "name": "Fish & Chips with Tartar Sauce",
+      "category": "Western Foods",
+      "price": 35000,
+      "description": "Hidangan klasik asal Inggris yang terdiri dari fillet ikan dori yang dibalur tepung terigu lalu digoreng garing (deep-fried), disajikan bersama kentang goreng tebal",
+      "available": false
+    },
+    {
+      "id": "wagyu-steak",
+      "name": "Wagyu Steak",
+      "category": "Western Foods",
+      "price": 45000,
+      "description": "Potongan daging sapi wagyu khas Jepang yang berkualitas premium dengan pilihan saus barbeque atau lada hitam",
+      "available": true,
+      "aliases": [
+        "wagyu steak"
+      ],
+      "variantOptions": "Barbeque - Nasi,Barbeque - Kentang,Lada Hitam - Nasi,Lada Hitam - Kentang"
+    },
+    {
+      "id": "chicken-steak",
+      "name": "Chicken Steak",
+      "category": "Western Foods",
+      "price": 35000,
+      "description": "Potongan dada ayam fillet yang dilumuri tepung dengan pilihan saus barbeque atau lada hitam",
+      "available": true,
+      "aliases": [
+        "chicken steak"
+      ],
+      "variantOptions": "Kentang - Barbeque,Kentang - Lada Hitam,Nasi - Barbeque,Nasi - Lada Hitam"
+    },
+    {
+      "id": "chicken-cordon-bleu",
+      "name": "Chicken Cordon Bleu",
+      "category": "Western Foods",
+      "price": 30000,
+      "description": "Dada ayam fillet yang berisi keju lumer berbalut smoked beef dengan topping saus barbeque",
+      "available": true,
+      "aliases": [
+        "chicken cordon bleu"
+      ],
+      "variantOptions": "Kentang,Nasi"
+    },
+    {
+      "id": "matcha-latte",
+      "name": "Matcha Latte",
+      "category": "Tea",
+      "price": 18000,
+      "description": "Minuman teh dengan bahan dasar pure matcha yang manis dan creamy",
+      "available": true,
+      "aliases": [
+        "matcha latte",
+        "matcha",
+        "green tea latte"
+      ],
+      "variantOptions": "Hot,Ice"
+    },
+    {
+      "id": "honey-milk-tea",
+      "name": "Honey Milk Tea",
+      "category": "Tea",
+      "price": 18000,
+      "description": "Teh Tarik dengan madu dan susu",
+      "available": true,
+      "aliases": [
+        "honey milk tea"
+      ],
+      "variantOptions": "Hot,Ice"
+    },
+    {
+      "id": "lychee-iced-tea",
+      "name": "Lychee Iced Tea",
+      "category": "Tea",
+      "price": 17000,
+      "description": "Teh dengan rasa dan buah leci",
+      "available": true,
+      "aliases": [
+        "lychee iced tea"
+      ]
+    },
+    {
+      "id": "lemon-tea",
+      "name": "Lemon Tea",
+      "category": "Tea",
+      "price": 15000,
+      "description": "Teh dengan rasa buah lemon",
+      "available": true,
+      "aliases": [
+        "lemon tea"
+      ],
+      "variantOptions": "Hot,Ice"
+    },
+    {
+      "id": "special-tea",
+      "name": "Special Tea",
+      "category": "Tea",
+      "price": 15000,
+      "description": "Teh artisan dengan varian rasa dan aroma",
+      "available": true,
+      "aliases": [
+        "special tea"
+      ],
+      "variantOptions": "Hot - No Sugar,Hot - Less Sugar,Hot - Normal,Hot - Extra Sugar,Ice - No Sugar,Ice - Less Sugar,Ice - Normal,Ice - Extra Sugar"
+    },
+    {
+      "id": "reguler-tea",
+      "name": "Reguler Tea",
+      "category": "Tea",
+      "price": 8000,
+      "description": "Minuman teh original",
+      "available": true,
+      "aliases": [
+        "es teh manis",
+        "es teh",
+        "teh",
+        "reguler tea",
+        "teh panas",
+        "tea",
+        "teh manis"
+      ],
+      "variantOptions": "No Sugar - Hot,No Sugar - Ice,Less Sugar - Hot,Less Sugar - Ice,Normal - Hot,Normal - Ice,Extra Sugar - Hot,Extra Sugar - Ice"
+    },
+    {
+      "id": "hazelnut-choco-blend",
+      "name": "Hazelnut Choco Blend",
+      "category": "Chocolate",
+      "price": 23000,
+      "description": "Minuman cokelat yang diblend dengan sirup hazelnut",
+      "available": true,
+      "aliases": [
+        "hazelnut choco blend"
+      ]
+    },
+    {
+      "id": "double-choco-chips",
+      "name": "Double Choco Chips",
+      "category": "Chocolate",
+      "price": 23000,
+      "description": "Minuman cokelat yang tebal dan creamy dengan topping whipped cream serta taburan cokelat chips",
+      "available": true,
+      "aliases": [
+        "double choco chips"
+      ]
+    },
+    {
+      "id": "choco-pandan-latte",
+      "name": "Choco Pandan Latte",
+      "category": "Chocolate",
+      "price": 23000,
+      "description": "Minuman cokelat yang tebal, milky dan creamy dengan sirup pandan",
+      "available": true,
+      "aliases": [
+        "choco pandan latte"
+      ]
+    },
+    {
+      "id": "ice-choco-mint",
+      "name": "Ice Choco Mint",
+      "category": "Chocolate",
+      "price": 23000,
+      "description": "Minuman cokelat yang tebal dan creamy dengan sirup mint",
+      "available": true,
+      "aliases": [
+        "ice choco mint"
+      ]
+    },
+    {
+      "id": "single-origin-chocolate",
+      "name": "Single Origin Chocolate",
+      "category": "Chocolate",
+      "price": 28000,
+      "description": "Minuman cokelat tebal, milky dan creamy serta memiliki karakter rasa berbeda berdasarkan asal daerahnya",
+      "available": true,
+      "aliases": [
+        "single origin chocolate"
+      ],
+      "variantOptions": "Hot,Ice"
+    },
+    {
+      "id": "chocolate-cinnamon",
+      "name": "Chocolate Cinnamon",
+      "category": "Chocolate",
+      "price": 20000,
+      "description": "Minuman cokelat yang tebal, milky dan creamy dengan aroma cinnamon (kayu manis)",
+      "available": true,
+      "aliases": [
+        "chocolate cinnamon"
+      ],
+      "variantOptions": "Hot,Ice"
+    },
+    {
+      "id": "red-velvet-latte",
+      "name": "Red Velvet Latte",
+      "category": "Chocolate",
+      "price": 18000,
+      "description": "Minuman cokelat red velvet yang milky, tebal dan creamy",
+      "available": true,
+      "aliases": [
+        "red velvet latte"
+      ],
+      "variantOptions": "Hot,Ice"
+    },
+    {
+      "id": "chocolate",
+      "name": "Chocolate",
+      "category": "Chocolate",
+      "price": 18000,
+      "description": "Minuman cokelat yang tebal, milky dan creamy",
+      "available": true,
+      "aliases": [
+        "chocolate",
+        "coklat",
+        "cokelat",
+        "hot chocolate",
+        "es coklat",
+        "es cokelat"
+      ],
+      "variantOptions": "Hot,Ice"
+    },
+    {
+      "id": "vanilla-milkshake",
+      "name": "Vanilla Milkshake",
+      "category": "Milkshake",
+      "price": 20000,
+      "description": "Minuman susu yang diblend dengan ice cream dan sirup vanilla",
+      "available": true,
+      "aliases": [
+        "vanilla milkshake"
+      ]
+    },
+    {
+      "id": "strawberry-milkshake",
+      "name": "Strawberry Milkshake",
+      "category": "Milkshake",
+      "price": 20000,
+      "description": "Minuman susu yang diblend dengan ice cream dan sirup strawberry",
+      "available": true,
+      "aliases": [
+        "strawberry milkshake"
+      ]
+    },
+    {
+      "id": "red-velvet-milkshake",
+      "name": "Red Velvet Milkshake",
+      "category": "Milkshake",
+      "price": 20000,
+      "description": "Minuman susu yang diblend dengan ice cream cokelat dan powder red velvet",
+      "available": true,
+      "aliases": [
+        "red velvet milkshake"
+      ]
+    },
+    {
+      "id": "oreo-milkshake",
+      "name": "Oreo Milkshake",
+      "category": "Milkshake",
+      "price": 23000,
+      "description": "Minuman susu yang diblend dengan ice cream cokelat dan biskuit oreo",
+      "available": true,
+      "aliases": [
+        "oreo milkshake"
+      ]
+    },
+    {
+      "id": "matcha-mint-milkshake",
+      "name": "Matcha Mint Milkshake",
+      "category": "Milkshake",
+      "price": 25000,
+      "description": "Minuman susu yang diblend dengan ice cream vanilla dan powder matcha serta sirup mint",
+      "available": true,
+      "aliases": [
+        "matcha mint milkshake",
+        "matcha"
+      ]
+    },
+    {
+      "id": "kurma-milkshake",
+      "name": "Kurma Milkshake",
+      "category": "Milkshake",
+      "price": 23000,
+      "description": "Minuman susu yang diblend dengan ice cream vanilla dan buah kurma",
+      "available": true,
+      "aliases": [
+        "kurma milkshake"
+      ]
+    },
+    {
+      "id": "cookies-cream",
+      "name": "Cookies & Cream",
+      "category": "Milkshake",
+      "price": 23000,
+      "description": "Minuman susu yang diblend dengan ice cream dan biskuit dengan topping whipped cream",
+      "available": true,
+      "aliases": [
+        "cookies & cream"
+      ]
+    },
+    {
+      "id": "chocolate-milkshake",
+      "name": "Chocolate Milkshake",
+      "category": "Milkshake",
+      "price": 20000,
+      "description": "Minuman susu yang diblend dengan ice cream dan powder cokelat",
+      "available": true,
+      "aliases": [
+        "chocolate milkshake"
+      ]
+    },
+    {
+      "id": "strawberry-smoothie",
+      "name": "Strawberry Smoothie",
+      "category": "Fresh & Healthy",
+      "price": 20000,
+      "description": "Minuman smoothies terbuat dari buah pisang dan strawberry dengan tambahan sirup strawberry",
+      "available": true,
+      "aliases": [
+        "strawberry smoothie"
+      ]
+    },
+    {
+      "id": "strawberry-milky-latte",
+      "name": "Strawberry Milky Latte",
+      "category": "Fresh & Healthy",
+      "price": 20000,
+      "description": "Minuman susu dan buah strawberry yang milky dan segar",
+      "available": true,
+      "aliases": [
+        "strawberry milky latte"
+      ]
+    },
+    {
+      "id": "green-leaf-juice",
+      "name": "Green Leaf Juice",
+      "category": "Fresh & Healthy",
+      "price": 17000,
+      "description": "Minuman jus yang segar terbuat dari bahan sayur pakcoy dengan sirup markisa dan perasan jeruk lemon",
+      "available": true,
+      "aliases": [
+        "green leaf juice"
+      ]
+    },
+    {
+      "id": "chocolate-smoothie",
+      "name": "Chocolate Smoothie",
+      "category": "Fresh & Healthy",
+      "price": 20000,
+      "description": "Minuman smoothies terbuat dari buah pisang dan cokelat bubuk",
+      "available": true,
+      "aliases": [
+        "chocolate smoothie"
+      ]
+    },
+    {
+      "id": "blue-lagoon-mocktail",
+      "name": "Blue Lagoon Mocktail",
+      "category": "Fresh & Healthy",
+      "price": 20000,
+      "description": "Minuman dingin menyegarkan dengan cita rasa sirup blue curacao dan buah lemon",
+      "available": true,
+      "aliases": [
+        "blue lagoon mocktail"
+      ]
+    },
+    {
+      "id": "best-green-smoothie",
+      "name": "Best Green Smoothie",
+      "category": "Fresh & Healthy",
+      "price": 20000,
+      "description": "Minuman smoothies terbuat dari buah pisang dan sayur pakcoy diblend susu dan yoghurt",
+      "available": true,
+      "aliases": [
+        "best green smoothie"
+      ]
+    },
+    {
+      "id": "kopi-susu-botol-pop-corn",
+      "name": "Kopi Susu Botol Pop Corn",
+      "category": "Kopi Susu Botol",
+      "price": 25000,
+      "description": "Kopi Susu Gula Aren dengan cita rasa jagung bakar (pop corn) dalam kemasan botol untuk ngopi bareng dan praktis dibawa kemana-mana",
+      "available": true,
+      "variants": [
+        {
+          "name": "Kopi Susu Botol Pop Corn - 250 ml",
+          "price": 25000
+        },
+        {
+          "name": "Kopi Susu Botol Pop Corn - 500 ml",
+          "price": 65000
+        },
+        {
+          "name": "Kopi Susu Botol Pop Corn - 1 liter",
+          "price": 130000
+        }
+      ],
+      "aliases": [
+        "kopi susu botol pop corn"
+      ]
+    },
+    {
+      "id": "kopi-susu-botol-mint",
+      "name": "Kopi Susu Botol Mint",
+      "category": "Kopi Susu Botol",
+      "price": 25000,
+      "description": "Kopi Susu Gula Aren dengan cita rasa mint yang dingin dan menyegarkan dalam kemasan botol untuk ngopi bareng dan praktis dibawa kemana-mana",
+      "available": true,
+      "variants": [
+        {
+          "name": "Kopi Susu Botol Mint - 250 ml",
+          "price": 25000
+        },
+        {
+          "name": "Kopi Susu Botol Mint - 500 ml",
+          "price": 65000
+        },
+        {
+          "name": "Kopi Susu Botol Mint - 1 liter",
+          "price": 130000
+        }
+      ],
+      "aliases": [
+        "kopi susu botol mint"
+      ]
+    },
+    {
+      "id": "kopi-susu-botol-cheese",
+      "name": "Kopi Susu Botol Cheese",
+      "category": "Kopi Susu Botol",
+      "price": 25000,
+      "description": "Kopi Susu Gula Aren dengan cita rasa keju yang creamy dalam kemasan botol untuk ngopi bareng dan praktis dibawa kemana-mana",
+      "available": true,
+      "variants": [
+        {
+          "name": "Kopi Susu Botol Cheese - 250 ml",
+          "price": 25000
+        },
+        {
+          "name": "Kopi Susu Botol Cheese - 500 ml",
+          "price": 65000
+        },
+        {
+          "name": "Kopi Susu Botol Cheese - 1 liter",
+          "price": 130000
+        }
+      ],
+      "aliases": [
+        "kopi susu botol cheese"
+      ]
+    },
+    {
+      "id": "kopi-susu-botol-cinnamon",
+      "name": "Kopi Susu Botol Cinnamon",
+      "category": "Kopi Susu Botol",
+      "price": 25000,
+      "description": "Kopi Susu Gula Aren dengan cita rasa cinnamon (kayu manis) dalam kemasan botol untuk ngopi bareng dan praktis dibawa kemana-mana",
+      "available": true,
+      "variants": [
+        {
+          "name": "Kopi Susu Botol Cinnamon - 250 ml",
+          "price": 25000
+        },
+        {
+          "name": "Kopi Susu Botol Cinnamon - 500 ml",
+          "price": 65000
+        },
+        {
+          "name": "Kopi Susu Botol Cinnamon - 1 liter",
+          "price": 130000
+        }
+      ],
+      "aliases": [
+        "kopi susu botol cinnamon"
+      ]
+    },
+    {
+      "id": "kopi-susu-botol-karamel",
+      "name": "Kopi Susu Botol Karamel",
+      "category": "Kopi Susu Botol",
+      "price": 25000,
+      "description": "Kopi Susu Gula Aren dengan cita rasa susu karamel dalam kemasan botol untuk ngopi bareng dan praktis dibawa kemana-mana",
+      "available": true,
+      "variants": [
+        {
+          "name": "Kopi Susu Botol Karamel - 250 ml",
+          "price": 25000
+        },
+        {
+          "name": "Kopi Susu Botol Karamel - 500 ml",
+          "price": 65000
+        },
+        {
+          "name": "Kopi Susu Botol Karamel - 1 liter",
+          "price": 130000
+        }
+      ],
+      "aliases": [
+        "kopi susu botol karamel"
+      ]
+    },
+    {
+      "id": "kopi-susu-botol-original",
+      "name": "Kopi Susu Botol Original",
+      "category": "Kopi Susu Botol",
+      "price": 20000,
+      "description": "Kopi Susu Gula Aren dengan karakter cokelat dan nutty  dalam kemasan botol untuk ngopi bareng dan praktis dibawa kemana-mana",
+      "available": true,
+      "variants": [
+        {
+          "name": "Kopi Susu Botol Original - 250 ml",
+          "price": 20000
+        },
+        {
+          "name": "Kopi Susu Botol Original - 500 ml",
+          "price": 55000
+        },
+        {
+          "name": "Kopi Susu Botol Original - 1 liter",
+          "price": 110000
+        }
+      ],
+      "aliases": [
+        "kopi susu botol original"
+      ]
+    },
+    {
+      "id": "vanilla-frappuccino",
+      "name": "Vanilla Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 25000,
+      "description": "Blended Espresso dengan susu dan Syrup Vanilla ditambah topping whipped cream",
+      "available": true,
+      "aliases": [
+        "vanilla frappuccino"
+      ]
+    },
+    {
+      "id": "oreo-frappuccino",
+      "name": "Oreo Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 27000,
+      "description": "Blended Espresso dengan susu dan biskuit Oreo ditambah topping whipped cream",
+      "available": true,
+      "aliases": [
+        "oreo frappuccino"
+      ]
+    },
+    {
+      "id": "mocha-frappuccino",
+      "name": "Mocha Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 25000,
+      "description": "Blended Espresso dengan susu dan cokelat ditambah topping whipped cream",
+      "available": true,
+      "aliases": [
+        "mocha frappuccino"
+      ]
+    },
+    {
+      "id": "hazelnut-frappuccino",
+      "name": "Hazelnut Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 25000,
+      "description": "Blended Espresso dengan susu dan Syrup Hazelnut ditambah topping whipped cream",
+      "available": true,
+      "aliases": [
+        "hazelnut frappuccino"
+      ]
+    },
+    {
+      "id": "choco-cookies-frappuccino",
+      "name": "Choco Cookies Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 27000,
+      "description": "Blended Espresso dengan susu dan biskuit cokelat ditambah topping whipped cream",
+      "available": false,
+      "aliases": [
+        "choco cookies frappuccino"
+      ]
+    },
+    {
+      "id": "caramel-frappuccino",
+      "name": "Caramel Frappuccino",
+      "category": "Es Kopi Blend",
+      "price": 25000,
+      "description": "Blended Espresso dengan susu dan Syrup Caramel ditambah topping whipped cream",
+      "available": true,
+      "aliases": [
+        "caramel frappuccino"
+      ]
+    },
+    {
+      "id": "tropical-coffee-mocktail",
+      "name": "Tropical Coffee Mocktail",
+      "category": "Signature Coffee",
+      "price": 20000,
+      "description": "Mixed Cold Drip Based Coffee dengan sirup buah-buahan",
+      "available": true,
+      "aliases": [
+        "tropical coffee mocktail"
+      ]
+    },
+    {
+      "id": "caramel-macchiatto",
+      "name": "Caramel Macchiatto",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "description": "Single Shot Espresso ditambah Syrup Caramel dengan topping milk foam yang tebal",
+      "available": true,
+      "aliases": [
+        "caramel macchiatto"
+      ],
+      "variantOptions": "Hot,Ice"
+    },
+    {
+      "id": "pandan-latte-iced-coffee",
+      "name": "Pandan Latte Iced Coffee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "description": "Mixed Kopi Susu Gula Aren dengan Pandan Latte",
+      "available": true,
+      "aliases": [
+        "pandan latte iced coffee"
+      ]
+    },
+    {
+      "id": "nutella-iced-coffee",
+      "name": "Nutella Iced Coffee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "description": "Kopi Susu Gula Aren dengan cokelat nutella",
+      "available": true,
+      "aliases": [
+        "nutella iced coffee"
+      ]
+    },
+    {
+      "id": "lotus-biscoff-iced-coffee",
+      "name": "Lotus Biscoff Iced Coffee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "description": "Kopi Susu Gula Aren dengan topping Lotus Biscoff Biscuit",
+      "available": true,
+      "aliases": [
+        "lotus biscoff iced coffee"
+      ]
+    },
+    {
+      "id": "lemonade-iced-coffee",
+      "name": "Lemonade Iced Coffee",
+      "category": "Signature Coffee",
+      "price": 20000,
+      "description": "Cold Drip Based Coffee dengan sirup dan buah lemon",
+      "available": true,
+      "aliases": [
+        "lemonade iced coffee"
+      ]
+    },
+    {
+      "id": "kopi-susu-madu-jahe-panas",
+      "name": "Kopi Susu Madu Jahe Panas",
+      "category": "Signature Coffee",
+      "price": 23000,
+      "description": "Espresso ditambah Susu Kental Manis (SKM) dengan jahe dan madu",
+      "available": true,
+      "aliases": [
+        "kopi susu madu jahe panas"
+      ]
+    },
+    {
+      "id": "cappuccino-hot-creme-brulee",
+      "name": "Cappuccino Hot Creme Brulee",
+      "category": "Signature Coffee",
+      "price": 25000,
+      "description": "Cappuccino Based Coffee dengan topping brown sugar caramel",
+      "available": true,
+      "aliases": [
+        "cappuccino hot creme brulee",
+        "cappuccino",
+        "capuccino"
+      ]
+    },
+    {
+      "id": "es-kopi-susu-dalgona",
+      "name": "Es Kopi Susu Dalgona",
+      "category": "Es Kopi Susu Gula Aren",
+      "price": 23000,
+      "description": "Kopi Susu Gula Aren khas Kedai Ngupi Ngupi dengan topping dalgona",
+      "available": true,
+      "aliases": [
+        "es kopi susu dalgona",
+        "kopi susu dalgona"
+      ],
+      "variantOptions": "Less Sugar,Normal,Extra Sugar"
+    },
+    {
+      "id": "es-kopi-susu-cream-cheese",
+      "name": "Es Kopi Susu Cream Cheese",
+      "category": "Es Kopi Susu Gula Aren",
+      "price": 23000,
+      "description": "Kopi Susu Gula Aren khas Kedai Ngupi Ngupi dengan topping cream cheese",
+      "available": true,
+      "aliases": [
+        "es kopi susu cream cheese",
+        "kopi susu cream cheese"
+      ],
+      "variantOptions": "Less Sugar,Normal,Extra Sugar"
+    },
+    {
+      "id": "es-kopi-susu-float",
+      "name": "Es Kopi Susu Float",
+      "category": "Es Kopi Susu Gula Aren",
+      "price": 23000,
+      "description": "Kopi Susu Gula Aren khas Kedai Ngupi Ngupi dengan topping es krim vanilla",
+      "available": true,
+      "aliases": [
+        "es kopi susu float",
+        "kopi susu float"
+      ],
+      "variantOptions": "Less Sugar,Normal,Extra Sugar"
+    },
+    {
+      "id": "mochaccino",
+      "name": "Mochaccino",
+      "category": "Milk Based Coffee",
+      "price": 25000,
+      "description": "Minuman kopi dengan bahan dasar espresso, susu dan cokelat",
+      "available": true,
+      "aliases": [
+        "mochaccino"
+      ],
+      "variantOptions": "Hot,Ice"
+    },
+    {
+      "id": "caffe-bon-bon",
+      "name": "Caffe Bon Bon",
+      "category": "Milk Based Coffee",
+      "price": 18000,
+      "description": "Minuman kopi dengan bahan dasar espresso dan Susu Kental Manis tanpa tambahan air",
+      "available": true,
+      "aliases": [
+        "caffe bon bon"
+      ]
+    },
+    {
+      "id": "caffe-latte",
+      "name": "Caffe Latte",
+      "category": "Milk Based Coffee",
+      "price": 23000,
+      "description": "Minuman kopi dengan bahan dasar espresso dan susu murni dengan tekstur yang creamy",
+      "available": true,
+      "variants": [
+        {
+          "name": "Caffe Latte - Hot - No Syrup",
+          "price": 23000
+        },
+        {
+          "name": "Caffe Latte - Hot - Vanilla",
+          "price": 26000
+        },
+        {
+          "name": "Caffe Latte - Hot - Caramel",
+          "price": 26000
+        },
+        {
+          "name": "Caffe Latte - Hot - Hazelnut",
+          "price": 26000
+        },
+        {
+          "name": "Caffe Latte - Hot - Pop Corn",
+          "price": 26000
+        },
+        {
+          "name": "Caffe Latte - Ice - No Syrup",
+          "price": 23000
+        },
+        {
+          "name": "Caffe Latte - Ice - Vanilla",
+          "price": 26000
+        },
+        {
+          "name": "Caffe Latte - Ice - Caramel",
+          "price": 26000
+        },
+        {
+          "name": "Caffe Latte - Ice - Hazelnut",
+          "price": 26000
+        },
+        {
+          "name": "Caffe Latte - Ice - Pop Corn",
+          "price": 26000
+        }
+      ],
+      "aliases": [
+        "latte",
+        "cafe latte",
+        "caffe latte",
+        "kopi latte"
+      ]
+    },
+    {
+      "id": "vietnam-drip",
+      "name": "Vietnam Drip",
+      "category": "Espresso & Manual Brew",
+      "price": 18000,
+      "description": "Kopi Blend Robusta-Arabica ditambah Susu Kental Manis yang diseduh menggunakan metode Vietnam Drip",
+      "available": true,
+      "variants": [
+        {
+          "name": "Vietnam Drip - Hot",
+          "price": 18000
+        },
+        {
+          "name": "Vietnam Drip - Ice",
+          "price": 20000
+        }
+      ],
+      "aliases": [
+        "vietnam drip"
+      ]
+    },
+    {
+      "id": "caffe-macchiato",
+      "name": "Caffe Macchiato",
+      "category": "Milk Based Coffee",
+      "price": 23000,
+      "description": "Minuman kopi dengan bahan dasar espresso dan foam yang tebal dari susu murni",
+      "available": true,
+      "aliases": [
+        "caffe macchiato"
+      ],
+      "variantOptions": "Hot - No Sugar,Hot - Less Sugar,Hot - Normal,Hot - Extra Sugar,Ice - No Sugar,Ice - Less Sugar,Ice - Normal,Ice - Extra Sugar"
+    },
+    {
+      "id": "cappuccino",
+      "name": "Cappuccino",
+      "category": "Milk Based Coffee",
+      "price": 23000,
+      "description": "Minuman kopi dengan bahan dasar espresso dan susu murni dengan tekstur foam yang tebal",
+      "available": true,
+      "aliases": [
+        "cappuccino",
+        "capuccino",
+        "cappucino",
+        "capucino"
+      ],
+      "variantOptions": "Hot - No Sugar,Hot - Less Sugar,Hot - Normal,Hot - Extra Sugar,Ice - No Sugar,Ice - Less Sugar,Ice - Normal,Ice - Extra Sugar"
+    },
+    {
+      "id": "v60-single-origin",
+      "name": "V60 Single Origin",
+      "category": "Espresso & Manual Brew",
+      "price": 23000,
+      "description": "Kopi yang diseduh menggunakan metode V60 Filter dengan jenis kopi Arabica Single Origin dari berbagai daerah",
+      "available": true,
+      "aliases": [
+        "v60 single origin"
+      ],
+      "variantOptions": "Hot,Ice (Javanese)"
+    },
+    {
+      "id": "espresso",
+      "name": "Espresso",
+      "category": "Espresso & Manual Brew",
+      "price": 15000,
+      "description": "Ekstrak kopi hitam dengan jenis blend kopi full arabica",
+      "available": true,
+      "aliases": [
+        "espresso"
+      ]
+    },
+    {
+      "id": "affogato",
+      "name": "Affogato",
+      "category": "Espresso & Manual Brew",
+      "price": 20000,
+      "description": "Dessert kopi khas Italia yang terdiri dari satu scoop es krim vanila yang \"ditenggelamkan\" atau disiram dengan segelas espresso panas",
+      "available": true,
+      "aliases": [
+        "affogato"
+      ]
+    },
+    {
+      "id": "americano",
+      "name": "Americano",
+      "category": "Espresso & Manual Brew",
+      "price": 20000,
+      "description": "Kopi hitam yang berasal dari espresso dengan jenis kopi blend full arabica dan tambahan air menghasilkan kopi yang lebih encer tapi tetap intens",
+      "available": true,
+      "aliases": [
+        "americano",
+        "amer",
+        "kopi amer"
+      ],
+      "variantOptions": "Hot - No Sugar,Hot - Less Sugar,Hot - Normal,Hot - Extra Sugar,Ice - No Sugar,Ice - Less Sugar,Ice - Normal,Ice - Extra Sugar"
+    },
+    {
+      "id": "es-kopi-susu-flavour",
+      "name": "Es Kopi Susu Flavour",
+      "category": "Es Kopi Susu Gula Aren",
+      "price": 22000,
+      "available": true,
+      "sellable": true,
+      "description": "Es Kopi Susu dengan pilihan rasa",
+      "variants": [
+        {
+          "name": "Es Kopi Susu Flavour - Cinnamon",
+          "price": 22000
+        },
+        {
+          "name": "Es Kopi Susu Flavour - Karamel",
+          "price": 22000
+        },
+        {
+          "name": "Es Kopi Susu Flavour - Mint",
+          "price": 22000
+        },
+        {
+          "name": "Es Kopi Susu Flavour - Pop Corn",
+          "price": 22000
+        }
+      ],
+      "image": null,
+      "sku": null
+    }
+  ],
+  "categories": [
+    {
+      "id": "bf2a8c80-227b-11f0-9d88-c9e89868a3fb",
+      "name": "Espresso & Manual Brew",
+      "itemCount": 6
+    },
+    {
+      "id": "55ef51f0-22b5-11f0-970d-854a22dc6d7c",
+      "name": "Es Kopi Susu Gula Aren",
+      "itemCount": 4
+    },
+    {
+      "id": "71b39e90-22b5-11f0-aa01-4d32c08285dc",
+      "name": "Kopi Susu Botol",
+      "itemCount": 6
+    },
+    {
+      "id": "f1b03460-231c-11f0-8d2d-95f7debceadd",
+      "name": "Milk Based Coffee",
+      "itemCount": 5
+    },
+    {
+      "id": "0360daa0-2371-11f0-bd97-9f2dc7b6ab5f",
+      "name": "Signature Coffee",
+      "itemCount": 11
+    },
+    {
+      "id": "55d80260-2373-11f0-8c6a-579acc173d3e",
+      "name": "Es Kopi Blend",
+      "itemCount": 10
+    },
+    {
+      "id": "bef1e990-2396-11f0-a756-05ffe487927b",
+      "name": "Fresh & Healthy",
+      "itemCount": 9
+    },
+    {
+      "id": "0183bce0-239d-11f0-afe3-290c9db56300",
+      "name": "Milkshake",
+      "itemCount": 8
+    },
+    {
+      "id": "01421bd0-239e-11f0-9163-31b4ab9c6547",
+      "name": "Chocolate",
+      "itemCount": 10
+    },
+    {
+      "id": "9fabb400-23c3-11f0-9486-a3e3bceaa5ff",
+      "name": "Tea",
+      "itemCount": 9
+    },
+    {
+      "id": "e67bae60-23c6-11f0-8534-11153528f41c",
+      "name": "Western Foods",
+      "itemCount": 6
+    },
+    {
+      "id": "3f5d19d0-23cc-11f0-9aa0-8f30dbac453c",
+      "name": "Indonesian Foods",
+      "itemCount": 8
+    },
+    {
+      "id": "7c34eb80-23dd-11f0-b515-03850605e0e6",
+      "name": "Nasi Goreng",
+      "itemCount": 6
+    },
+    {
+      "id": "e64eb920-23e1-11f0-9420-c3ea158194fd",
+      "name": "Rice Bowls & Noodles",
+      "itemCount": 11
+    },
+    {
+      "id": "c0958e80-23ea-11f0-b621-99f209683c70",
+      "name": "Makanan Ringan",
+      "itemCount": 11
+    },
+    {
+      "id": "922885c0-23f2-11f0-9932-17b7edfcfa24",
+      "name": "Dessert",
+      "itemCount": 4
+    },
+    {
+      "id": "67522f50-23f4-11f0-9c5d-09935df75d15",
+      "name": "Lain-lain",
+      "itemCount": 7
+    }
+  ],
+  "lastSyncedAt": "2026-05-14T11:23:51.364Z",
+  "syncSource": "pawoon-v2",
+  "totalItems": 132,
+  "totalCategories": 17
+}
