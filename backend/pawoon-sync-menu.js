@@ -69,7 +69,8 @@ async function fetchVariants(token, productId) {
     return (data.data || []).map(v => ({
       name: v.name,
       price: Number(v.price || 0),
-      sku: v.sku || null
+      sku: v.sku || null,
+      pawoonId: v.id || null
     }));
   } catch (_) {
     return [];
@@ -133,9 +134,14 @@ async function syncMenu() {
   } catch (_) {}
 
   const existingAliases = {};
+  const existingVariantIds = {};
   for (const item of (existingMenu.menus || [])) {
     if (item.aliases?.length) {
       existingAliases[item.name] = item.aliases;
+    }
+    // Preserve manually-added pawoonIds on variants
+    if (item.variants?.length && item.variants[0]?.pawoonId) {
+      existingVariantIds[item.name] = item.variants;
     }
   }
 
@@ -168,11 +174,7 @@ async function syncMenu() {
   let added = 0, updated = 0, unchanged = 0;
   const newMenus = [];
 
-  // Exclude "Es Kopi Susu Flavour" (owner request)
-  const excludeNames = ['Es Kopi Susu Flavour'];
-
-  for (const p of products) {
-    if (excludeNames.includes(p.name)) continue;
+    for (const p of products) {
 
     const catName = catMap[p.product_category_id] || 'Lain-lain';
     const menuId = slugify(p.name);
@@ -216,6 +218,17 @@ async function syncMenu() {
     if (existingAliases[p.name]) {
       item.aliases = existingAliases[p.name];
     }
+
+    // Preserve manually-added pawoonIds on variants
+    if (existingVariantIds[p.name] && item.variants?.length) {
+      for (const ev of existingVariantIds[p.name]) {
+        const match = item.variants.find(v => v.name === ev.name);
+        if (match && ev.pawoonId) match.pawoonId = ev.pawoonId;
+      }
+    }
+
+    // Store pawoonId from API
+    item.pawoonId = p.id;
 
     // Check if changed
     const existing = (existingMenu.menus || []).find(m => m.name === p.name);
@@ -276,7 +289,6 @@ async function syncMenu() {
       item.description = item.description.trim() || null;
     }
     if (!item.description) delete item.description;
-    delete item.pawoonId;
     delete item.sellable;
     // Compact variants: same-price → variantOptions string, diff-price → keep array without sku
     if (item.variants?.length) {
@@ -284,7 +296,8 @@ async function syncMenu() {
       const basePrice = item.price;
       if (item.variants.every(v => v.price === basePrice)) {
         item.variantOptions = item.variants.map(v => v.name.replace(item.name + ' - ', '').replace(item.name + ' ', '')).join(',');
-        delete item.variants;
+        // Keep variants array with pawoonIds for Pawoon push
+        item.variants = item.variants.map(v => ({ name: v.name, price: v.price, pawoonId: v.pawoonId }));
       }
     } else {
       delete item.variants;
