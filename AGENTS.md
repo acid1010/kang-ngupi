@@ -206,7 +206,7 @@ JANGAN langsung lempar 17 kategori. Mulai dengan best seller + opsi:
 ```
 Favorit di sini nih kak:
 ☕ Kopsu (Es Kopi Susu Original) — Rp18K
-☕ Americano — Rp17K
+☕ Americano — Rp20K
 🍫 Chocolate — Rp18K
 🍵 Matcha Latte — Rp18K
 🍗 Dimsum — Rp17K

@@ -10,12 +10,26 @@ import logger from './lib/logger.js';
 
 const SESSION_TIMEOUT_HOURS = 3;
 
+// Guard: skip all operations if table doesn't exist yet
+let tableExists = null;
+async function checkTableExists() {
+  if (tableExists !== null) return tableExists;
+  try {
+    const { error } = await getSupabase().from('table_sessions').select('id').limit(1);
+    tableExists = !error || !error.message.includes('schema cache');
+  } catch (_) {
+    tableExists = false;
+  }
+  return tableExists;
+}
+
 /**
  * Get or create an active table session.
  * If an active session exists for the table, return it.
  * Otherwise, create a new one.
  */
 export async function getOrCreateTableSession(tableNumber, { customerPhone, customerName } = {}) {
+  if (!await checkTableExists()) return null;
   const supabase = getSupabase();
   const tableLabel = `Meja ${tableNumber}`;
 
@@ -102,6 +116,7 @@ export async function getOrCreateTableSession(tableNumber, { customerPhone, cust
  * Called after pushOrderToPawoon succeeds.
  */
 export async function addOrderToSession(sessionId, { orderId, pawoonOrderId, amount }) {
+  if (!await checkTableExists() || !sessionId) return null;
   const supabase = getSupabase();
 
   // Fetch current session
@@ -281,6 +296,7 @@ export async function getAllActiveSessions() {
  * Closes sessions with no activity for SESSION_TIMEOUT_HOURS.
  */
 export async function closeStaleTableSessions() {
+  if (!await checkTableExists()) return [];
   const supabase = getSupabase();
   const cutoff = new Date(Date.now() - SESSION_TIMEOUT_HOURS * 60 * 60 * 1000).toISOString();
 
