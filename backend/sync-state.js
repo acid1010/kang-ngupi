@@ -552,12 +552,25 @@ async function cmdSyncQrisDoku(phone, ctx, totalAmount) {
     // Non-fatal — order may not exist in DB but QRIS flow continues
   }
 
-  // Step 1: Generate QRIS via Doku (with retry on duplicate orderId)
+  // Step 1: Generate QRIS via Doku (with retry on duplicate orderId or transient failure)
   let dokuResult = await fetchJson(`${BACKEND_BASE_URL}/payments/doku/qris`, {
     method: 'POST',
     headers: buildHeaders(),
     body: JSON.stringify({ orderId, amount, validityMinutes: 30 })
   });
+
+  // Retry on transient failure (HTML response, timeout, 5xx)
+  if (!dokuResult.ok && !JSON.stringify(dokuResult).includes('4044718')) {
+    const errStr = JSON.stringify(dokuResult);
+    if (errStr.includes('<!DOCTYPE') || errStr.includes('ECONNREFUSED') || errStr.includes('timeout') || errStr.includes('500') || errStr.includes('502') || errStr.includes('503')) {
+      await new Promise(r => setTimeout(r, 3000));
+      dokuResult = await fetchJson(`${BACKEND_BASE_URL}/payments/doku/qris`, {
+        method: 'POST',
+        headers: buildHeaders(),
+        body: JSON.stringify({ orderId, amount, validityMinutes: 30 })
+      });
+    }
+  }
 
   // Retry with unique suffix if Doku rejects duplicate orderId (4044718)
   if (!dokuResult.ok && JSON.stringify(dokuResult).includes('4044718')) {
