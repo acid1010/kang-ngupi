@@ -1073,6 +1073,7 @@ app.post('/webhooks/pawoon', async (req, res) => {
 // Dashboard API (CORS enabled for Next.js frontend)
 const DASHBOARD_ORIGINS = [
   'https://ngupingupi.me',
+  'https://app.ngupingupi.me',
   'http://localhost:3000',
   'http://localhost:3002',
   ...(process.env.DASHBOARD_EXTRA_ORIGINS || '').split(',').filter(Boolean),
