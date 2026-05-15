@@ -28,6 +28,12 @@ Thumbs.db
 # Temp
 backend/tmp/
 /tmp/
+*.png
+!backend/public/**/*.png
+
+# Runtime data
+backend/data/stock-snapshots/
+backend/data/order-counter.json
 
 # OpenClaw
 .openclaw/
@@ -53,3 +59,4 @@ state/reservasi/*.json
 state/doku-pending/*.json
 memory/*.md
 !memory/.gitkeep
+.vercel

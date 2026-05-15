@@ -39,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={cn("font-sans", geist.variable)}>
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <body className="min-h-screen bg-background text-foreground antialiased">
         <AuthProvider>
           {children}

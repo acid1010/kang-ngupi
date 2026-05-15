@@ -6,15 +6,7 @@ import { login } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Eye, EyeOff, Loader2, Coffee } from "lucide-react";
+import { Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -27,7 +19,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!loading && user) {
-      router.replace("/dashboard");
+      router.replace(user.role === "kurir" ? "/kurir" : "/dashboard");
     }
   }, [user, loading, router]);
 
@@ -39,9 +31,9 @@ export default function LoginPage() {
     try {
       const res = await login(username, password);
       loginSuccess(res.token, res.user);
-      router.push("/dashboard");
+      router.push(res.user.role === "kurir" ? "/kurir" : "/dashboard");
     } catch {
-      setError("Username atau password salah");
+      setError("Invalid username or password");
     } finally {
       setIsLoading(false);
     }
@@ -51,79 +43,86 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-background relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-32 -right-32 w-72 h-72 bg-[var(--ngupi)]/5 rounded-full blur-3xl" />
-        <div className="absolute -bottom-32 -left-32 w-72 h-72 bg-[var(--ngupi-darker)]/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--ngupi)]/[0.02] rounded-full blur-3xl" />
+      {/* Ambient background */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[var(--ngupi)]/[0.03] rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[var(--ngupi-darker)]/[0.04] rounded-full blur-[100px] -translate-x-1/3 translate-y-1/3" />
       </div>
 
-      <Card className="w-full max-w-sm relative border-border/60 bg-card/95 backdrop-blur-xl shadow-2xl shadow-black/20">
-        <CardHeader className="text-center pb-2 pt-8">
-          {/* Logo */}
-          <div className="mx-auto mb-5 w-20 h-20 rounded-2xl overflow-hidden shadow-lg shadow-black/30 ring-1 ring-border">
+      {/* Grid pattern overlay */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.015]"
+        aria-hidden="true"
+        style={{
+          backgroundImage: `linear-gradient(var(--ngupi) 1px, transparent 1px), linear-gradient(90deg, var(--ngupi) 1px, transparent 1px)`,
+          backgroundSize: "60px 60px",
+        }}
+      />
+
+      <div className="w-full max-w-[380px] relative">
+        {/* Brand header */}
+        <div className="text-center mb-8">
+          <div className="mx-auto mb-5 w-16 h-16 rounded-2xl overflow-hidden shadow-2xl shadow-black/40 ring-1 ring-white/[0.06] transition-transform duration-500 hover:scale-105">
             <img
               src="/logo.jpg"
-              alt="Ngupi Ngupi"
+              alt="Go Ngupi"
               className="w-full h-full object-cover"
             />
           </div>
-
-          <CardTitle className="text-xl font-bold text-[var(--ngupi)]">
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">
             Go Ngupi
-          </CardTitle>
-          <CardDescription className="text-muted-foreground text-xs mt-1">
-            Dashboard Kedai Kopi Ngupi Ngupi
-          </CardDescription>
-        </CardHeader>
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1 font-light">
+            Operations Dashboard
+          </p>
+        </div>
 
-        <Separator className="bg-border/50 mx-6" />
-
-        <CardContent className="pt-5 pb-7 px-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Error message */}
+        {/* Login card */}
+        <div className="rounded-2xl border border-border/60 bg-card/80 backdrop-blur-2xl shadow-2xl shadow-black/30 p-7">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Error */}
             {error && (
-              <div className="p-3 rounded-lg bg-red-500/8 border border-red-500/15 text-red-400 text-sm text-center">
+              <div className="px-4 py-3 rounded-xl bg-red-500/[0.06] border border-red-500/15 text-red-400 text-sm text-center font-medium animate-in fade-in slide-in-from-top-1 duration-200">
                 {error}
               </div>
             )}
 
             {/* Username */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80">
+              <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Username
               </label>
               <Input
                 type="text"
-                placeholder="Masukkan username"
+                placeholder="Enter username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 autoComplete="username"
                 autoFocus
-                className="h-11 bg-secondary/50 border-border/60 placeholder:text-muted-foreground/40 focus:border-[var(--ngupi)]/50 focus:ring-[var(--ngupi)]/20"
+                className="h-12 bg-background/60 border-border/50 rounded-xl placeholder:text-muted-foreground/30 focus:border-[var(--ngupi)]/40 focus:ring-[var(--ngupi)]/15 focus:bg-background/80 transition-all duration-300 text-sm"
               />
             </div>
 
             {/* Password */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground/80">
+              <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Password
               </label>
               <div className="relative">
                 <Input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Masukkan password"
+                  placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
-                  className="h-11 pr-10 bg-secondary/50 border-border/60 placeholder:text-muted-foreground/40 focus:border-[var(--ngupi)]/50 focus:ring-[var(--ngupi)]/20"
+                  className="h-12 pr-11 bg-background/60 border-border/50 rounded-xl placeholder:text-muted-foreground/30 focus:border-[var(--ngupi)]/40 focus:ring-[var(--ngupi)]/15 focus:bg-background/80 transition-all duration-300 text-sm"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground/80 transition-colors"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-foreground/70 transition-colors duration-200"
                 >
                   {showPassword ? (
                     <EyeOff className="w-4 h-4" />
@@ -137,25 +136,29 @@ export default function LoginPage() {
             {/* Submit */}
             <Button
               type="submit"
-              size="lg"
-              className="w-full h-11 text-sm font-semibold bg-[var(--ngupi-darker)] hover:bg-[var(--ngupi-dark)] text-white border-0"
+              className="w-full h-12 text-sm font-semibold bg-[var(--ngupi)] hover:bg-[var(--ngupi-light)] text-[#0a1414] border-0 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-[var(--ngupi)]/20 hover:-translate-y-0.5 active:translate-y-0 active:shadow-none"
               disabled={isLoading}
             >
               {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Masuk...
+                  Signing in...
                 </>
               ) : (
                 <>
-                  <Coffee className="w-4 h-4 mr-2" />
-                  Masuk
+                  Sign In
+                  <ArrowRight className="w-4 h-4 ml-2" />
                 </>
               )}
             </Button>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Footer */}
+        <p className="text-center text-[11px] text-muted-foreground/40 mt-6 font-light">
+          Kedai Ngupi-Ngupi Purwakarta
+        </p>
+      </div>
     </div>
   );
 }

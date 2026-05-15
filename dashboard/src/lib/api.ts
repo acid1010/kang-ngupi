@@ -1,5 +1,5 @@
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_BASE || "https://ngupingupi.me/dashboard/api";
+  process.env.NEXT_PUBLIC_API_BASE || "/dashboard/api";
 
 export interface User {
   id: number;
@@ -57,7 +57,21 @@ export interface OrderStats {
   pendingDelivery: number;
   onTheWay: number;
   completedToday: number;
-  dine_in?: number;
+  dineInToday: number;
+  pickupToday: number;
+  deliveryToday: number;
+  revenueToday: number;
+  avgOrderValue: number;
+}
+
+export interface MenuStats {
+  totalItems: number;
+  availableItems: number;
+  unavailableItems: number;
+  availabilityRate: number;
+  topUnavailableCategories: { category: string; count: number }[];
+  latestUnavailable: { id: string; name: string; category: string; price: number }[];
+  lastSyncedAt: string | null;
 }
 
 function getToken(): string | null {
@@ -114,7 +128,7 @@ async function apiFetch<T>(
     removeToken();
     removeUser();
     if (typeof window !== "undefined") {
-      window.location.href = "/app/login";
+      window.location.href = "/login";
     }
     throw new Error("Unauthorized");
   }
@@ -199,6 +213,10 @@ export async function updateOrderStatus(
 
 export async function getOrderStats(): Promise<{ ok: boolean; data: OrderStats }> {
   return apiFetch<{ ok: boolean; data: OrderStats }>("/orders/stats/summary");
+}
+
+export async function getMenuStats(): Promise<{ ok: boolean; data: MenuStats }> {
+  return apiFetch<{ ok: boolean; data: MenuStats }>("/menu/stats");
 }
 
 // Users

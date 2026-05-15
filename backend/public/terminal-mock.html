@@ -1,0 +1,36 @@
+<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#282c34;font-family:'Menlo',Monaco,'Courier New',monospace;padding:40px;color:#abb2bf}.terminal{background:#1e2127;border-radius:12px;overflow:hidden;max-width:880px;margin:0 auto;box-shadow:0 20px 60px rgba(0,0,0,0.5)}.titlebar{background:#323842;padding:10px 16px;display:flex;align-items:center;gap:8px}.dot{width:12px;height:12px;border-radius:50%}.dot.r{background:#ff5f56}.dot.y{background:#ffbd2e}.dot.g{background:#27c93f}.tt{color:#636d83;font-size:12px;margin-left:auto}.c{padding:20px;font-size:12.5px;line-height:1.8;white-space:pre}.p{color:#98c379}.cmd{color:#e5c07b}.i{color:#61afef}.s{color:#98c379}.d{color:#636d83}.w{color:#abb2bf}.cy{color:#56b6c2}.m{color:#c678dd}</style></head><body><div class="terminal"><div class="titlebar"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><span class="tt">ubuntu@kang-ngupi ~ (production)</span></div><div class="c"><span class="d">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+<span class="cy">  KANG NGUPI — AI WhatsApp Ordering Agent | Production Logs</span>
+<span class="d">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+
+<span class="p">$</span> <span class="cmd">pm2 logs ngupi-backend</span>  <span class="d"># Live order: Customer → AI → QRIS → POS push</span>
+
+<span class="i">[13:25:14]</span> <span class="s">INFO</span> [agent] New WhatsApp session: +628xxx (dine-in, table 1)
+<span class="i">[13:25:16]</span> <span class="s">INFO</span> [agent] AI response: "Halo kak! Meja 1 ya. Mau pesan apa?"
+<span class="i">[13:25:31]</span> <span class="s">INFO</span> [agent] Order detected: Es Batu + Cup x1 (Rp2,000)
+<span class="i">[13:27:16]</span> <span class="s">INFO</span> [agent] Customer selected QRIS → writing state + exec sync
+<span class="i">[13:27:17]</span> <span class="s">INFO</span> [doku] Generating QRIS for DI-1243-001 (Rp2,000)
+<span class="i">[13:27:17]</span> <span class="s">INFO</span> [doku] QRIS generated → QR image sent to WhatsApp
+<span class="i">[13:27:17]</span> <span class="s">INFO</span> [agent] Response: NO_REPLY <span class="d">(silent — backend handles notification)</span>
+<span class="i">[13:43:53]</span> <span class="s">INFO</span> [doku] Webhook received — payment notification
+<span class="i">[13:43:59]</span> <span class="m">INFO</span> [poller] <span class="s">✓ Payment CONFIRMED</span> | DI-1243-001 | Rp2,000
+<span class="i">[13:44:01]</span> <span class="s">INFO</span> [pawoon] Order pushed to POS → ID: 41591a11 (table=1, dine_in)
+<span class="i">[13:44:04]</span> <span class="s">INFO</span> [whatsapp] Receipt sent: "Pembayaran QRIS terverifikasi ✅"
+
+<span class="d">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+
+<span class="p">$</span> <span class="cmd">openclaw sessions --summary</span>
+
+  <span class="cy">Agent Token Usage (past 7 days)</span>
+  ┌─────────────────────────────────────────────────────┐
+  │ gpt-5.4 (WhatsApp bot):        420,000 tokens      │
+  │ claude-opus-4.6 (admin/dev):   633,000 tokens      │
+  │ Total:                       1,053,000 tokens      │
+  │ Orders processed:                    32            │
+  │ Payments verified (QRIS):            12            │
+  │ POS pushes (Pawoon):                 28            │
+  └─────────────────────────────────────────────────────┘
+
+<span class="p">$</span> <span class="cmd">curl -s https://ngupingupi.me/health | jq</span>
+  { "ok": true, "service": "ngupi-backend", "db": "ok", "memoryMB": 97 }
+
+<span class="p">$</span> <span class="d">█</span></div></div></body></html>

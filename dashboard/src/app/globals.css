@@ -69,17 +69,18 @@
 /* We don't need a separate .dark block — the root IS dark */
 
 body {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans, system-ui), -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: var(--background);
   color: var(--foreground);
+  letter-spacing: -0.01em;
 }
 
 /* ── Custom scrollbar ──────────────────────────────────────── */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -88,11 +89,16 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: var(--ngupi-border);
-  border-radius: 3px;
+  border-radius: 100px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--ngupi);
+  background: var(--ngupi-darker);
+}
+
+/* ── Premium transitions ───────────────────────────────────── */
+* {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ── Toast overrides ───────────────────────────────────────── */

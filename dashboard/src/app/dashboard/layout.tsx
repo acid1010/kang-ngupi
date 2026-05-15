@@ -9,12 +9,11 @@ import {
   Users,
   LogOut,
   Menu,
-  ChevronRight,
+  Navigation,
 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Sheet,
@@ -27,9 +26,10 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["admin", "kurir"] },
-  { href: "/dashboard/orders", label: "Pesanan", icon: Package, roles: ["admin", "kurir"] },
-  { href: "/dashboard/users", label: "Pengguna", icon: Users, roles: ["admin"] },
+  { href: "/kurir", label: "Courier", icon: Navigation, roles: ["admin", "kurir"] },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["admin"] },
+  { href: "/dashboard/orders", label: "Orders", icon: Package, roles: ["admin"] },
+  { href: "/dashboard/users", label: "Users", icon: Users, roles: ["admin"] },
 ];
 
 function NavLink({
@@ -47,15 +47,17 @@ function NavLink({
       href={item.href}
       onClick={onClick}
       className={cn(
-        "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all group",
+        "flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-300 group relative",
         isActive
-          ? "bg-[var(--ngupi)]/12 text-[var(--ngupi)]"
-          : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+          ? "bg-[var(--ngupi)]/10 text-[var(--ngupi)] shadow-sm shadow-[var(--ngupi)]/5"
+          : "text-muted-foreground hover:text-foreground hover:bg-white/[0.03]"
       )}
     >
-      <Icon className={cn("w-[18px] h-[18px]", isActive && "text-[var(--ngupi)]")} />
+      {isActive && (
+        <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-[var(--ngupi)]" />
+      )}
+      <Icon className={cn("w-[17px] h-[17px] transition-colors duration-300", isActive ? "text-[var(--ngupi)]" : "group-hover:text-foreground")} />
       <span className="flex-1">{item.label}</span>
-      {isActive && <ChevronRight className="w-3.5 h-3.5 opacity-50" />}
     </Link>
   );
 }
@@ -69,27 +71,26 @@ function UserBlock({ user, onLogout }: { user: { name?: string; username?: strin
     .toUpperCase();
 
   return (
-    <div className="space-y-3">
-      <Separator className="bg-border" />
+    <div className="border-t border-border/50 pt-4 space-y-3">
       <div className="flex items-center gap-3 px-1">
         <Avatar size="default">
-          <AvatarFallback className="bg-[var(--ngupi)]/15 text-[var(--ngupi)] text-xs font-semibold">
+          <AvatarFallback className="bg-[var(--ngupi)]/10 text-[var(--ngupi)] text-[11px] font-semibold ring-1 ring-[var(--ngupi)]/20">
             {initials}
           </AvatarFallback>
         </Avatar>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-foreground truncate">{user.name || user.username || "User"}</p>
-          <p className="text-xs text-[var(--ngupi-darker)] capitalize">{user.role}</p>
+          <p className="text-sm font-medium text-foreground truncate leading-tight">{user.name || user.username || "User"}</p>
+          <p className="text-[11px] text-muted-foreground capitalize leading-tight mt-0.5">{user.role}</p>
         </div>
       </div>
       <Button
         variant="ghost"
         size="sm"
         onClick={onLogout}
-        className="w-full justify-start text-muted-foreground hover:text-red-400 hover:bg-red-500/10"
+        className="w-full justify-start text-muted-foreground/70 hover:text-red-400 hover:bg-red-500/[0.06] rounded-lg text-xs h-8"
       >
-        <LogOut className="w-4 h-4 mr-2" />
-        Keluar
+        <LogOut className="w-3.5 h-3.5 mr-2" />
+        Sign Out
       </Button>
     </div>
   );
@@ -114,11 +115,14 @@ export default function DashboardLayout({
   if (loading || !user) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 rounded-xl overflow-hidden animate-pulse">
-            <img src="/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-11 h-11 rounded-xl overflow-hidden animate-pulse ring-1 ring-border">
+            <img src="/logo.jpg" alt="Go Ngupi" className="w-full h-full object-cover" />
           </div>
-          <p className="text-xs text-muted-foreground">Memuat...</p>
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-[var(--ngupi)] animate-pulse" />
+            <p className="text-xs text-muted-foreground font-light">Loading</p>
+          </div>
         </div>
       </div>
     );
@@ -131,48 +135,48 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-background">
-      {/* ── Mobile header ──────────────────────────────────────── */}
-      <header className="lg:hidden sticky top-0 z-50 bg-card/95 backdrop-blur-md border-b border-border">
+      {/* Mobile header */}
+      <header className="lg:hidden sticky top-0 z-50 bg-background/90 backdrop-blur-xl border-b border-border/50">
         <div className="flex items-center justify-between px-4 h-14">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg overflow-hidden ring-1 ring-border">
-              <img src="/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
+            <div className="w-8 h-8 rounded-lg overflow-hidden ring-1 ring-border/60">
+              <img src="/logo.jpg" alt="Go Ngupi" className="w-full h-full object-cover" />
             </div>
-            <span className="font-bold text-[var(--ngupi)] text-base">Go Ngupi</span>
+            <span className="font-bold text-[var(--ngupi)] text-[15px] tracking-tight">Go Ngupi</span>
           </div>
 
           <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
             <SheetTrigger
               render={
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                   <Menu className="w-5 h-5" />
                 </Button>
               }
             />
             <SheetContent
               side="left"
-              className="w-[280px] bg-card border-border p-0"
+              className="w-[260px] bg-background border-border/50 p-0"
               showCloseButton={false}
             >
-              <SheetHeader className="px-5 pt-5 pb-3">
+              <SheetHeader className="px-5 pt-6 pb-4">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl overflow-hidden ring-1 ring-border">
-                    <img src="/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
+                  <div className="w-9 h-9 rounded-xl overflow-hidden ring-1 ring-border/60">
+                    <img src="/logo.jpg" alt="Go Ngupi" className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <SheetTitle className="text-[var(--ngupi)] text-base font-bold leading-tight">
+                    <SheetTitle className="text-[var(--ngupi)] text-[15px] font-bold leading-tight tracking-tight">
                       Go Ngupi
                     </SheetTitle>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                      Dashboard
+                    <p className="text-[10px] text-muted-foreground/60 uppercase tracking-widest mt-0.5">
+                      Operations
                     </p>
                   </div>
                 </div>
               </SheetHeader>
 
-              <Separator className="bg-border" />
+              <div className="h-px bg-border/40 mx-4" />
 
-              <ScrollArea className="flex-1 px-3 py-3">
+              <ScrollArea className="flex-1 px-3 py-4">
                 <nav className="space-y-1">
                   {filteredNav.map((item) => (
                     <SheetClose key={item.href} render={<div />}>
@@ -186,7 +190,7 @@ export default function DashboardLayout({
                 </nav>
               </ScrollArea>
 
-              <div className="px-4 pb-4 mt-auto">
+              <div className="px-4 pb-5 mt-auto">
                 <UserBlock user={user} onLogout={logout} />
               </div>
             </SheetContent>
@@ -195,21 +199,21 @@ export default function DashboardLayout({
       </header>
 
       <div className="flex">
-        {/* ── Desktop sidebar ────────────────────────────────────── */}
-        <aside className="hidden lg:flex lg:flex-col lg:w-60 lg:fixed lg:inset-y-0 bg-card border-r border-border">
+        {/* Desktop sidebar */}
+        <aside className="hidden lg:flex lg:flex-col lg:w-[240px] lg:fixed lg:inset-y-0 bg-background border-r border-border/40">
           {/* Logo */}
-          <div className="flex items-center gap-3 px-5 h-14 border-b border-border">
-            <div className="w-9 h-9 rounded-xl overflow-hidden ring-1 ring-border shadow-lg shadow-black/20">
-              <img src="/logo.jpg" alt="Ngupi" className="w-full h-full object-cover" />
+          <div className="flex items-center gap-3 px-5 h-16 border-b border-border/30">
+            <div className="w-9 h-9 rounded-xl overflow-hidden ring-1 ring-border/50 shadow-lg shadow-black/20">
+              <img src="/logo.jpg" alt="Go Ngupi" className="w-full h-full object-cover" />
             </div>
             <div>
-              <h1 className="font-bold text-[var(--ngupi)] text-base leading-tight">Go Ngupi</h1>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Dashboard</p>
+              <h1 className="font-bold text-[var(--ngupi)] text-[15px] leading-tight tracking-tight">Go Ngupi</h1>
+              <p className="text-[10px] text-muted-foreground/50 uppercase tracking-widest mt-0.5">Operations</p>
             </div>
           </div>
 
           {/* Nav */}
-          <ScrollArea className="flex-1 px-3 py-4">
+          <ScrollArea className="flex-1 px-3 py-5">
             <nav className="space-y-1">
               {filteredNav.map((item) => (
                 <NavLink key={item.href} item={item} isActive={isActive(item.href)} />
@@ -218,14 +222,14 @@ export default function DashboardLayout({
           </ScrollArea>
 
           {/* User */}
-          <div className="px-4 pb-4">
+          <div className="px-4 pb-5">
             <UserBlock user={user} onLogout={logout} />
           </div>
         </aside>
 
-        {/* ── Main content ───────────────────────────────────────── */}
-        <main className="flex-1 lg:ml-60 min-h-screen">
-          <div className="p-4 lg:p-6 max-w-7xl mx-auto">
+        {/* Main content */}
+        <main className="flex-1 lg:ml-[240px] min-h-screen">
+          <div className="p-4 lg:p-8 max-w-[1400px] mx-auto">
             {children}
           </div>
         </main>
