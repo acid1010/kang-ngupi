@@ -917,6 +917,29 @@ app.post('/integrations/pawoon/delete', async (req, res) => {
   }
 });
 
+// Courier notify endpoint — send delivery notification to courier (used by sync-state.js for COD)
+app.post('/notifications/courier', async (req, res) => {
+  try {
+    const { orderId, customerName, customerPhone, items, deliveryFee, totalAmount, deliveryLocation } = req.body;
+    if (!orderId) return res.status(400).json({ ok: false, error: 'Missing orderId' });
+    const { notifyCouriers } = await import('./notifications/courier.js');
+    const order = {
+      client_order_id: orderId,
+      customer_name_snapshot: customerName || 'Customer',
+      customer_phone_snapshot: customerPhone || '-',
+      fulfillment_method: 'delivery',
+      payment_method: 'cod',
+      delivery_fee: deliveryFee || 0
+    };
+    const courierPayment = { amount: totalAmount || 0, total_payment: totalAmount || 0 };
+    await notifyCouriers(order, items || [], courierPayment);
+    res.json({ ok: true });
+  } catch (err) {
+    logger.error('[courier-notify] Error: %s', err.message);
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 // Pawoon Webhook — receive stock/product updates from POS
 app.post('/webhooks/pawoon', async (req, res) => {
   try {

@@ -342,6 +342,84 @@ async function cmdSync(phone) {
   }
 
   // Non-QRIS sync
+  // COD delivery/pickup: push to Pawoon + notify courier + insert DB
+  if (ctx.paymentMethod === 'cod') {
+    (async () => {
+      try {
+        const allItems = (ctx.items || []).map(i => ({
+          menu_name: i.menuName || i.menu_name,
+          qty: i.quantity || i.qty || 1,
+          price: Number(i.price || 0),
+          notes: i.notes || null
+        }));
+        const deliveryFee = Number(ctx.deliveryFee || ctx.ongkir || 0);
+        const orderAmount = allItems.reduce((sum, i) => sum + (i.price * i.qty), 0);
+        const totalAmount = orderAmount + deliveryFee;
+
+        // Push to Pawoon
+        const pushItems = [...allItems];
+        if (deliveryFee > 0) {
+          pushItems.push({ menu_name: 'Ongkir Go Ngupi', qty: 1, price: deliveryFee, notes: null });
+        }
+        const noteText = ctx.fulfillmentMethod === 'delivery'
+          ? `Delivery COD - ${ctx.customerName || 'Customer'}` 
+          : `Pickup COD - ${ctx.customerName || 'Customer'}`;
+
+        await fetchJson(`${BACKEND_BASE_URL}/integrations/pawoon/push`, {
+          method: 'POST',
+          headers: buildHeaders(),
+          body: JSON.stringify({
+            client_order_id: clientOrderId,
+            customer_name: ctx.customerName || null,
+            customer_phone: normalized,
+            fulfillment_method: ctx.fulfillmentMethod || 'delivery',
+            payment_method: 'cash',
+            payment_status: 'pending_cod',
+            items: pushItems,
+            notes: noteText
+          })
+        });
+
+        // Insert order in DB
+        await fetchJson(`${BACKEND_BASE_URL}/webhooks/orders`, {
+          method: 'POST',
+          headers: buildHeaders(),
+          body: JSON.stringify({
+            event_type: 'final_order',
+            order: {
+              client_order_id: clientOrderId,
+              customer: { name: ctx.customerName || null, phone: normalized },
+              channel: 'whatsapp',
+              items: allItems.map(i => ({ menu_name: i.menu_name, qty: i.qty, notes: i.notes })),
+              fulfillment_method: ctx.fulfillmentMethod,
+              delivery_fee: deliveryFee,
+              payment_method: 'cod',
+              payment_status: 'pending_cod',
+              total_amount: totalAmount
+            }
+          })
+        });
+
+        // Notify courier (delivery only)
+        if (ctx.fulfillmentMethod === 'delivery' && ctx.deliveryLocation) {
+          await fetchJson(`${BACKEND_BASE_URL}/notifications/courier`, {
+            method: 'POST',
+            headers: buildHeaders(),
+            body: JSON.stringify({
+              orderId: clientOrderId,
+              customerName: ctx.customerName || null,
+              customerPhone: normalized,
+              items: allItems,
+              deliveryFee,
+              totalAmount,
+              deliveryLocation: ctx.deliveryLocation
+            })
+          });
+        }
+      } catch (_) {}
+    })();
+  }
+
   // For cash_at_counter dine-in: push EVERY time (barista sees each order, printer fires)
   // Use table session tracking (DB + file) to add sequence labels
   if (ctx.paymentMethod === 'cash_at_counter') {
