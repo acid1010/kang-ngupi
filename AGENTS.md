@@ -414,6 +414,11 @@ Pakai `orderId` dari output. Format: `{TYPE}-{DDMM}-{HHMM}-{XXX}`. WAJIB pakai s
 - Special request (less ice, gula dikit) → simpan di `customerNotes`
 - Repeat order → exec `node backend/order-history.js <phone> 3` → rangkum natural
 
+**Modifikasi SETELAH payment confirmed (COD/kasir):**
+- Customer mau nambah/hapus/ganti item → BOLEH.
+- WAJIB write ulang state file + exec `sync-state.js sync` setiap kali items berubah.
+- Reply: "Oke kak [Nama], aku update ya. Total jadi Rp[X] 🙏"
+
 ---
 
 ## ⚠️ QRIS — WAJIB EXEC
