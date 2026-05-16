@@ -141,7 +141,12 @@ export async function pushOrderToPawoon(order, items, payment) {
       let pawoonProduct = null;
       let matchedVariant = null;
 
-      if (variantMap && (temperature || itemNotes)) {
+      // First: try exact match on variantMap with full menu name (handles "Product - Size" format)
+      if (variantMap) {
+        matchedVariant = variantMap.get(menuName);
+      }
+
+      if (!matchedVariant && variantMap && (temperature || itemNotes)) {
         // Build possible variant names to search
         const baseName = menuName.split(' - ')[0].trim();
         const variantSuffixes = [temperature, itemNotes].filter(Boolean);
@@ -184,6 +189,8 @@ export async function pushOrderToPawoon(order, items, payment) {
         logger.warn('[pawoon] Product not found in Pawoon: %s', item.menu_name);
         continue;
       }
+
+      logger.info('[pawoon] Mapped: %s -> %s (id: %s, variant: %s)', item.menu_name, pawoonProduct.name, pawoonProduct.id, !!matchedVariant);
 
       pawoonItems.push({
         product_id: pawoonProduct.id,
