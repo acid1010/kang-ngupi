@@ -39,7 +39,12 @@ const kedaiOpenMin = isWeekend ? 8 * 60 : 9 * 60;
 const kedaiCloseMin = isWeekend ? 23 * 60 + 30 : 23 * 60;
 const kedaiOpen = currentMinutes >= kedaiOpenMin && currentMinutes < kedaiCloseMin;
 
-const deliveryOpen = botOpen && currentMinutes < 21 * 60; // only during bot hours AND before 21:00
+// Override: force delivery off for specific dates (YYYY-MM-DD)
+const DELIVERY_OFF_DATES = ['2026-05-17'];
+const todayStr = `${wib.getFullYear()}-${String(wib.getMonth()+1).padStart(2,'0')}-${String(wib.getDate()).padStart(2,'0')}`;
+const deliveryOverrideOff = DELIVERY_OFF_DATES.includes(todayStr);
+
+const deliveryOpen = !deliveryOverrideOff && botOpen && currentMinutes < 21 * 60;
 
 const timeStr = wib.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
@@ -54,5 +59,6 @@ console.log(JSON.stringify({
   kedaiClosesAt,
   currentTimeWIB: timeStr,
   isWeekend,
-  deliveryOpen
+  deliveryOpen,
+  deliveryOffReason: deliveryOverrideOff ? 'maintenance' : (!botOpen ? 'closed' : (currentMinutes >= 21 * 60 ? 'cutoff' : null))
 }));
