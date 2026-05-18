@@ -391,11 +391,16 @@ async function cmdSync(phone) {
               customer: { name: ctx.customerName || null, phone: normalized },
               channel: 'whatsapp',
               items: allItems.map(i => ({ menu_name: i.menu_name, qty: i.qty, notes: i.notes })),
-              fulfillment_method: ctx.fulfillmentMethod,
-              delivery_fee: deliveryFee,
-              payment_method: 'cod',
-              payment_status: 'pending_cod',
-              total_amount: totalAmount
+              fulfillment: {
+                method: ctx.fulfillmentMethod,
+                delivery_fee: deliveryFee,
+                shareloc: ctx.deliveryLocation || null
+              },
+              payment: {
+                method: 'cod',
+                status: 'confirmed'
+              },
+              delivery_fee: deliveryFee
             }
           })
         });
